@@ -1,0 +1,68 @@
+{% extends 'base.html' %} 
+{% block content %} {% load static %}
+
+
+  <!-- Carousel wrapper -->
+<div id="carouselMaterialStyle" class="carousel slide carousel-fade " data-mdb-ride="carousel">
+  <!-- Indicators -->
+  <div class="carousel-indicators">
+    <button type="button" data-mdb-target="#carouselMaterialStyle" data-mdb-slide-to="0" class="active" aria-current="true"
+      aria-label="Slide 1"></button>
+    <button type="button" data-mdb-target="#carouselMaterialStyle" data-mdb-slide-to="1" aria-label="Slide 2"></button>
+    <button type="button" data-mdb-target="#carouselMaterialStyle" data-mdb-slide-to="2" aria-label="Slide 3"></button>
+  </div>
+
+  <!-- Inner -->
+  <div class="carousel-inner rounded-5 shadow-4-strong">
+    <!-- Single item -->
+    <div class="carousel-item active">
+      <img src="{%static 'images\forest3.jpg'%}" class="d-block w-100 "
+      width="400"
+          height="600"
+        alt="Sunset Over the City" />
+      <div class="carousel-caption d-none d-md-block">
+        <!-- <h5>First slide label</h5> -->
+        <p >“We’ve all got to come together, and we’ve got to protect what’s left of our ancient forests on this planet.”</p>
+      </div>
+    </div>
+
+    <!-- Single item -->
+    <div class="carousel-item">
+      <img src="{%static 'images\forest2.jpg'%}" class="d-block w-100"
+      width="400"
+          height="600"
+        alt="Canyon at Nigh" />
+      <div class="carousel-caption d-none d-md-block">
+        <!-- <h5>Second slide label</h5> -->
+        <p style="color: black; font-weight: bold; ">“I love the forest. It is the place where you hear yourself better.”</p>
+      </div>
+    </div>
+
+    <!-- Single item -->
+    <div class="carousel-item">
+      <img src="{%static 'images\forest4.jpg'%}" class="d-block w-100"
+      width="400"
+          height="600"
+        alt="Cliff Above a Stormy Sea" />
+      <div class="carousel-caption d-none d-md-block">
+        <!-- <h5>Third slide label</h5> -->
+        <p >"The death of the forest is the end of our life."</p>
+      </div>
+    </div>
+  </div>
+  <!-- Inner -->
+
+  <!-- Controls -->
+  <button class="carousel-control-prev" type="button" data-mdb-target="#carouselMaterialStyle" data-mdb-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-mdb-target="#carouselMaterialStyle" data-mdb-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
+<!-- Carousel wrapper -->
+
+{% endblock %}
+
