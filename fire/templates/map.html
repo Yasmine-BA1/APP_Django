@@ -25,19 +25,20 @@
       <form method="POST">
         {% csrf_token %}
        
-       <div class='col-6 rounded ' id="mapid" style="width: 1000px;height: 500px; box-sizing:border-box; margin-top: 20px;  border-radius: 50px;"></div>
-          <div
-            class="leaflet-control"
-          >
-          <input type="text" id="points" name="points" />
-            
+       <div class='col-6 rounded ' id="mapid" style="width: 1000px;height: 500px; box-sizing:border-box; margin-top: 20px;  border-radius: 50px;">
+          <div class="leaflet-control">
+
+          
+
           </div>
+
         </div>
+        <input type="text" id="points" name="points" style="margin-right: 375px;" /> 
         <!-- <button class="btn btn-outline-primary my-2 my-sm-0" type="submit" value="save" style='width:30%'>
           save polygone
         </button> -->
 
-        <button id="save-polygon-btn" class="btn btn-dark btn-rounded " style='width:30%; margin-top: 20px; background-color: #294c5b;'>Save </button>
+        <button id="save-polygon-btn" class="btn btn-dark  " style='width:30%; margin-top: 20px; background-color: #294c5b;'>Save </button>
 
       </form>
     </center>

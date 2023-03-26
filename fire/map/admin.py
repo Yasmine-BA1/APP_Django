@@ -13,13 +13,13 @@
 #     list_display = ("geom")
 
 from django.contrib import admin
-from .models import test
+#from .models import test
 
 from django.contrib.gis import admin
 from .models import myPolygon
 
 
-admin.site.register(test)
+#admin.site.register(test)
 
 admin.site.register(myPolygon)
 class polygonAdmin(admin.GISModelAdmin):
