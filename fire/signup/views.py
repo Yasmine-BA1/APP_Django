@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from .forms import *
-from .models import myPolygon
-from django.contrib.gis.geos import GEOSGeometry
+#from .models import myPolygon
+#from django.contrib.gis.geos import GEOSGeometry
 
 # Create your views here.
 def compte(request, pk):
