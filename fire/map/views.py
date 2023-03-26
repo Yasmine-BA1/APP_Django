@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
+from django.contrib.gis.geos import Polygon
 from .models import myPolygon
 from django.contrib.gis.geos import GEOSGeometry
 
-# Create your views here.
 def stocker_polygone(request):
     if request.method == 'POST':
         polygonString = request.POST.get('points')
@@ -11,5 +11,5 @@ def stocker_polygone(request):
         instance = myPolygon(geom=polygon)
         instance.save()
        
-        return redirect('stocker_polygone')
+        return redirect('home')
     return render(request, 'map.html')

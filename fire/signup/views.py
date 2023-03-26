@@ -12,7 +12,9 @@ def compte(request, pk):
                 formulaire.enregistrer()
                 pseudo = formulaire.cleaned_data['pseudo']
                 variable = 'supervisor'
-                return redirect('map', variable, pseudo)
+                #######PB here
+                return redirect('map/',  pseudo)
+                # return redirect('map', variable, pseudo)
             return render(request, 'signup.html', {'form': formulaire})
         return render(request, 'signup.html', {'form': Form_supervisor()})
     else:
@@ -22,7 +24,9 @@ def compte(request, pk):
                 formulaire.enregistrer()
                 pseudo = formulaire.cleaned_data['pseudo']
                 variable = 'client'
-                return redirect('map', variable, pseudo)
+                ####### redirect dashboard normally
+                #return redirect('map/',variable, pseudo)
+                return redirect('home')
             return render(request, 'signup.html', {'form': formulaire})
         return render(request, 'signup.html', {'form': Form_client()})
     

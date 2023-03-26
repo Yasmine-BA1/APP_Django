@@ -18,10 +18,14 @@ from django.urls import path,include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',include("map.urls")),
+   
     path('',include("home.urls")),
 
-    path('Inscrire/', include('signup.urls')),
+    #path('Inscrire/', include('signup.urls')),
+    path('Inscrire', include('signup.urls')),
     path('connect', include('login.urls')),
+    
+    path('map/',include("map.urls")),
+   
 ]
 
