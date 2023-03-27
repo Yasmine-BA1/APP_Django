@@ -10,6 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
+
+
 from pathlib import Path
 import os
 if os.name == 'nt':
@@ -30,6 +32,8 @@ SECRET_KEY = 'django-insecure-n8xki*q+tx6n+f7ui0kl7e+2csu1zto_%seu=@0ow8jw@i()3=
 DEBUG = True
 
 ALLOWED_HOSTS = []
+
+# ALLOWED_HOSTS = ['127.0.0.1', '.pythonanywhere.com']
 
 
 # Application definition

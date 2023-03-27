@@ -4,6 +4,8 @@
 from django.contrib.gis.db import models
 
 
+# from django.conf import settings
+
 # Create your models here.
 # class myPolygon(models.Model):
 #    geom = models.PolygonField()
@@ -17,7 +19,14 @@ class supervisor(models.Model):
     pseudo=models.CharField(max_length=100,null=True)
     e_mail=models.EmailField(max_length=100,null=True)
     #position=models.PointField(null=True)
+    
+
+    supervisor_id=models.CharField(max_length=100,null=True, unique=True)
+    # client = models.ForeignKey(client, on_delete=models.CASCADE, null=True, related_name='%(class)s_related')
+
     image=models.ImageField(null=True)
+    
+
     def __str__(self):
         return f"{self.prenom} {self.nom}"
     
@@ -28,6 +37,13 @@ class client(models.Model):
     NB_GSM=models.CharField(max_length=100,null=True)
     pseudo=models.CharField(max_length=100,null=True)
     e_mail=models.EmailField(max_length=100,null=True)
+    image=models.ImageField(null=True)
+
+    client_id=models.CharField(max_length=100,null=True, unique=True)
+
+    supervisor = models.ForeignKey(supervisor, on_delete=models.CASCADE, null=True, related_name='%(class)s_related')
+
+    # author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,null=True)
     #position=models.PointField(null=True)
     image=models.ImageField(null=True)
     def __str__(self):

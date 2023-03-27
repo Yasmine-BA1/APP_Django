@@ -12,6 +12,9 @@ from django.utils import timezone
 
 ############polyg##########
 from django.contrib.gis.db import models
+from signup.models import client
+from signup.models import supervisor
+
 
 
 # class test(models.Model):
@@ -32,3 +35,6 @@ from django.contrib.gis.db import models
 class myPolygon(models.Model):
     nom = models.CharField(max_length=50, null=True)
     geom = models.PolygonField()
+
+    client = models.ForeignKey(client, on_delete=models.CASCADE, null=True, related_name='%(class)s_related')
+    supervisor = models.ForeignKey(supervisor, on_delete=models.CASCADE, null=True, related_name='%(class)s_related')

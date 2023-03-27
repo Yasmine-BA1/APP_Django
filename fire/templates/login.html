@@ -18,8 +18,35 @@
       <div class="text-danger" role="alert">{{ form.mot_de_passe.errors }}</div></h4>
       {% endif %}
     </div>
+
+    <div class="mb-3" >
+      <label for="pseudo" class="form-label" ><h4>Payment method:</h4></label>
+        <select class="form-select form-control shadow-lg p-6 mb-6 rounded" aria-label="Default select example" style="font-size: 20px; background-color: #DFD9DB;">
+        <option selected >choise how to pay </option>
+        <option value="1">cash</option>
+        <option value="2">Debit cards</option>
+        <option value="3">Credit cards</option>
+      </select>
+    </div>
+
+    
+   
+
+    
+
     <div class="text-center">
-        <button class="btn btn-dark" style='width:30%; background-color: #A26A25; color:#2B2612; font-size: 15px; ' type="submit" value="save">connection</button>
+        
+      <button class="btn btn-dark" style='width:30%; background-color: #A26A25; color:#2B2612; font-size: 15px; ' type="submit" value="save">connection</button>
+        <!-- <div style="color: black; margin-top: 0px; text-align: center; font-size: 15px; opacity: 0.5;">
+          <p  style="margin-bottom: 0px; margin-top: 5px;">New here ?</p>
+          <a href="{% url 'compte' 'client' %}" style="color: black; margin-left: -10px;">Singn up</a>
+         </div> -->
+    </div>
+
+    <!-- this only for client not concerned by supervisor -->
+    <div class="panel-footer" style="text-align: center; margin-top: 10px;">
+      Don't have an account? <a href="{% url 'compte' 'client' %}">Click here</a> to register.
+   
     </div>
   </form>
 </div>
