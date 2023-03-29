@@ -3,6 +3,8 @@ from django.contrib.gis.geos import Polygon
 from .models import myPolygon
 from django.contrib.gis.geos import GEOSGeometry
 
+
+
 def stocker_polygone(request):
     if request.method == 'POST':
         polygonString = request.POST.get('points')

@@ -52,7 +52,8 @@ INSTALLED_APPS = [
     'home',
     'signup',
     'login',
-    'blog',
+    
+   
     
 ]
 
