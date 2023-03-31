@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'home',
     'signup',
     'login',
+    'dash',
     
    
     
@@ -147,3 +148,10 @@ MEDIA_ROOT=os.path.join(BASE_DIR,'static/images')
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+MQTT_SERVER = 'eu1.cloud.thethings.network'
+MQTT_PORT = 1883
+MQTT_KEEPALIVE = 60
+MQTT_USER = 'my-lora1-application@ttn'
+MQTT_PASSWORD = 'NNSXS.DGNPFLTCMI5K74KZJC3NYRPWVM2ONZW76NSKP3Y.SDCRYFWFV5MTZUWWPUOKSZBVY5Z5LCZB7BWRLI6YC5EKQ3MJKDNQ'

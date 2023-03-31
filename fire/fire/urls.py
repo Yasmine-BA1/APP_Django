@@ -16,6 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path,include
 
+admin.site.site_header = 'FIRE--Forest admin'
+admin.site.site_title = 'FIRE_Forest admin'
+admin.site.site_url = 'http://fireforest.com/'
+admin.site.index_title = 'FIRE--Forest administration'
+admin.empty_value_display = '**Empty**'
+
 urlpatterns = [
     path('admin/', admin.site.urls),
    
@@ -23,9 +29,12 @@ urlpatterns = [
 
     #path('Inscrire/', include('signup.urls')),
     path('Inscrire', include('signup.urls')),
-    path('connect', include('login.urls')),
+   
     
+    path('connect', include('login.urls')),
+
     path('map/',include("map.urls")),
+    path('dash/',include("dash.urls")),
    
 ]
 

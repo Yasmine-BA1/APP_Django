@@ -5,25 +5,25 @@ from .models import *
 
 class Form_supervisor(forms.Form):
     nom = forms.CharField(required=True, max_length=supervisor._meta.get_field(
-        'nom').max_length, widget=forms.TextInput(attrs={'id': "nom", 'name': "nom", 'class': "form-control shadow-lg p-6 mb-6 rounded", 'style': "font-size: 20px; background-color: #DFD9DB;", 'placeholder': 'Last Name'}))
+        'nom').max_length, widget=forms.TextInput(attrs={'id': "nom", 'name': "nom", 'class': "form-control shadow-lg p-6mb-4 rounded", 'style': "font-size: 20px; background-color: #DFD9DB;", 'placeholder': 'Last Name'}))
     
     prenom = forms.CharField(required=True, max_length=supervisor._meta.get_field(
-        'prenom').max_length, widget=forms.TextInput(attrs={'id': 'prenom', 'name': 'prenom', 'placeholder': 'First Name', 'class': "form-control shadow-lg p-6 mb-6 rounded", 'style': "font-size: 20px; background-color: #DFD9DB;"}))
+        'prenom').max_length, widget=forms.TextInput(attrs={'id': 'prenom', 'name': 'prenom', 'placeholder': 'First Name', 'class': "form-control shadow-lg p-6 mb-4 rounded", 'style': "font-size: 20px; background-color: #DFD9DB;"}))
     
     telephone = forms.CharField(required=True, max_length=supervisor._meta.get_field(
-        'NB_GSM').max_length, widget=forms.TextInput(attrs={'id': 'NB_GSM', 'name': 'NB_GSM', 'placeholder': 'Phone', 'class': "form-control shadow-lg p-6 mb-6 rounded", 'style': "font-size: 20px; background-color: #DFD9DB;"}))
+        'NB_GSM').max_length, widget=forms.TextInput(attrs={'id': 'NB_GSM', 'name': 'NB_GSM', 'placeholder': 'Phone', 'class': "form-control shadow-lg p-6 mb-4 rounded", 'style': "font-size: 20px; background-color: #DFD9DB;"}))
     
     pseudo = forms.CharField(required=True, max_length=supervisor._meta.get_field(
-        'pseudo').max_length, widget=forms.TextInput(attrs={'id': 'pseudo', 'name': 'pseudo', 'placeholder': 'Pseudo', 'class': "form-control shadow-lg p-6 mb-6 rounded", 'style': "font-size: 20px; background-color: #DFD9DB;"}))
+        'pseudo').max_length, widget=forms.TextInput(attrs={'id': 'pseudo', 'name': 'pseudo', 'placeholder': 'Pseudo', 'class': "form-control shadow-lg p-6 mb-4 rounded", 'style': "font-size: 20px; background-color: #DFD9DB;"}))
     
     email = forms.EmailField(max_length=supervisor._meta.get_field(
-        'e_mail').max_length, required=True, widget=forms.EmailInput(attrs={'id': 'email', 'name': 'email', 'placeholder': 'Mail', 'class': "form-control shadow-lg p-6 mb-6 rounded", 'style': "font-size: 20px; background-color: #DFD9DB;"}))
+        'e_mail').max_length, required=True, widget=forms.EmailInput(attrs={'id': 'email', 'name': 'email', 'placeholder': 'Mail', 'class': "form-control shadow-lg p-6 mb-4 rounded", 'style': "font-size: 20px; background-color: #DFD9DB;"}))
     
     mot_de_passe = forms.CharField(required=True, widget=forms.PasswordInput(
-        attrs={'id': 'password', 'name': 'password', 'placeholder': 'Password', 'class': "form-control shadow-lg p-6 mb-6 rounded", 'style': "font-size: 20px; background-color: #DFD9DB;"}))
+        attrs={'id': 'password', 'name': 'password', 'placeholder': 'Password', 'class': "form-control shadow-lg p-6 mb-4 rounded", 'style': "font-size: 20px; background-color: #DFD9DB;"}))
     
     confirmation_mot_de_passe = forms.CharField(required=True, widget=forms.PasswordInput(
-        attrs={'id': 'password1', 'name': 'password1', 'placeholder': 'Re-enter password', 'class': "form-control shadow-lg p-6 mb-6 rounded", 'style': "font-size: 20px; background-color: #DFD9DB;"}))
+        attrs={'id': 'password1', 'name': 'password1', 'placeholder': 'Re-enter password', 'class': "form-control shadow-lg p-6 mb-4 rounded", 'style': "font-size: 20px; background-color: #DFD9DB;"}))
 
     def is_valid(self):
             nom = self.data['nom']
@@ -71,25 +71,25 @@ class Form_supervisor(forms.Form):
 
 class Form_client(forms.Form):
     nom = forms.CharField(required=True, max_length=client._meta.get_field(
-        'nom').max_length, widget=forms.TextInput(attrs={'id': "nom", 'name': "nom", 'class': "form-control shadow-lg p-6 mb-6 rounded", 'style': "font-size: 20px; background-color: #DFD9DB;", 'placeholder': 'Last Name'}))
+        'nom').max_length, widget=forms.TextInput(attrs={'id': "nom", 'name': "nom", 'class': "form-control shadow-lg p-6 mb-4 rounded", 'style': "font-size: 20px; background-color: #DFD9DB;", 'placeholder': 'Last Name'}))
     
     prenom = forms.CharField(required=True, max_length=client._meta.get_field(
-        'prenom').max_length, widget=forms.TextInput(attrs={'id': 'prenom', 'name': 'prenom', 'placeholder': 'First Name', 'class': "form-control shadow-lg p-6 mb-6 rounded", 'style': "font-size: 20px; background-color: #DFD9DB;"}))
+        'prenom').max_length, widget=forms.TextInput(attrs={'id': 'prenom', 'name': 'prenom', 'placeholder': 'First Name', 'class': "form-control shadow-lg p-6 mb-4 rounded", 'style': "font-size: 20px; background-color: #DFD9DB;"}))
     
     telephone = forms.CharField(required=True, max_length=client._meta.get_field(
-        'NB_GSM').max_length, widget=forms.TextInput(attrs={'id': 'NB_GSM', 'name': 'NB_GSM', 'placeholder': 'Phone', 'class': "form-control shadow-lg p-6 mb-6 rounded", 'style': "font-size: 20px; background-color: #DFD9DB;"}))
+        'NB_GSM').max_length, widget=forms.TextInput(attrs={'id': 'NB_GSM', 'name': 'NB_GSM', 'placeholder': 'Phone', 'class': "form-control shadow-lg p-6 mb-4 rounded", 'style': "font-size: 20px; background-color: #DFD9DB;"}))
     
     pseudo = forms.CharField(required=True, max_length=client._meta.get_field(
-        'pseudo').max_length, widget=forms.TextInput(attrs={'id': 'pseudo', 'name': 'pseudo', 'placeholder': 'Pseudo', 'class': "form-control shadow-lg p-6 mb-6 rounded", 'style': "font-size: 20px; background-color: #DFD9DB;"}))
+        'pseudo').max_length, widget=forms.TextInput(attrs={'id': 'pseudo', 'name': 'pseudo', 'placeholder': 'Pseudo', 'class': "form-control shadow-lg p-6 mb-4 rounded", 'style': "font-size: 20px; background-color: #DFD9DB;"}))
     
     email = forms.EmailField(max_length=client._meta.get_field(
-        'e_mail').max_length, required=True, widget=forms.EmailInput(attrs={'id': 'email', 'name': 'email', 'placeholder': 'Mail', 'class': "form-control shadow-lg p-6 mb-6 rounded", 'style': "font-size: 20px; background-color: #DFD9DB;"}))
+        'e_mail').max_length, required=True, widget=forms.EmailInput(attrs={'id': 'email', 'name': 'email', 'placeholder': 'Mail', 'class': "form-control shadow-lg p-6 mb-4 rounded", 'style': "font-size: 20px; background-color: #DFD9DB;"}))
     
     mot_de_passe = forms.CharField(required=True, widget=forms.PasswordInput(
-        attrs={'id': 'password', 'name': 'password', 'placeholder': 'Password', 'class': "form-control shadow-lg p-6 mb-6 rounded", 'style': "font-size: 20px; background-color: #DFD9DB;"}))
+        attrs={'id': 'password', 'name': 'password', 'placeholder': 'Password', 'class': "form-control shadow-lg p-6 mb-4 rounded", 'style': "font-size: 20px; background-color: #DFD9DB;"}))
     
     confirmation_mot_de_passe = forms.CharField(required=True, widget=forms.PasswordInput(
-        attrs={'id': 'password1', 'name': 'password1', 'placeholder': 'Re-enter password', 'class': "form-control shadow-lg p-6 mb-6 rounded", 'style': "font-size: 20px; background-color: #DFD9DB;"}))
+        attrs={'id': 'password1', 'name': 'password1', 'placeholder': 'Re-enter password', 'class': "form-control shadow-lg p-6 mb-4 rounded", 'style': "font-size: 20px; background-color: #DFD9DB;"}))
 
     def is_valid(self):
             nom = self.data['nom']

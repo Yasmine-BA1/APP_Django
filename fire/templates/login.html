@@ -1,6 +1,6 @@
 {% extends 'base.html' %} {% block content %}
 <body class="bg-img" >
-<div class="container">
+<div class="container" >
   <form method="POST" id="form" class="shadow-lg p-6 mb-8 mt-5 rounded" >
     {% csrf_token %}
     <h1 class="text-center mb-4">Connexion</h1>
@@ -36,7 +36,7 @@
 
     <div class="text-center">
         
-      <button class="btn btn-dark" style='width:30%; background-color: #A26A25; color:#2B2612; font-size: 15px; ' type="submit" value="save">connection</button>
+      <button class="btn btn-dark" style='width:30%; background-color: #A26A25; color:#2B2612; font-size: 15px; ' type="submit" value="save"  data-mdb-toggle="modal" data-mdb-target="#exampleModal">connection</button>
         <!-- <div style="color: black; margin-top: 0px; text-align: center; font-size: 15px; opacity: 0.5;">
           <p  style="margin-bottom: 0px; margin-top: 5px;">New here ?</p>
           <a href="{% url 'compte' 'client' %}" style="color: black; margin-left: -10px;">Singn up</a>
@@ -48,6 +48,23 @@
       Don't have an account? <a href="{% url 'compte' 'client' %}">Click here</a> to register.
    
     </div>
+    <!-- Modal -->
+<!-- <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">THANK YOU FOR YOUR VISIT</h5>
+        <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">we are so grateful  that you are part of our family</div>
+      <!-- <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div> -->
+    <!-- </div>
+  </div>
+</div>  -->
+
   </form>
 </div>
 </body>

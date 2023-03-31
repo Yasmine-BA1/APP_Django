@@ -16,7 +16,7 @@ def connect(request):
                 login(request, data)
                 #### on va redirect dashboard #####
                 # return redirect('map/')
-                return redirect('map/')
+            return redirect('dash/')
         # We pass the form to the template even if it is not valid
         return render(request, 'login.html', {'form': formulaire})
     # We pass the form to the template for GET requests
