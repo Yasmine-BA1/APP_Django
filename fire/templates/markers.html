@@ -25,6 +25,18 @@
         </div>
     </div>
   </div>
+<script>
+    var map = L.map('map').setView([0, 0], 2);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: 'Map data © OpenStreetMap contributors',
+    maxZoom: 18
+}).addTo(map);
 
+fetch('/my-polygon-view')
+    .then(response => response.json())
+    .then(polygon_geojson => {
+        L.geoJSON(polygon_geojson).addTo(map);
+    });
+</script>
   
 {% endblock %}

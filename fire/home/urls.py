@@ -12,7 +12,7 @@ urlpatterns = [
     path('profile/', views.profile, name='profile' ),
     path('settings/', views.settings, name='settings' ),
 
-    path('connect/',views.connect,name='connect')
+  
 
 
 

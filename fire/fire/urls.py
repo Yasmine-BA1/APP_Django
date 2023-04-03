@@ -31,7 +31,7 @@ urlpatterns = [
     path('Inscrire', include('signup.urls')),
    
     
-    #path('connect', include('login.urls')),
+    path('connect/', include('login.urls')),
 
     path('map/',include("map.urls")),
     path('dash/',include("dash.urls")),
