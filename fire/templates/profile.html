@@ -1,0 +1,21 @@
+{% extends 'index.html' %} {% block content %} {% load static %}
+<div class="profile">
+<div style="margin-left: 30px;">
+    <h1 style="color: rgb(1, 16, 30);margin-top: 0px;  ">Profile</h1>
+   <h2>Supervisors</h2>
+    {% for item in sup %}
+    <strong>{{item.nom}} {{item.prenom}}</strong> <br/>
+    e_mail : {{item.e_mail}}
+    <hr>
+    {% endfor %}
+    <hr>
+    <h2>Client</h2>
+    {% for item in cli %}
+    <strong>{{item.nom}} {{item.prenom}}</strong> <br/>
+    e_mail : {{item.e_mail}}
+    <hr>
+    {% endfor %}
+</div>
+ </div>
+{% endblock%} 
+

@@ -13,5 +13,5 @@ def stocker_polygone(request):
         instance = myPolygon(geom=polygon)
         instance.save()
        
-        return redirect('home')
+        return redirect('index')
     return render(request, 'map.html')

@@ -4,6 +4,7 @@ from .models import myPolygon
 
 
 
+
 admin.site.register(myPolygon)
 class polygonAdmin(admin.GISModelAdmin):
     list_display = ("geom")

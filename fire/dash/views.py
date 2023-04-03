@@ -2,6 +2,7 @@ from .models import Post
 from django.shortcuts import render
 
 from .mqtt import start_mqtt_client
+from django.http import JsonResponse
 
 
 def start_mqtt(request):
@@ -22,6 +23,10 @@ def post_list(request):
     # Render the template and pass the latest Post object as a context variable
     return render(request, 'dash/post_list.html', {'post': post})
 
+
+def getTemp(request):
+    TEMP =Post.objects.all()
+    return JsonResponse({"TEMP": list(TEMP.values())})
 
 
 

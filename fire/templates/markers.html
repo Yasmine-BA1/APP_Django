@@ -1,0 +1,30 @@
+{% extends 'index.html' %} 
+{% block content %} {% load static %}
+
+<div class="container text-center" style="color: aliceblue ;">
+    
+    <div class="row">
+        <div class="colm1 col-4"  >
+            <h2> list of nodes</h2>
+            <h2> list of gates</h2>
+            markers 
+            .............
+        </div>
+
+        <div class=" colm2 col-8">
+            <h1 style="color: rgb(1, 16, 30); ">Map</h1>
+            <h2>map list</h2>
+            {% for item in map %}
+            Name :<strong>{{item.nom}}</strong> <br/>
+            Client :<strong>{{item.client}}</strong>
+            Supervisor :<strong>{{item.supervisor}}</strong>
+            <br/>
+            {{item.geom}} <br/>
+            <hr>
+            {% endfor %}
+        </div>
+    </div>
+  </div>
+
+  
+{% endblock %}

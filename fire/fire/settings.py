@@ -51,7 +51,7 @@ INSTALLED_APPS = [
     'map',
     'home',
     'signup',
-    'login',
+   
     'dash',
     
    
