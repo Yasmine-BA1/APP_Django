@@ -1,0 +1,98 @@
+{% extends 'base.html' %} 
+{% block content %} {% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Markers Map</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" 
+    integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js" 
+    integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
+   
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+
+  
+    <link rel="stylesheet" type="text/css" href="lib/leaflet.css">
+	<link rel="stylesheet" type="text/css" href="lib/leaflet.draw.css">
+
+  <!-- CSS -->
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/locationpicker/0.1.12/locationpicker.css" />
+
+<!-- JavaScript -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/locationpicker/0.1.12/locationpicker.jquery.min.js"></script>
+
+
+
+  </head>
+  <body  class="bg-img" ">
+
+    <div class="container text-center" style="margin-left: 20px;">
+ 
+    
+         <div class="container" >
+          
+          <form method="POST" id="form" class="shadow-lg p-6 mb-8 mt-5 rounded"  style="width: 900px;">
+            {% csrf_token %}
+
+            <h1 class="mb-4">Create new project</h1>
+              
+                <div class="mb-3">
+                  <h4>Project Name</h4>
+                  {{ form.nomp}}
+                  {% if form.nomp.errors %}
+                  <strong class="text-danger" role="alert">{{ form.nomp.errors }}</strong>
+                  {% endif %}
+                </div>
+
+                <div class="mb-3">
+                  <h4>Project Description</h4>
+                  {{ form.descp}}
+                  
+                </div>
+
+                <div class="row mb-3" >
+                  <div class="col" >
+                    <h4>Start Date</h4>
+                    {{ form.debutp}}
+                    
+                  </div>
+                  <div class="col">
+                    <h4>End Date</h4>
+                    {{ form.finp}}
+                   
+                  </div>
+                </div>
+
+                <div class="row mb-3" >
+                  <div class="col" >
+                    <h4>City Name</h4>
+                    {{ form.cityp}}
+                    
+                  </div>
+                 
+              <div class="text-center">
+                <button class="btn btn-dark" style='width:30%; background-color: #A26A25; color:#2B2612; font-size: 15px; ' type="submit" value="save">Next</button>
+                <!-- <button class="btn btn-dark  mx-auto d-block" style='  font-size: 15px; background-color: darkgreen;' onclick="location.href='{% url 'add_client'  %}'"> Next step</button> -->
+              </div>
+          
+           </form>
+        </div>
+        
+     </div>
+   </div>
+  
+  </body>
+</html>
+
+{% endblock %}

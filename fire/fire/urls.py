@@ -33,7 +33,7 @@ urlpatterns = [
     
     path('connect/', include('login.urls')),
 
-    path('map/',include("map.urls")),
+    path('add_project/',include("map.urls")),
     path('dash/',include("dash.urls")),
    
 ]
