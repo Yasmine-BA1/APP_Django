@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.gis',
    
+    'location_field.apps.DefaultConfig',
 
     'map',
     'home',
@@ -155,3 +156,21 @@ MQTT_PORT = 1883
 MQTT_KEEPALIVE = 60
 MQTT_USER = 'my-lora1-application@ttn'
 MQTT_PASSWORD = 'NNSXS.DGNPFLTCMI5K74KZJC3NYRPWVM2ONZW76NSKP3Y.SDCRYFWFV5MTZUWWPUOKSZBVY5Z5LCZB7BWRLI6YC5EKQ3MJKDNQ'
+
+
+LOCATION_FIELD = {
+    # 'map.provider': 'google',
+    # 'map.zoom': 13,
+    # OpenStreetMap
+    'provider.openstreetmap.max_zoom': 18,
+}
+
+LOCATION_FIELD = {
+    # 'provider.google.api': '//maps.google.com/maps/api/js?sensor=false',
+    # 'provider.google.api_key': '',
+    # 'provider.google.api_libraries': '',
+    # 'provider.google.map.type': 'ROADMAP',
+    
+    'map.provider': 'openstreetmap',
+    'search.provider': 'nominatim',
+}

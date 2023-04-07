@@ -5,7 +5,8 @@ from django.contrib.gis.db import models
 from signup.models import client
 from signup.models import supervisor
 
-    
+from django.contrib.gis.geos import Point
+from location_field.models.plain import PlainLocationField
 
 
 class myProject(models.Model):
@@ -15,7 +16,8 @@ class myProject(models.Model):
     debutp = models.DateTimeField(default=timezone.now,null=True)
     finp = models.DateTimeField(null=True)
     cityp = models.CharField(max_length=255,null=True)
-
+    locationp = PlainLocationField(based_fields=['cityp'], zoom=7,null=True)
+    
     
     def __str__(self):
         return f' Project: {self.nomp}'
