@@ -50,7 +50,25 @@
                     <form method="POST">
                     {% csrf_token %} 
 
-                        <h1>Your Polygon </h1>
+                        <h1> Add Node To Your : {{ project.nomp }}</h1>
+
+                        <div class="col-md-5">
+                            <input type="text"  name="nom" style="margin-right: 375px;" placeholder="Node Name" /> 
+                        </div>
+
+                        <!-- <div class="col-md-5">
+                            <input type="text"  name="polyg" style="margin-right: 375px;" placeholder="Polygon Name" /> 
+                        </div> -->
+                        <div class="col-md-5">
+                        <label for="nomp">Select The Specific Project ID</label>
+                        <br/>
+                        <select name="polyg">
+                            {% for proj in projects %}
+                            <option value="{{ proj.polygon_id }}">Project ID: {{ proj.polygon_id }}</option>
+                            {% endfor %}
+                        </select>
+                        </div>
+
                         <button class="btn btn-dark  mx-auto d-block" name="button_1" style='  font-size: 15px; background-color: darkgreen; margin-bottom: 20px;' onclick="location.href='{% url 'all' project.polygon_id %}'"> SAVE node</button>
                         <h2>Map</h2>
                         <div class='col-6 rounded ' id="map" style="width: 800px;height: 500px; box-sizing:border-box; margin-top: 20px;  border-radius: 50px; border: 1px solid rgb(9, 0, 0) ;">

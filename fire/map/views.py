@@ -79,9 +79,10 @@ def add_node(request, id):
         node_name = request.POST.get('nom') 
         mylatitude = request.POST.get('latitude') 
         mylongitude = request.POST.get('longitude') 
-        Project_poly = request.POST.get('polyg') 
+        project_id = request.POST.get('polyg')
+        project_instance = myProject.objects.get(polygon_id=project_id)
 
-        instance = node( nom=node_name, polyg= Project_poly,latitude=mylatitude,longitude=mylongitude)
+        instance = node(nom=node_name, polyg=project_instance, latitude=mylatitude, longitude=mylongitude)
         instance.save()
 
         return redirect('all',id)
