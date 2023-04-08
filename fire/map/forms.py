@@ -5,9 +5,10 @@ from .models import *
 import datetime
 # from location_field.widgets import LocationWidget
 # from django.contrib.gis.forms.widgets import LocationWidget
-
+from django.contrib.gis import forms as geoforms
 
 class Form_project(forms.Form):
+
     nomp = forms.CharField(required=True,max_length=myProject._meta.get_field(
         'nomp').max_length, widget=forms.TextInput(attrs={'id': "nomp", 'name': "nomp", 'class': "form-control shadow-lg p-6 mb-4 rounded", 'style': "font-size: 20px; background-color: #DFD9DB;", 'placeholder': 'Project Name'}))
     descp = forms.CharField(  max_length=myProject._meta.get_field(
@@ -20,6 +21,8 @@ class Form_project(forms.Form):
         'cityp').max_length, widget=forms.TextInput(attrs={'id': "cityp", 'name': "cityp", 'class': "form-control shadow-lg p-6 mb-4 rounded", 'style': "font-size: 20px; background-color: #DFD9DB;", 'placeholder': 'City Name'}))
     # location = forms.CharField( required=True,widget=LocationWidget(attrs={'id': "location", 'name': "location", 'class': "form-control shadow-lg p-6 mb-4 rounded", 'style': "font-size: 20px; background-color: #DFD9DB;"}, based_fields=['city']))
 
+    clientp = forms.ModelChoiceField(queryset=client.objects.all(), empty_label=None, widget=forms.Select(attrs={'id': "clientp", 'name': "clientp", 'class': "form-control shadow-lg p-6 mb-4 rounded", 'style': "font-size: 20px; background-color: #DFD9DB; width:200px; margin-left:340px;", 'placeholder': 'Select Client'}))
+    
     def is_valid(self):
             nomp = self.data['nomp']
             if any(char.isdigit() for char in nomp):
@@ -42,10 +45,13 @@ class Form_project(forms.Form):
         debutp = self.cleaned_data['debutp']
         finp = self.cleaned_data['finp']
         cityp = self.cleaned_data['cityp']
+        clientp = self.cleaned_data['clientp']
+        
+      
         # location = self.cleaned_data['location']
 
-        data =myProject(nomp=nomp,descp=descp,debutp=debutp,finp=finp,cityp=cityp)
-        data.save()
+        data =myProject(nomp=nomp,descp=descp,debutp=debutp,finp=finp,cityp=cityp,clientp=clientp)
+        # data.save()
 
 
 class Form_client(forms.Form):

@@ -10,13 +10,32 @@ from .forms import *
 
 def add_project(request):
     projects = myProject.objects.all()
+    clients = client.objects.all()
     if request.method == 'POST':
 
         formulairep = Form_project(request.POST)
+        # Get the other data from the form data
+        nomp = request.POST.get('nomp')
+        descp = request.POST.get('descp')
+        debutp = request.POST.get('debutp')
+        finp = request.POST.get('finp')
+        cityp = request.POST.get('cityp')
+        # clientp = request.POST.get('clientp')
+
         if formulairep.is_valid():
+            # Get the selected client from the form
+            selected_client_id = request.POST.get('clientp')
+
+            # Get the client object based on the selected ID
+            selected_client = client.objects.get(id=selected_client_id)
                  
             formulairep.enregistrerProj()
-                
+            polygonString = request.POST.get('points')
+            print(polygonString)
+            polygon = GEOSGeometry(polygonString, srid=4326)
+            instance = myProject(nomp=nomp,descp=descp,debutp=debutp,finp=finp,cityp=cityp,geomp=polygon,clientp=selected_client)
+            instance.save()
+                    
             return redirect('add_client')
         return render(request, 'addproj.html', {'form': formulairep,'projects':projects})
     return render(request, 'addproj.html', {'form': Form_project(),'projects':projects})
@@ -38,6 +57,8 @@ def add_client(request):
         
 
 def stocker_polygone(request):
+    projects = myProject.objects.all()
+
     if request.method == 'POST':
         polygonString = request.POST.get('points')
         print(polygonString)
@@ -46,4 +67,4 @@ def stocker_polygone(request):
         instance.save()
        
         return redirect('home')
-    return render(request, 'map.html')
+    return render(request, 'drawpoly.html', {'projects':projects})

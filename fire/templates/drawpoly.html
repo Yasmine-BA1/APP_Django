@@ -1,0 +1,145 @@
+{% extends 'base.html' %} 
+{% block content %} {% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+       
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        
+        
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" 
+        integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
+        <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js" 
+        integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
+       
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+    
+        
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+    
+      
+        <link rel="stylesheet" type="text/css" href="lib/leaflet.css">
+        <link rel="stylesheet" type="text/css" href="lib/leaflet.draw.css">
+    
+    </head>
+
+    <body class="bg-img">
+        <div class="container text-center" >
+            <div class="row">
+                <div class="col-3">
+                    <div class="card mb-3" style="margin-left: 45px;">
+                        <div class="card-header">
+                          <h5 class="card-title" style="text-align:center; color:rgb(51, 77, 4);">Projects List</h5>
+                         </div>
+                        <div class="card-body">
+                         
+                          {% for proj in projects %}
+                          <div class="card mb-2 " style="background-color: #d4d6d8; display: flex; flex-direction: column;">
+                            <div class="card-body text-vert">
+                              <h6 class="card-subtitle mb-2 text-muted" style="text-align:center; color:rgb(51, 77, 4);">Project name: {{ proj.nomp }}</h6>
+                                                            <button class="btn btn-dark  mx-auto d-block"  onclick="location.href='#'">see polygon</button>
+                              <button class="btn btn-dark  mx-auto d-block" name="button_2" style='  font-size: 8px; background-color: darkgreen;' onclick="location.href='#'"> SEE all details</button>
+                               </div>
+                          </div>
+                          {% endfor %}
+                          </div>
+                        </div>
+
+                </div>
+                <div class="col-3"  style="background-color: #FFFFFF;width: 900px; border-radius: 10px;">
+                    <form method="post">
+                    {% csrf_token %} 
+                    <h1>Draw your polygon </h1>
+                    <label>Project Name:</label>
+                        <div class='col-6 rounded ' id="mapid" style="width: 800px;height: 500px; box-sizing:border-box; margin-top: 20px;  border-radius: 50px; border: 1px solid rgb(9, 0, 0) ;">
+                            <div class="leaflet-control"></div>
+                        </div> 
+
+                        <input type="text" id="points" name="points" style="margin-right: 375px;" /> 
+
+                        <button id="save-polygon-btn" class="btn btn-dark  "  style='width:30%; margin-top: 20px; background-color: #294c5b;'>Save Polygon </button>
+                                           
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    <!-- <script src="{% static 'js/map.js' %}" ></script> -->
+    <script type="text/javascript" src="lib/leaflet.js"></script>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.js"></script> 
+
+  <script>
+     var map = L.map('mapid').setView([35, 9.5], 5);
+     L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+         attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+     }).addTo(map);
+
+         // FeatureGroup is to store editable layers
+    var drawnItems = new L.FeatureGroup();
+    map.addLayer(drawnItems);
+
+    var drawControl = new L.Control.Draw({
+      draw: {
+		    polygon: {
+		     shapeOptions: {
+		      color: 'purple'
+		     },
+		     allowIntersection: false,
+		     drawError: {
+		      color: 'orange',
+		      timeout: 1000
+		     },
+		    },
+		    polyline: {
+		     shapeOptions: {
+		      color: 'red'
+		     },
+		    },
+		    rect: {
+		     shapeOptions: {
+		      color: 'green'
+		     },
+		    },
+		    circle: {
+		     shapeOptions: {
+		      color: 'steelblue'
+		     },
+		    },
+		   },
+         edit: {
+             featureGroup: drawnItems
+         }
+    });
+    map.addControl(drawControl);
+
+    
+    var polygons = [];
+    map.on('draw:created', function (e) {
+      var type = e.layerType,
+            layer = e.layer;
+        const coordinates = layer.editing.latlngs[0][0]
+        let polygon = [];
+        coordinates.forEach((element) => {
+            polygon.push(`${element.lng} ${element.lat}`);
+        });
+        polygon.push(`${coordinates[0].lng} ${coordinates[0].lat}`);
+        polygonString = 'POLYGON (('+polygon.join(', ')+'))';
+        document.getElementById('points').value=polygonString;
+        drawnItems.addLayer(layer);
+        polygons.push(polygon); // add the polygon to the polygons array
+        // drawControl.remove();
+        // drawEditControl.addTo(map);
+    });
+
+ </script>       
+
+    </body>
+
+</html>
+{% endblock %}
