@@ -81,7 +81,7 @@ def add_node(request, id):
         mylongitude = request.POST.get('longitude') 
         Project_poly = request.POST.get('polyg') 
 
-        instance = nodes( nom=node_name, polyg= Prject_poly,latitude=mylatitude,longitude=mylongitude)
+        instance = node( nom=node_name, polyg= Project_poly,latitude=mylatitude,longitude=mylongitude)
         instance.save()
 
         return redirect('all',id)
@@ -94,7 +94,9 @@ def all_node(request,id):
     project = myProject.objects.get(polygon_id=id)
 
     marker = node.objects.all()
-    markers = node.objects.filter(polyg=project)
+    nodeq = node.objects.filter(polyg=project)
 
-    return render(request, 'all.html', { 'nodes': markers,'markers': marker,'projects':projects, 'project': project})
+    return render(request, 'all.html', { 'node': nodeq,'markers': marker,'projects':projects, 'project': project})
+
+
 
