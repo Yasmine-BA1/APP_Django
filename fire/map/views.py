@@ -10,6 +10,8 @@ from .forms import *
 
 def add_project(request):
     projects = myProject.objects.all()
+    # project = myProject.objects.get(polygon_id=id)
+
     clients = client.objects.all()
     if request.method == 'POST':
 
@@ -36,12 +38,13 @@ def add_project(request):
             instance = myProject(nomp=nomp,descp=descp,debutp=debutp,finp=finp,cityp=cityp,geomp=polygon,clientp=selected_client)
             instance.save()
                     
-            return redirect('add_client')
+            return redirect('add_client',id=instance.polygon_id)
         return render(request, 'addproj.html', {'form': formulairep,'projects':projects})
     return render(request, 'addproj.html', {'form': Form_project(),'projects':projects})
 
 
-def add_client(request):
+def add_client(request,id):
+        project = myProject.objects.get(polygon_id=id)
         
         if request.method == 'POST':
             formulaire = Form_client(request.POST)
@@ -50,17 +53,19 @@ def add_client(request):
                 pseudo = formulaire.cleaned_data['pseudo']
                 variable = 'client'
 
-                return redirect('display_polygone')
-            return render(request, 'addclient.html', {'form': formulaire})
-        return render(request, 'addclient.html', {'form': Form_client()})
+                return redirect('display_polygone',id)
+            return render(request, 'addclient.html', {'form': formulaire,'project':project})
+        return render(request, 'addclient.html', {'form': Form_client(),'project':project})
 
         
 
-def display_polygone(request):
+def display_polygone(request,id):
     projects = myProject.objects.all()
+    project = myProject.objects.get(polygon_id=id)
 
     if request.method == 'POST':
+        # id=instance.polygon_id
 
        
-        return redirect('home')
-    return render(request, 'displaypoly.html', {'projects':projects})
+        return redirect('addnode',id)
+    return render(request, 'displaypoly.html', {'projects':projects,'project':project})

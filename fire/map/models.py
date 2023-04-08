@@ -19,6 +19,7 @@ class myProject(models.Model):
     locationp = PlainLocationField(based_fields=['cityp'], zoom=7,null=True)
     clientp = models.ForeignKey(client, on_delete=models.CASCADE,null=True)
     
+    polygon_id = models.BigAutoField(primary_key=True, default=None)
     
     def __str__(self):
         return f' Project: {self.nomp}'
