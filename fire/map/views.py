@@ -50,21 +50,17 @@ def add_client(request):
                 pseudo = formulaire.cleaned_data['pseudo']
                 variable = 'client'
 
-                return redirect('stocker_polygone')
+                return redirect('display_polygone')
             return render(request, 'addclient.html', {'form': formulaire})
         return render(request, 'addclient.html', {'form': Form_client()})
 
         
 
-def stocker_polygone(request):
+def display_polygone(request):
     projects = myProject.objects.all()
 
     if request.method == 'POST':
-        polygonString = request.POST.get('points')
-        print(polygonString)
-        polygon = GEOSGeometry(polygonString, srid=4326)
-        instance = myProject(geomp=polygon)
-        instance.save()
+
        
         return redirect('home')
-    return render(request, 'drawpoly.html', {'projects':projects})
+    return render(request, 'displaypoly.html', {'projects':projects})

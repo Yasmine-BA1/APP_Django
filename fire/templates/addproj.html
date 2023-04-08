@@ -80,14 +80,15 @@
                     {{ form.cityp}} 
                   </div>
                   <div class="col" >
-                    <h4>Client </h4>
+                    <h4>Choise Client </h4>
+                    <label>select an existing client hereand click skip or click next to create new one</label>
                     {{ form.clientp}} 
                   </div>
 
                   <div class="col" >
                     {% csrf_token %} 
                     <h1>Draw your polygon </h1>
-                    <label>Project Name:</label>
+                  
                         <div class='col-6 rounded ' id="mapid" style="width: 800px;height: 500px; box-sizing:border-box; margin-top: 20px;  border-radius: 50px; border: 1px solid rgb(9, 0, 0) ;">
                             <div class="leaflet-control"></div>
                         </div> 
@@ -102,6 +103,7 @@
                 <button class="btn btn-dark" style='width:30%; background-color: #A26A25; color:#2B2612; font-size: 15px; ' type="submit" value="save">Next</button>
                 <!-- <button class="btn btn-dark  mx-auto d-block" style='  font-size: 15px; background-color: darkgreen;' onclick="location.href='{% url 'add_client'  %}'"> Next step</button> -->
               </div>
+              <button class="btn btn-dark  mx-auto d-block"  style='  font-size: 8px; background-color: #A26A25; color:#2B2612;' onclick="location.href='{% url 'display_polygone'  %}'"> Skip </button>
           
            </form>
         </div>

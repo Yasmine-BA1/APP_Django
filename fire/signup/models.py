@@ -32,8 +32,8 @@ class supervisor(models.Model):
     
 
 class client(models.Model):
-    nom=models.CharField(max_length=100,null=True)
-    prenom=models.CharField(max_length=100,null=True)
+    nom=models.CharField(max_length=100,null=True,blank=True)
+    prenom=models.CharField(max_length=100,null=True,blank=True)
     NB_GSM=models.CharField(max_length=100,null=True)
     pseudo=models.CharField(max_length=100,null=True)
     e_mail=models.EmailField(max_length=100,null=True)
