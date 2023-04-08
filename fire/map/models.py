@@ -23,3 +23,17 @@ class myProject(models.Model):
     
     def __str__(self):
         return f' Project: {self.nomp}'
+
+
+
+#table des noeuds /markers
+class node(models.Model):
+    nom = models.CharField(max_length=50,blank=True, null=True)
+    position=models.PointField(null=True)
+    latitude =models.CharField(max_length=50, null=True , blank=True)
+    longitude =models.CharField(max_length=50, null=True,blank=True)
+   
+    polyg = models.ForeignKey(myProject, on_delete=models.CASCADE, null=True, blank=True,related_name='%(class)s_related')
+
+    def __str__(self):
+        return f' {self.nom}'  

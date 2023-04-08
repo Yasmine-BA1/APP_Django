@@ -69,3 +69,32 @@ def display_polygone(request,id):
        
         return redirect('addnode',id)
     return render(request, 'displaypoly.html', {'projects':projects,'project':project})
+
+
+def add_node(request, id):
+    projects = myProject.objects.all()
+    project = myProject.objects.get(polygon_id=id)
+
+    if request.method == 'POST':
+        node_name = request.POST.get('nom') 
+        mylatitude = request.POST.get('latitude') 
+        mylongitude = request.POST.get('longitude') 
+        Project_poly = request.POST.get('polyg') 
+
+        instance = nodes( nom=node_name, polyg= Prject_poly,latitude=mylatitude,longitude=mylongitude)
+        instance.save()
+
+        return redirect('all',id)
+
+    return render(request, 'add_node.html', { 'projects': projects, 'project': project})
+
+
+def all_node(request,id):
+    projects = myProject.objects.all()
+    project = myProject.objects.get(polygon_id=id)
+
+    marker = node.objects.all()
+    markers = node.objects.filter(polyg=project)
+
+    return render(request, 'all.html', { 'nodes': markers,'markers': marker,'projects':projects, 'project': project})
+
