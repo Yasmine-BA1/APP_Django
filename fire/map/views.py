@@ -79,10 +79,11 @@ def add_node(request, id):
         node_name = request.POST.get('nom') 
         mylatitude = request.POST.get('latitude') 
         mylongitude = request.POST.get('longitude') 
+        point=Point(x=float(mylongitude),y=float(mylatitude))
         project_id = request.POST.get('polyg')
         project_instance = myProject.objects.get(polygon_id=project_id)
 
-        instance = node(nom=node_name, polyg=project_instance, latitude=mylatitude, longitude=mylongitude)
+        instance = node(position=point,nom=node_name, polyg=project_instance, latitude=mylatitude, longitude=mylongitude)
         instance.save()
 
         return redirect('all',id)
@@ -96,8 +97,55 @@ def all_node(request,id):
 
     marker = node.objects.all()
     nodeq = node.objects.filter(polyg=project)
+    print('****',nodeq)
+    
+    for node_instance in nodeq:
+        # get the latitude and longitude values from the node instance
+        latitude = node_instance.latitude
+        longitude = node_instance.longitude
+        position=node_instance.position
+        nom=node_instance.nom
+        
+        print('nom:',nom)
+        print('x:',node_instance.position.x)
+        print('y:',node_instance.position.y)
+        print('position:',position)
+        
+    #no = node.objects.order_by('-id').first()
+    #bla = no.nom
+    #print(bla)
 
-    return render(request, 'all.html', { 'node': nodeq,'markers': marker,'projects':projects, 'project': project})
+    return render(request, 'all.html', { 'node_instance': node_instance,'nodee': nodeq,'markers': marker,'projects':projects, 'project': project})
 
 
 
+
+def ALL(request,id):
+    projects = myProject.objects.all()
+    project = myProject.objects.get(polygon_id=id)
+
+    marker = node.objects.all()
+    nodeq = node.objects.filter(polyg=project)
+    
+    
+    for node_instance in nodeq:
+        # get the latitude and longitude values from the node instance
+        latitude = node_instance.latitude
+        longitude = node_instance.longitude
+        position=node_instance.position
+        nom=node_instance.nom
+        print('nom:',nom)
+        print('position:',position)
+
+    return render(request, 'ALL_node.html', {  'node_instance': node_instance,'node': nodeq,'markers': marker,'projects':projects, 'project': project})
+
+
+def interface_c(request):
+    projects = myProject.objects.all()
+   
+
+    marker = node.objects.all()
+   
+    
+    
+    return render(request, 'interface_c.html',{'markers': marker,'projects':projects})

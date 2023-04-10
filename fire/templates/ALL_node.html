@@ -58,14 +58,7 @@
                    
                             <h3><a href="{% url 'update' %}"">This is my live Data</a></h3>
                             
-                            <ul id="display"> </ul> 
-
-                            {% comment %} <h1> This is my live Data</h1>
-                            <h3><a href="{% url 'update' %}"">Click Here To See Hum and Temp</a></h3> {% endcomment %}
-                            
-                            
-                            <ul id="display">    
-                            </ul>
+                            <ul id="display"> </ul>
         
                         </div>
 
@@ -92,7 +85,7 @@
 
                         <h3>Nodes List Of Project:{{ project.nomp }}</h3>
                         <div class="row">
-                        {% for d in nodee %}
+                        {% for d in node %}
                         <div class="col-2" style="border: 1px solid rgb(7, 7, 7) ; height: 200px; width: 200px;">                        
                           <h6 class="card-subtitle mb-2 text-muted" style="text-align:center; color:rgb(51, 77, 4);"><h5>Node Name: </h5>{{ d.nom }}</h6>
                           <h6 class="card-subtitle mb-2 text-muted" style="text-align:center; color:rgb(51, 77, 4);"><h5>Node Latitude: </h5>{{ d.latitude  }}</h6>
@@ -111,16 +104,17 @@
                     <div class="card-header">
                       <h5 class="card-title" style="text-align:center; color:rgb(51, 77, 4);">Nodes List</h5>
                      </div>
-                     
-                     <button class="btn btn-dark  mx-auto d-block"  onclick="location.href='{% url 'ALL_node' project.polygon_id %}'">see nodes details</button>
                     <div class="card-body">
                      
                       {% for marker in markers %}
                       <div class="card mb-2 " style="background-color: #d4d6d8; display: flex; flex-direction: column;">
                         <div class="card-body text-vert">
                           <h6 class="card-subtitle mb-2 text-muted" style="text-align:center; color:rgb(51, 77, 4);"><h5>Node Name: </h5>{{ marker.nom }}</h6>
-
-                          <!--<button class="btn btn-dark  mx-auto d-block" name="button_2" style='  font-size: 8px; background-color: darkgreen;' onclick="location.href='{% url 'all' project.polygon_id %}'"> SEE all details</button> -->
+                          <h6 class="card-subtitle mb-2 text-muted" style="text-align:center; color:rgb(51, 77, 4);"><h5>Node Latitude: </h5>{{ marker.latitude  }}</h6>
+                          <h6 class="card-subtitle mb-2 text-muted" style="text-align:center; color:rgb(51, 77, 4);"><h5>Node Longitude:</h5> {{ marker.longitude  }}</h6>
+                          <h6 class="card-subtitle mb-2 text-muted" style="text-align:center; color:rgb(51, 77, 4);"><h5>Node Poly: </h5>{{ marker.polyg  }}</h6>
+                          <!-- <button class="btn btn-dark  mx-auto d-block"  onclick="location.href='{% url 'display_polygone' project.polygon_id %}'">see polygon</button>
+                          <button class="btn btn-dark  mx-auto d-block" name="button_2" style='  font-size: 8px; background-color: darkgreen;' onclick="location.href='{% url 'all' project.polygon_id %}'"> SEE all details</button> -->
                            </div>
                       </div>
                       {% endfor %}
@@ -136,74 +130,29 @@
         </div>
 
    
+    <!-- <script src="{% static 'js/map.js' %}"></script> -->
     <script>
-      var geojson_str = "{{ project.geomp.json|escapejs }}";
-      var geojson = JSON.parse(geojson_str);
-
-
-      var map = L.map('map').setView([{{ project.geomp.centroid.y }}, {{ project.geomp.centroid.x }}], 9);
-
-
-      L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
-
-        polygon = L.geoJSON(geojson).addTo(map);
-       
-       
-        var yass = L.marker([{{node_instance.position.y}},{{node_instance.position.x}}]).addTo(map);
+        var geojson_str = "{{ project.geomp.json|escapejs }}";
+        var geojson = JSON.parse(geojson_str);
+  
+  
+        var map = L.map('map').setView([{{ project.geomp.centroid.y }}, {{ project.geomp.centroid.x }}], 9);
+  
+  
+        L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+              attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+          }).addTo(map);
+  
+          polygon = L.geoJSON(geojson).addTo(map);
+         
+          var yass = L.marker([{{node_instance.position.y}},{{node_instance.position.x}}]).addTo(map);
      
-    </script>
 
-    <script>
-      $(document).ready(function(){
-          
-          setInterval(function(){
-            
-            $.ajax({
-              type:'GET',
-              url : "{% url 'getTemp' %}",
-              success: function(response){
-                
-                $("#display").empty();
-                for (var key in response.TEMP)
-                {
-                  
-                  var temp ="<h2><li>"+"temperature : "+response.TEMP[key].temperature + " humidity :" +response.TEMP[key].humidity+" </li></h2>";
-                   // $("#display").append(temp); 
-                  $("#display").html(temp); 
-
-                                  // Get the temperature and humidity values
-                        var temperature = response.TEMP[key].temperature;
-                        var humidity = response.TEMP[key].humidity;
-
-                        // Change the polygon color based on the temperature and humidity values
-                        if (temperature > 30 && humidity < 30) {
-                          polygon.setStyle({
-                            fillColor: 'red'
-                            , fillOpacity: 0.5, color:'red'
-                          });
-                        } else if (temperature <= 30 && humidity >= 30) {
-                          polygon.setStyle({
-                            fillColor: 'green', fillOpacity: 0.5 ,color:'green'
-                          });
-                        } else {
-                          polygon.setStyle({
-                            fillColor: 'yellow', fillOpacity: 0.5,color:'yellow'
-                          });
-                        }
-                   
-                }
-              },
-              error: function(reponse){
-                
-                alert("an error occured");
-              }
-            });
-          },1000);
-        });
+   
+       
       </script>
-
+  
+  
     </body>
 
 </html>

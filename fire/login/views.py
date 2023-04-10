@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from .forms import *
+from map.models import myProject
 # Create your views here.
 
 
@@ -8,6 +9,8 @@ def connectas(request):
     return render(request, 'connectas.html', {})
 
 def connectasclient(request):
+    
+    
     if request.method == 'POST':
         formulaire = LoginForm(request.POST)
         if formulaire.is_valid(request):
@@ -19,7 +22,7 @@ def connectasclient(request):
                 login(request, data)
                 #### on va redirect dashboard #####
                 # return redirect('map/')
-            return redirect('post_list')
+            return redirect('interface_c')
         # We pass the form to the template even if it is not valid
         return render(request, 'login.html', {'form': formulaire})
     # We pass the form to the template for GET requests

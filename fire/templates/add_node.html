@@ -22,7 +22,7 @@
     </head>
 
     <body class="bg-img">
-        <div class="container text-center" >
+        <div class="container222 text-center" >
             <div class="row">
                 <div class="col-3">
                     <div class="card mb-3" style="margin-left: 45px;">
@@ -96,6 +96,13 @@
 
    
     <!-- <script src="{% static 'js/map.js' %}"></script> -->
+    <!-- leaflet js  -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.2/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.2/dist/leaflet.js"></script>
+
+<!-- leaflet draw plugin  -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.js"></script>
   <script>
 
     //  var map = L.map('map').setView([35, 9.5], 5);
@@ -108,7 +115,7 @@ var geojson_str = "{{ project.geomp.json|escapejs }}";
 var geojson = JSON.parse(geojson_str);
 
 // Create a Leaflet map
-var map = L.map('map').setView([{{ project.geomp.centroid.y }}, {{ project.geomp.centroid.x }}], 5);
+var map = L.map('map').setView([{{ project.geomp.centroid.y }}, {{ project.geomp.centroid.x }}], 9);
 
 
 L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
@@ -121,7 +128,7 @@ L.geoJSON(geojson).addTo(map);
 // Add the client name to the page
 // document.getElementById('client').innerHTML = client;
 
-L.marker([35, 9.5]).addTo(map)
+{% comment %} L.marker([35, 9.5]).addTo(map)
     .bindPopup('A marker test.')
     .openPopup();
 
@@ -147,8 +154,130 @@ marker.bindPopup('heloooooooooooooo.')
     document.getElementById("lat").value = position.lat;
     document.getElementById("lng").value = position.lng;
   });
+}); {% endcomment %}
+
+
+
+// leaflet draw 
+var drawnFeatures = new L.FeatureGroup();
+map.addLayer(drawnFeatures);
+
+var drawControl = new L.Control.Draw({
+    // position: "topright",
+    edit: {
+        featureGroup: drawnFeatures,
+        remove: true
+    },
+    draw: {
+    polygon: {
+     shapeOptions: {
+      color: 'purple'
+     },
+    //  allowIntersection: false,
+    //  drawError: {
+    //   color: 'orange',
+    //   timeout: 1000
+    //  },
+    },
+    polyline: {
+     shapeOptions: {
+      color: 'red'
+     },
+    },
+    rect: {
+     shapeOptions: {
+      color: 'green'
+     },
+    },
+    circle: {
+     shapeOptions: {
+      color: 'steelblue'
+     },
+    },
+    remove: true // Add remove control option
+   },
+
+});
+map.addControl(drawControl);
+
+map.on("draw:created", function(e){
+    var type = e.layerType;
+    var layer = e.layer;
+
+   
+
+    console.log(layer.toGeoJSON())
+
+    layer.bindPopup(`<p>${JSON.stringify(layer.toGeoJSON())}</p>`)
+    drawnFeatures.addLayer(layer);
+
+    var geoj = layer.toGeoJSON();
+    const lat = geoj.geometry.coordinates[1];
+    const lng = geoj.geometry.coordinates[0];
+    
+    console.log("Latitude:", lat);
+    console.log("Longitude:", lng);
+
+    document.getElementById("lat").value = lat;
+   document.getElementById("lng").value = lng;
+
+   layer.dragging.enable(); // make the marker draggable
+
+   
+   layer.on('dragend', function() {
+    var latlng = layer.getLatLng();
+    console.log("New latitude:", latlng.lat);
+    console.log("New longitude:", latlng.lng);
+
+    document.getElementById("lat").value = latlng.lat;
+    document.getElementById("lng").value = latlng.lng;
 });
 
+    // remove the marker when clicked
+   // layer.on('click', function () {
+   //   map.removeLayer(layer);
+  //});
+
+    
+});
+
+map.on("draw:edited", function(e){
+    var layers = e.layers;
+    var type = e.layerType;
+    
+
+    layers.eachLayer(function(layer){
+        console.log(layer)
+        
+       
+    })
+    
+})
+
+/**************the old markeer*****************/
+
+{% comment %} var marker;
+
+map.on("click", function (e) {
+  // If marker is already defined, remove it before adding a new one
+   if (marker) {
+   map.removeLayer(marker);
+   }  
+  // Add new marker at double-clicked location
+  marker = L.marker(e.latlng, { draggable: true }).addTo(map);
+marker.bindPopup('heloooo from "click".')
+    .openPopup();
+  
+  document.getElementById("lat").value = e.latlng.lat;
+  document.getElementById("lng").value = e.latlng.lng;
+
+  marker.on("dragend", function (e) {
+    var marker = e.target;
+    var position = marker.getLatLng();
+    document.getElementById("lat").value = position.lat;
+    document.getElementById("lng").value = position.lng;
+  });
+}); {% endcomment %}
  </script>       
 
     </body>

@@ -9,6 +9,9 @@ urlpatterns = [
     path('display_polygone/<int:id>/', views.display_polygone, name='display_polygone'),
     path('display_polygone/<int:id>/add_node', views.add_node, name='addnode'),
     path('display_polygone/<int:id>/all_detail', views.all_node, name='all'),
+    path('display_polygone/<int:id>/nodes', views.ALL, name='ALL_node'),
+    
+    path('interface/', views.interface_c, name='interface_c'),
   
   
 ]
