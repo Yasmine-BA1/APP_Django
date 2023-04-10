@@ -47,31 +47,12 @@
                 </div>
 
                 <div class="col-3"  style="background-color: #FFFFFF;width: 900px; border-radius: 10px;">
-                    <form method="POST">
-                    {% csrf_token %} 
-
-                    <h1>Your Polygon Of Project: {{ project.nomp }}</h1>
-                    <h5>Your Client : {{ project.clientp }}</h5>
-                        <!-- <div class="col-md-5">
-                        <label for="nomp">Select Your Client</label>
-                        <br/>
-                        <select name="clientp">
-                            {% for client in clients %}
-                            <option value="{{ client.nom }}">Client: {{ client.nom  }}</option>
-                            {% endfor %}
-                        </select>
-                    </div> -->
-
-                    <button class="btn btn-dark  mx-auto d-block" name="button_1" style='  font-size: 15px; background-color: darkgreen; margin-bottom: 20px;' onclick="location.href='{% url 'addnode' project.polygon_id %}'"> Add node</button>
-                        <h2>Map</h2>
-                        <div class='col-6 rounded ' id="map" style="width: 800px;height: 500px; box-sizing:border-box; margin-top: 20px;  border-radius: 50px; border: 1px solid rgb(9, 0, 0) ;">
-                            <div class="leaflet-control"></div>
-                        </div>
-             
-                        <label for="geomp">Geometry:</label>
-                        <input type="text" id="geomp" name="geomp" value="{{ project.geomp }}" readonly><br><br>
-                                                    
-                    </form>
+                    <div style="border: 1px solid rgb(7, 7, 7) ; height: 200px; width: 480px; margin: 200px 200px;">
+                   
+                        <h3 style="margin: 80px 30px;">Welcome To Your Projects</h3>
+                      
+    
+                    </div>
 
                 </div>
 

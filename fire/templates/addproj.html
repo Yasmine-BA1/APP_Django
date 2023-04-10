@@ -81,7 +81,7 @@
                   </div>
                   <div class="col" >
                     <h4>Choise Client </h4>
-                    <label>select an existing client hereand click skip or click next to create new one</label>
+                    <label>Select An Existing Client From Here </label>
                     {{ form.clientp}} 
                   </div>
 
@@ -100,10 +100,13 @@
                 
                  
               <div class="text-center">
-                <button class="btn btn-dark" style='width:30%; background-color: #A26A25; color:#2B2612; font-size: 15px; ' type="submit" value="save">Next</button>
-                <!-- <button class="btn btn-dark  mx-auto d-block" style='  font-size: 15px; background-color: darkgreen;' onclick="location.href='#'"> Next step</button> -->
+                <div class="panel-footer" style="text-align: center; margin-top: 10px;">
+                  Click Next To Submit Project Form Or Skip If You Have Already Project.
               </div>
-              {% comment %} <button class="btn btn-dark  mx-auto d-block"  style='  font-size: 8px; background-color: #A26A25; color:#2B2612;' onclick="location.href='#'"> Skip </button> {% endcomment %}
+                <button class="btn btn-dark" style='width:30%; background-color: #A26A25; color:#2B2612; font-size: 15px; margin-bottom: 4px;' type="submit" value="save">Next</button>
+                <button class="btn btn-dark  mx-auto d-block"  style='  font-size: 8px; background-color: #A26A25; color:#2B2612;' onclick="location.href='{% url 'display' %}'"> Skip </button>  
+              </div>
+              <!-- {% comment %} <button class="btn btn-dark  mx-auto d-block"  style='  font-size: 8px; background-color: #A26A25; color:#2B2612;' onclick="location.href='#'"> Skip </button> {% endcomment %} -->
           
            </form>
         </div>
@@ -115,70 +118,96 @@
    <script type="text/javascript" src="lib/leaflet.js"></script>
 
    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.js"></script> 
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
  
    <script>
       var map = L.map('mapid').setView([37, 10.2], 9);
-      L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-          attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-      }).addTo(map);
- 
-          // FeatureGroup is to store editable layers
-     var drawnItems = new L.FeatureGroup();
-     map.addLayer(drawnItems);
- 
-     var drawControl = new L.Control.Draw({
-       draw: {
-         polygon: {
-          shapeOptions: {
-           color: 'purple'
-          },
-          allowIntersection: false,
-          drawError: {
-           color: 'orange',
-           timeout: 1000
-          },
-         },
-         polyline: {
-          shapeOptions: {
-           color: 'red'
-          },
-         },
-         rect: {
-          shapeOptions: {
-           color: 'green'
-          },
-         },
-         circle: {
-          shapeOptions: {
-           color: 'steelblue'
-          },
-         },
+L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(map);
+
+// FeatureGroup is to store editable layers
+var drawnItems = new L.FeatureGroup();
+map.addLayer(drawnItems);
+
+var drawControl = new L.Control.Draw({
+    draw: {
+        polygon: {
+            shapeOptions: {
+                color: 'purple'
+            },
+            allowIntersection: false,
+            drawError: {
+                color: 'orange',
+                timeout: 1000
+            },
         },
-          edit: {
-              featureGroup: drawnItems
-          }
-     });
-     map.addControl(drawControl);
- 
-     
-     var polygons = [];
-     map.on('draw:created', function (e) {
-       var type = e.layerType,
-             layer = e.layer;
-         const coordinates = layer.editing.latlngs[0][0]
-         let polygon = [];
-         coordinates.forEach((element) => {
-             polygon.push(`${element.lng} ${element.lat}`);
-         });
-         polygon.push(`${coordinates[0].lng} ${coordinates[0].lat}`);
-         polygonString = 'POLYGON (('+polygon.join(', ')+'))';
-         document.getElementById('points').value=polygonString;
-         drawnItems.addLayer(layer);
-         polygons.push(polygon); // add the polygon to the polygons array
-         // drawControl.remove();
-         // drawEditControl.addTo(map);
-     });
- 
+        polyline: {
+            shapeOptions: {
+                color: 'red'
+            },
+        },
+        rect: {
+            shapeOptions: {
+                color: 'green'
+            },
+        },
+        circle: {
+            shapeOptions: {
+                color: 'steelblue'
+            },
+        },
+    },
+    edit: {
+        featureGroup: drawnItems
+    }
+});
+map.addControl(drawControl);
+
+var polygons = []; // initialize an empty array to store polygons
+
+map.on('draw:created', function (e) {
+    var type = e.layerType,
+        layer = e.layer;
+    const coordinates = layer.editing.latlngs[0][0]
+    let polygon = [];
+    coordinates.forEach((element) => {
+        polygon.push(`${element.lng} ${element.lat}`);
+    });
+    polygon.push(`${coordinates[0].lng} ${coordinates[0].lat}`);
+    polygonString = 'POLYGON (('+polygon.join(', ')+'))';
+    document.getElementById('points').value=polygonString;
+    drawnItems.addLayer(layer);
+    polygons.push(polygon); // add the polygon to the polygons array
+});
+
+// Function to save polygons to the database
+function savePolygons() {
+    // Loop through all the polygons and save them to the database
+    for (var i = 0; i < polygons.length; i++) {
+        var polygonString = 'POLYGON ((' + polygons[i].join(', ') + '))';
+        var formData = new FormData();
+        formData.append('polygonString', polygonString);
+
+        fetch('/save-polygon/', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log(data);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+}
+
   </script>       
  
   
