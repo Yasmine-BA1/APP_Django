@@ -207,8 +207,10 @@ map.on("draw:created", function(e){
    
 
     console.log(layer.toGeoJSON())
+    
 
     layer.bindPopup(`<p>${JSON.stringify(layer.toGeoJSON())}</p>`)
+    
     drawnFeatures.addLayer(layer);
 
     var geoj = layer.toGeoJSON();
@@ -220,6 +222,7 @@ map.on("draw:created", function(e){
 
     document.getElementById("lat").value = lat;
    document.getElementById("lng").value = lng;
+   layer.bindPopup(`<p>Latitude: ${lat}<br> Longitude: ${lng}</p>`);
 
    layer.dragging.enable(); // make the marker draggable
 
@@ -231,15 +234,18 @@ map.on("draw:created", function(e){
 
     document.getElementById("lat").value = latlng.lat;
     document.getElementById("lng").value = latlng.lng;
+
+    layer.bindPopup(`<p>Latitude: ${latlng.lat}<br> Longitude: ${latlng.lng}</p>`);
+});
+
+
+  
 });
 
     // remove the marker when clicked
    // layer.on('click', function () {
    //   map.removeLayer(layer);
   //});
-
-    
-});
 
 map.on("draw:edited", function(e){
     var layers = e.layers;

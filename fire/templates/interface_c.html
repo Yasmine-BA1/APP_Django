@@ -1,0 +1,116 @@
+{% extends 'base.html' %} 
+{% block content %} {% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+       
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- Leaflet CSS and JS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" 
+    integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js" 
+    integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
+  
+    <!-- Leaflet Draw CSS and JS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+
+    </head>
+
+    <body class="bg-img">
+        <div class="contain text-center" style="width: 1445px; height: 1500px; border: 1px solid rgb(7, 7, 7) ;  margin-left: 2px; border-radius: 10px;" >
+            <div  class="row">
+                <div class="col-3" style="width: 250px; height: 150px;background-color: #FFFFFF; margin-left: 22px; border-radius: 10px 10px 0px 0px; margin-top: 8px;"><h3>Welcome, {{ pseudo }}!</h3></div>
+                <div class="col-3" style=" border: 2px solid rgb(7, 7, 7) ; width: 330px; height: 150px; margin-left: 33px; border-radius: 10px; margin-top: 8px; margin-right: 60px;" ></div>
+                <div class="col-3" style=" border: 2px solid rgb(7, 7, 7) ; width: 330px; height: 150px;  border-radius: 10px; margin-top: 8px; margin-right: 60px;" ></div>
+                <div class="col-3" style=" border: 2px solid rgb(7, 7, 7) ; width: 330px; height: 150px;  border-radius: 10px; margin-top: 8px; margin-right: 8px;" ></div>
+
+           </div>
+
+            <div class="row">
+                <div class="col-3" style="width: 250px; height: 800px; background-color: #FFFFFF; margin-left: 22px; border-radius: 0px 0px 10px 10px; margin-right: 8px; ">
+                   
+
+                </div>
+
+
+                <div class="col-3"  style="background-color: #FFFFFF; width: 1150px; height: 800px; border-radius: 10px; margin-top: 8px; margin-left: 8px;">
+
+               
+                    
+<!-- 
+                    {% for project in projects %}
+                        <p>{{ project.nomp }}</p>
+                    {% endfor %}
+
+                   -->
+                   <h3> Project Name:</h3>
+                    <p>{{proj_instance.nomp}}</p>
+                   
+
+                    <div class='col-6 rounded ' id="map" style="width: 1125px;height: 600px; box-sizing:border-box; margin-top: 20px;  border-radius: 50px; border: 1px solid rgb(9, 0, 0) ;">
+                        <div class="leaflet-control"></div>
+                    </div>
+         
+                    <label for="geomp">Geometry:</label>
+                    <input type="text" id="geomp" name="geomp" value="{{ proj_instance.geomp }}" readonly><br><br>
+                    
+                </div>
+
+            </div>
+
+        </div>
+
+        <script type="text/javascript" src="lib/leaflet.js"></script>
+
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.js"></script> 
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+ 
+   //       var map = L.map('map').setView([37, 10.2], 9);
+// L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+//     attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+// }).addTo(map);
+
+   <script>
+var geojson_str = "{{ proj_instance.geomp.json|escapejs }}";
+var geojson = JSON.parse(geojson_str);
+
+// Create a Leaflet map
+var map = L.map('map').setView([{{ proj_instance.geomp.centroid.y }}, {{ proj_instance.geomp.centroid.x }}], 9);
+
+
+L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+  }).addTo(map);
+
+  var drawnItems = new L.FeatureGroup();
+    map.addLayer(drawnItems);
+
+// Add the GeoJSON polygon to the map
+L.geoJSON(geojson).addTo(map);
+
+var yass = L.marker([{{node_instance.position.y}},{{node_instance.position.x}}]).addTo(map);
+
+var latlng = yass.getLatLng();
+yass.bindPopup("<b>Node Name</b><br>{{node_instance.nom}} <br><b>Node Position</b><br>Latitude: " + latlng.lat + "<br>Longitude: " + latlng.lng).openPopup();
+
+
+
+  
+            
+            
+            
+</script> 
+      
+
+    </body>
+
+</html>
+
+
+{% endblock %}

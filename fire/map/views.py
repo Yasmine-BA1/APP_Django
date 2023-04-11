@@ -149,12 +149,31 @@ def ALL(request,id):
     return render(request, 'ALL_node.html', {  'node_instance': node_instance,'node': nodeq,'markers': marker,'projects':projects, 'project': project})
 
 
-def interface_c(request):
-    projects = myProject.objects.all()
-   
 
-    marker = node.objects.all()
+def interface_c(request, pseudo):
+    clientp = client.objects.get(pseudo=pseudo)
+    projects = myProject.objects.filter(clientp=clientp)
+    print('***',projects)
+    for proj_instance in projects:
+        print('namep',proj_instance.nomp)
+        print('geomp',proj_instance.geomp)
+    
+    
+
+    nodeq = node.objects.filter(polyg=proj_instance)
+    for node_instance in nodeq:
+        # get the latitude and longitude values from the node instance
+        latitude = node_instance.latitude
+        longitude = node_instance.longitude
+        position=node_instance.position
+        nom=node_instance.nom
+        print('---node name:',nom)
+        print('---node position:',position)
+
+    context = {'projects': projects, 'pseudo': pseudo,'proj_instance':proj_instance,'node_instance':node_instance}
+    return render(request, 'interface_c.html', context)
+
    
     
     
-    return render(request, 'interface_c.html',{'markers': marker,'projects':projects})
+    

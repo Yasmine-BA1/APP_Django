@@ -54,13 +54,13 @@
 
                         <h1>ALL Details Of Project: {{ project.nomp }}</h1>
 
-                        <div style="border: 1px solid rgb(7, 7, 7) ; height: 200px; width: 480px;">
+                        <div style="border: 1px solid rgb(7, 7, 7) ; height: 120px; width: 350px; margin-top: 50px;">
                    
-                            <h3><a href="{% url 'update' %}"">This is my live Data</a></h3>
-                            
-                            <ul id="display"> </ul>
-        
-                        </div>
+                          <h3><a href="{% url 'update' %}"">This is my live Data</a></h3>
+                          
+                          <ul id="display"> </ul>
+      
+                      </div>
 
 
 
@@ -132,26 +132,83 @@
    
     <!-- <script src="{% static 'js/map.js' %}"></script> -->
     <script>
-        var geojson_str = "{{ project.geomp.json|escapejs }}";
-        var geojson = JSON.parse(geojson_str);
-  
-  
-        var map = L.map('map').setView([{{ project.geomp.centroid.y }}, {{ project.geomp.centroid.x }}], 9);
-  
-  
-        L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-              attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-          }).addTo(map);
-  
-          polygon = L.geoJSON(geojson).addTo(map);
-         
-          var yass = L.marker([{{node_instance.position.y}},{{node_instance.position.x}}]).addTo(map);
-     
+      var geojson_str = "{{ project.geomp.json|escapejs }}";
+      var geojson = JSON.parse(geojson_str);
 
-   
-       
-      </script>
+ 
+      var map = L.map('map').setView([{{ project.geomp.centroid.y }}, {{ project.geomp.centroid.x }}], 9);
+
+
+      L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        L.marker([36, 10]).addTo(map)
+          .bindPopup('A marker test.')
+          .openPopup();
+
+          
+
+        polygon = L.geoJSON(geojson).addTo(map);
+      
+        var yass = L.marker([{{node_instance.position.y}},{{node_instance.position.x}}]).addTo(map);
+
+        var latlng = yass.getLatLng();
+        yass.bindPopup("<b>Node Name</b><br>{{node_instance.nom}} <br><b>Node Position</b><br>Latitude: " + latlng.lat + "<br>Longitude: " + latlng.lng).openPopup();
+
   
+     
+    </script>
+
+    <script>
+      $(document).ready(function(){
+          
+          setInterval(function(){
+            
+            $.ajax({
+              type:'GET',
+              url : "{% url 'getTemp' %}",
+              success: function(response){
+                
+                $("#display").empty();
+                for (var key in response.TEMP)
+                {
+                  
+                  var temp = "<h4>" + "temperature: " + response.TEMP[key].temperature + "<br>humidity: " + response.TEMP[key].humidity + "</h4>";
+                   // $("#display").append(temp); 
+                  $("#display").html(temp); 
+
+                                  // Get the temperature and humidity values
+                        var temperature = response.TEMP[key].temperature;
+                        var humidity = response.TEMP[key].humidity;
+
+                        // Change the polygon color based on the temperature and humidity values
+                        if (temperature > 30 && humidity < 30) {
+                          polygon.setStyle({
+                            fillColor: 'red'
+                            , fillOpacity: 0.5, color:'red'
+                          });
+                        } else if (temperature <= 30 && humidity >= 30) {
+                          polygon.setStyle({
+                            fillColor: 'green', fillOpacity: 0.5 ,color:'green'
+                          });
+                        } else {
+                          polygon.setStyle({
+                            fillColor: 'yellow', fillOpacity: 0.5,color:'yellow'
+                          });
+                        }
+                   
+                }
+              },
+              error: function(reponse){
+                
+                alert("an error occured");
+              }
+            });
+          },1000);
+        });
+      </script>
+
   
     </body>
 

@@ -54,20 +54,13 @@
 
                         <h1>ALL Details Of Project: {{ project.nomp }}</h1>
 
-                        <div style="border: 1px solid rgb(7, 7, 7) ; height: 200px; width: 480px;">
+                        <div style="border: 1px solid rgb(7, 7, 7) ; height: 120px; width: 350px; margin-top: 50px;">
                    
-                            <h3><a href="{% url 'update' %}"">This is my live Data</a></h3>
-                            
-                            <ul id="display"> </ul> 
-
-                            {% comment %} <h1> This is my live Data</h1>
-                            <h3><a href="{% url 'update' %}"">Click Here To See Hum and Temp</a></h3> {% endcomment %}
-                            
-                            
-                            <ul id="display">    
-                            </ul>
-        
-                        </div>
+                          <h3><a href="{% url 'update' %}"">This is my live Data</a></h3>
+                          
+                          <ul id="display"> </ul>
+      
+                      </div>
 
 
 
@@ -140,7 +133,7 @@
       var geojson_str = "{{ project.geomp.json|escapejs }}";
       var geojson = JSON.parse(geojson_str);
 
-
+ 
       var map = L.map('map').setView([{{ project.geomp.centroid.y }}, {{ project.geomp.centroid.x }}], 9);
 
 
@@ -148,10 +141,20 @@
             attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
 
+        L.marker([36, 10]).addTo(map)
+          .bindPopup('A marker test.')
+          .openPopup();
+
+          
+
         polygon = L.geoJSON(geojson).addTo(map);
-       
-       
+      
         var yass = L.marker([{{node_instance.position.y}},{{node_instance.position.x}}]).addTo(map);
+
+        var latlng = yass.getLatLng();
+        yass.bindPopup("<b>Node Name</b><br>{{node_instance.nom}} <br><b>Node Position</b><br>Latitude: " + latlng.lat + "<br>Longitude: " + latlng.lng).openPopup();
+
+  
      
     </script>
 
@@ -169,7 +172,8 @@
                 for (var key in response.TEMP)
                 {
                   
-                  var temp ="<h2><li>"+"temperature : "+response.TEMP[key].temperature + " humidity :" +response.TEMP[key].humidity+" </li></h2>";
+                  var temp = "<h4>" + "temperature: " + response.TEMP[key].temperature + "<br>humidity: " + response.TEMP[key].humidity + "</h4>";
+
                    // $("#display").append(temp); 
                   $("#display").html(temp); 
 
