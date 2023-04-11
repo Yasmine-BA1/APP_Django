@@ -25,11 +25,33 @@
     <body class="bg-img">
         <div class="contain text-center" style="width: 1445px; height: 1500px; border: 1px solid rgb(7, 7, 7) ;  margin-left: 2px; border-radius: 10px;" >
             <div  class="row">
-                <div class="col-3" style="width: 250px; height: 150px;background-color: #FFFFFF; margin-left: 22px; border-radius: 10px 10px 0px 0px; margin-top: 8px;"><h3>Welcome, {{ pseudo }}!</h3></div>
+                <div class="col-3" style="width: 250px; height: 200px;background-color: #FFFFFF; margin-left: 22px; border-radius: 10px 10px 0px 0px; margin-top: 8px;">
+                    
+                    <div class="sidebar-header d-flex justify-content-center align-items-center px-3 py-4" >
+                        <img
+                             class="rounded-pill img-fluid"
+                             width="65"
+                             src="{{ clientp.image.url }}"
+                             alt="">
+
+                        <div class="ms-2">
+                          <h4 class="fs-6 mb-0">
+                            
+                            <a class="text-decoration-none" href="#">{{clientp.prenom}} {{clientp.nom}}</a>
+                          </h4>
+                          <p class="mt-1 mb-0">Lorem ipsum dolor sit .</p>
+                        </div>
+                      </div>
+                      <h5 style="margin-top: 10px; margin-bottom: 5px;">Welcome, {{ pseudo }}!</h5>
+                </div>
                 <div class="col-3" style=" border: 2px solid rgb(7, 7, 7) ; width: 330px; height: 150px; margin-left: 33px; border-radius: 10px; margin-top: 8px; margin-right: 60px;" >
-                    <h3><a href="{% url 'update' %}"">__Data__</a></h3>
-                          
-                    <ul id="display"> </ul>
+                    
+                   
+                        <h4><a href="{% url 'update' %}""> live Data</a></h4>
+                        
+                        <h4 id="display"> </h4>
+                        <h4>Wind Speed :{{wind_speed}}</h4>
+                      
                 </div>
                 <div class="col-3" style=" border: 2px solid rgb(7, 7, 7) ; width: 330px; height: 150px;  border-radius: 10px; margin-top: 8px; margin-right: 60px;" ></div>
                 <div class="col-3" style=" border: 2px solid rgb(7, 7, 7) ; width: 330px; height: 150px;  border-radius: 10px; margin-top: 8px; margin-right: 8px;" ></div>
@@ -39,7 +61,7 @@
             <div class="row">
                 <div class="col-3" style="width: 250px; height: 800px; background-color: #FFFFFF; margin-left: 22px; border-radius: 0px 0px 10px 10px; margin-right: 8px; ">
                    
-
+                    
                 </div>
 
 
@@ -75,7 +97,7 @@
    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.js"></script> 
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
  
-   //       var map = L.map('map').setView([37, 10.2], 9);
+   //       var map = L.map('map').setView([37, 10.2], 10);
 // L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
 //     attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
 // }).addTo(map);
@@ -85,7 +107,7 @@ var geojson_str = "{{ proj_instance.geomp.json|escapejs }}";
 var geojson = JSON.parse(geojson_str);
 
 // Create a Leaflet map
-var map = L.map('map').setView([{{ proj_instance.geomp.centroid.y }}, {{ proj_instance.geomp.centroid.x }}], 9);
+var map = L.map('map').setView([{{ proj_instance.geomp.centroid.y }}, {{ proj_instance.geomp.centroid.x }}], 15);
 
 
 L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {

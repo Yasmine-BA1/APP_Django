@@ -2,10 +2,13 @@
 from django.db import models
 from django.utils import timezone
 
+
 #Django model for post object
 class Post(models.Model):
+    
     temperature = models.BigIntegerField()
     humidity = models.BigIntegerField()
+    
     created_date = models.DateTimeField(default=timezone.now)
     
 
