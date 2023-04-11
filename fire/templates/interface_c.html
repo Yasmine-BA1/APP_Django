@@ -25,12 +25,12 @@
     <body class="bg-img">
         <div class="contain text-center" style="width: 1445px; height: 1500px; border: 1px solid rgb(7, 7, 7) ;  margin-left: 2px; border-radius: 10px;" >
             <div  class="row">
-                <div class="col-3" style="width: 250px; height: 200px;background-color: #FFFFFF; margin-left: 22px; border-radius: 10px 10px 0px 0px; margin-top: 8px;">
+                <div class="col-3" style="width: 250px; height: 120px;background-color: #FFFFFF; border: 0.5px solid rgb(168, 167, 167) ; margin-left: 22px; border-radius: 10px ; margin-top: 25px;">
                     
                     <div class="sidebar-header d-flex justify-content-center align-items-center px-3 py-4" >
                         <img
                              class="rounded-pill img-fluid"
-                             width="65"
+                             width="70"
                              src="{{ clientp.image.url }}"
                              alt="">
 
@@ -39,27 +39,28 @@
                             
                             <a class="text-decoration-none" href="#">{{clientp.prenom}} {{clientp.nom}}</a>
                           </h4>
-                          <p class="mt-1 mb-0">Lorem ipsum dolor sit .</p>
+                          <h6 style="margin-top: 10px; margin-bottom: 5px;">Welcome, {{ pseudo }}!</h6> 
+                          <!-- <p class="mt-1 mb-0">Lorem ipsum dolor sit .</p> -->
                         </div>
                       </div>
-                      <h5 style="margin-top: 10px; margin-bottom: 5px;">Welcome, {{ pseudo }}!</h5>
+                      
                 </div>
-                <div class="col-3" style=" border: 2px solid rgb(7, 7, 7) ; width: 330px; height: 150px; margin-left: 33px; border-radius: 10px; margin-top: 8px; margin-right: 60px;" >
+                <div class="col-3" style=" border: 2px solid rgb(7, 7, 7) ; width: 250px; height: 150px; margin-left: 33px; border-radius: 10px; margin-top: 8px; margin-right: 60px;" >
                     
                    
                         <h4><a href="{% url 'update' %}""> live Data</a></h4>
                         
-                        <h4 id="display"> </h4>
-                        <h4>Wind Speed :{{wind_speed}}</h4>
+                        <h5 id="display"> </h5>
+                        <h5>Wind Speed :{{post_instance.wind_speed}}</h5>
                       
                 </div>
-                <div class="col-3" style=" border: 2px solid rgb(7, 7, 7) ; width: 330px; height: 150px;  border-radius: 10px; margin-top: 8px; margin-right: 60px;" ></div>
-                <div class="col-3" style=" border: 2px solid rgb(7, 7, 7) ; width: 330px; height: 150px;  border-radius: 10px; margin-top: 8px; margin-right: 8px;" ></div>
+                <div class="col-3" style=" border: 2px solid rgb(7, 7, 7) ; width: 300px; height: 150px;  border-radius: 10px; margin-top: 8px; margin-right: 60px;" ></div>
+                <div class="col-3" style=" border: 2px solid rgb(7, 7, 7) ; width: 300px; height: 150px;  border-radius: 10px; margin-top: 8px; margin-right: 8px;" ></div>
 
            </div>
 
             <div class="row">
-                <div class="col-3" style="width: 250px; height: 800px; background-color: #FFFFFF; margin-left: 22px; border-radius: 0px 0px 10px 10px; margin-right: 8px; ">
+                <div class="col-3" style="width: 250px; height: 800px; background-color: #FFFFFF;  border: 0.5px solid rgb(168, 167, 167) ; margin-left: 22px; border-radius: 10px; margin-right: 8px; ">
                    
                     
                 </div>
@@ -142,7 +143,7 @@ yass.bindPopup("<b>Node Name</b><br>{{node_instance.nom}} <br><b>Node Position</
               for (var key in response.TEMP)
               {
                 
-                var temp = "<h4>" + "temperature: " + response.TEMP[key].temperature + "<br>humidity: " + response.TEMP[key].humidity + "</h4>";
+                var temp = "<h5>" + "temperature: " + response.TEMP[key].temperature + "<br>humidity: " + response.TEMP[key].humidity + "</h5>";
                  // $("#display").append(temp); 
                 $("#display").html(temp); 
 

@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.gis.geos import Polygon
 
 from .models import myProject
+from dash.models import Post
 from django.contrib.gis.geos import GEOSGeometry
 
 from django.http import JsonResponse
@@ -102,15 +103,9 @@ def add_node(request, id):
 
 
 def all_node(request,id):
-    owm = pyowm.OWM("0f21fa98b6e075b77fd85b3af087e294")
-    
-    location = owm.weather_manager().weather_at_place('Bizerte, TN')
-    
-    weather = location.weather
-
-    temperature_owm = weather.temperature('celsius')['temp']
-    humidity_owm = weather.humidity
-    wind_speed = weather.wind()['speed']
+    posts = Post.objects.all()
+    for post_instance in posts:
+        print('***wind',post_instance.wind_speed)
 
     projects = myProject.objects.all()
     project = myProject.objects.get(polygon_id=id)
@@ -134,19 +129,16 @@ def all_node(request,id):
     #no = node.objects.order_by('-id').first()
     #bla = no.nom
     #print(bla)
-    context = { 'node_instance': node_instance,'nodee': nodeq,'markers': marker,'projects':projects, 'project': project,'wind_speed':wind_speed,'location':location,'weather':weather,'temperature_owm':temperature_owm,'humidity_owm':humidity_owm}
+    context = { 'node_instance': node_instance,'nodee': nodeq,'markers': marker,'post_instance':post_instance}
     return render(request, 'all.html',context)
 
 
 
 
 def ALL(request,id):
-    owm = pyowm.OWM("0f21fa98b6e075b77fd85b3af087e294")
-    location = owm.weather_manager().weather_at_place('Bizerte, TN') 
-    weather = location.weather
-    temperature_owm = weather.temperature('celsius')['temp']
-    humidity_owm = weather.humidity
-    wind_speed = weather.wind()['speed']
+    posts = Post.objects.all()
+    for post_instance in posts:
+        print('***wind',post_instance.wind_speed)
 
     projects = myProject.objects.all()
     project = myProject.objects.get(polygon_id=id)
@@ -164,17 +156,14 @@ def ALL(request,id):
         print('nom:',nom)
         print('position:',position)
 
-    return render(request, 'ALL_node.html', {  'node_instance': node_instance,'node': nodeq,'markers': marker,'projects':projects, 'project': project,'wind_speed':wind_speed})
+    return render(request, 'ALL_node.html', {  'node_instance': node_instance,'node': nodeq,'markers': marker,'projects':projects, 'project': project,'post_instance':post_instance})
 
 
 
 def interface_c(request, pseudo):
-    owm = pyowm.OWM("0f21fa98b6e075b77fd85b3af087e294")
-    location = owm.weather_manager().weather_at_place('Bizerte, TN') 
-    weather = location.weather
-    temperature_owm = weather.temperature('celsius')['temp']
-    humidity_owm = weather.humidity
-    wind_speed = weather.wind()['speed']
+    posts = Post.objects.all()
+    for post_instance in posts:
+        print('***wind',post_instance.wind_speed)
 
     clientp = client.objects.get(pseudo=pseudo)
     print('nom client',clientp.nom)
@@ -197,7 +186,7 @@ def interface_c(request, pseudo):
         # print('---node name:',nom)
         # print('---node position:',position)
 
-    context = {'clientp':clientp,'projects': projects, 'pseudo': pseudo,'proj_instance':proj_instance,'node_instance':node_instance,'wind_speed':wind_speed}
+    context = {'clientp':clientp,'projects': projects, 'pseudo': pseudo,'proj_instance':proj_instance,'node_instance':node_instance,'post_instance':post_instance}
     return render(request, 'interface_c.html', context)
 
    
