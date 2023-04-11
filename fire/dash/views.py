@@ -3,6 +3,7 @@ from django.shortcuts import render
 
 from .mqtt import start_mqtt_client
 from django.http import JsonResponse
+import pyowm
 
 
 def start_mqtt(request):
@@ -17,7 +18,7 @@ def start_mqtt(request):
 
 def post_list(request):
     # Retrieve the latest Post object
-   
+  
     post = Post.objects.order_by('-id').first()
 
     # Render the template and pass the latest Post object as a context variable
