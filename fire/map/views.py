@@ -197,7 +197,7 @@ def interface_c(request, pseudo):
         longitude = node_instance.longitude
         position=node_instance.position
         nom=node_instance.nom
-        # print('---node name:',nom)
+        print('---node name:',nom)
         # print('---node position:',position)
 
     context = {'nodee':nodeq,'clientp':clientp,'projects': projects, 'pseudo': pseudo,'proj_instance':proj_instance,'node_instance':node_instance,'post_instance':post_instance}

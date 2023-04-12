@@ -261,10 +261,11 @@ map.on("draw:edited", function(e){
 })
 
         {% for node in nodee %}
-        // console.log('nooooom',{{node.nom}})
             var yass = L.marker([{{ node.position.y }}, {{ node.position.x }}]).addTo(map);
-            // var latlng = yass.getLatLng();
-            // yass.bindPopup("<b>Node Name</b><br>" + {{ node.nom }} + "<br><b>Node Position</b><br>Latitude: " + latlng.lat + "<br>Longitude: " + latlng.lng).openPopup();
+            var latlng = yass.getLatLng();
+            console.log('--latlng',latlng)
+            // console.log('--name {{node.nom}}')
+            yass.bindPopup("<b>Node Name</b><br> {{ node.nom }} "   + "<br><b>Node Position</b><br>Latitude: " + latlng.lat + "<br>Longitude: " + latlng.lng).openPopup();
         {% endfor %}
 
 /**************the old markeer*****************/
