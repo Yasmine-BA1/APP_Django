@@ -164,49 +164,79 @@ var drawControl = new L.Control.Draw({
 });
 map.addControl(drawControl);
 
-var polygons = []; // initialize an empty array to store polygons
-
 map.on('draw:created', function (e) {
-    var type = e.layerType,
+        var type = e.layerType;
         layer = e.layer;
-    const coordinates = layer.editing.latlngs[0][0]
-    let polygon = [];
-    coordinates.forEach((element) => {
-        polygon.push(`${element.lng} ${element.lat}`);
-    });
-    polygon.push(`${coordinates[0].lng} ${coordinates[0].lat}`);
-    polygonString = 'POLYGON (('+polygon.join(', ')+'))';
-    document.getElementById('points').value=polygonString;
-    drawnItems.addLayer(layer);
-    polygons.push(polygon); // add the polygon to the polygons array
-});
-
-// Function to save polygons to the database
-function savePolygons() {
-    // Loop through all the polygons and save them to the database
-    for (var i = 0; i < polygons.length; i++) {
-        var polygonString = 'POLYGON ((' + polygons[i].join(', ') + '))';
-        var formData = new FormData();
-        formData.append('polygonString', polygonString);
-
-        fetch('/save-polygon/', {
-            method: 'POST',
-            body: formData
+            console.log(layer.toGeoJSON());
+           
+            const   coordinates = layer.toGeoJSON();
+            console.log("coord : "+e.layer.toGeoJSON().geometry.coordinates);
+            console.log(type);
+            if (type === 'polygon'){
+                drawnItems.addLayer(layer);
+                console.log("coord : "+e.layer.toGeoJSON().geometry.coordinates);
+            myjson=drawnItems.toGeoJSON() ;
+        console.log('myjson',myjson);}
+        let coords = [];
+        myjson.features.forEach((coordonne) => {
+            coords = [...coords, ...coordonne.geometry.coordinates];
         })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
+            const multiPolygone = { 
+                "type": "MultiPolygon",
+                "coordinates": [
+                    [...coords]
+                ]
             }
-            return response.json();
-        })
-        .then(data => {
-            console.log(data);
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-    }
-}
+            console.log(multiPolygone)
+        document.getElementById('points').value=JSON.stringify(multiPolygone);  
+       
+     });
+
+
+// var polygons = []; // initialize an empty array to store polygons
+
+// map.on('draw:created', function (e) {
+//     var type = e.layerType, // what type of shape was drawn
+//         layer = e.layer;  //access to the drawn shape object
+//     const coordinates = layer.editing.latlngs[0][0] //extracts the coordinates of the drawn shape
+//     console.log('---coordinates',coordinates)
+//     //extract the longitude and latitude of each coordinate and push them as a string to the polygon array.
+//     let polygon = [];
+//     coordinates.forEach((element) => {
+//         polygon.push(`${element.lng} ${element.lat}`);
+        
+//     });
+//     console.log('-a--polygon',polygon)
+//     polygon.push(`${coordinates[0].lng} ${coordinates[0].lat}`);
+//     console.log('-f--polygon',polygon)
+//     polygonString = 'POLYGON (('+polygon.join(', ')+'))';
+//     console.log('---polygonString',polygonString)
+//     document.getElementById('points').value=polygonString;
+//     drawnItems.addLayer(layer);
+//     polygons.push(polygon); // add the polygon to the polygons array
+//     console.log('---polygons',polygons)
+// });
+
+
+    
+
+//     map.on('draw:edited', function (e) {
+//         layer = e.layers;
+//         const coordinates = layer._layers[Object.keys(layer._layers)[0]]._latlngs[0];
+//         let polygon = [];
+//         coordinates.forEach((element) => {
+//             polygon.push(`${element.lng} ${element.lat}`);
+//         });
+//         polygon.push(`${coordinates[0].lng} ${coordinates[0].lat}`);
+//         polygonString = 'POLYGON (('+polygon.join(', ')+'))';
+//         document.getElementById('points').value=polygonString;
+//     });
+
+//     map.on('draw:deleted', function () {
+//         drawControl.addTo(map);
+//         // drawEditControl.remove();
+//         document.getElementById('points').value='';
+//     });
 
   </script>       
  

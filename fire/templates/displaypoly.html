@@ -82,12 +82,15 @@
    
     <!-- <script src="{% static 'js/map.js' %}"></script> -->
   <script>
-  
+
+ 
+
+    
 var geojson_str = "{{ project.geomp.json|escapejs }}";
 var geojson = JSON.parse(geojson_str);
 
 // Create a Leaflet map
-var map = L.map('map').setView([{{ project.geomp.centroid.y }}, {{ project.geomp.centroid.x }}], 9);
+var map = L.map('map').setView([{{ project.geomp.centroid.y }}, {{ project.geomp.centroid.x }}], 12);
 
 
 L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
@@ -102,9 +105,9 @@ L.geoJSON(geojson).addTo(map);
 
 
 
-L.marker([36, 10]).addTo(map)
-    .bindPopup('A marker test.')
-    .openPopup();
+// L.marker([36, 10]).addTo(map)
+//     .bindPopup('A marker test.')
+//     .openPopup();
 
 
 

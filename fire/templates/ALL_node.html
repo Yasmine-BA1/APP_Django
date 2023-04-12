@@ -81,18 +81,6 @@
                         <input type="text" id="longitude" name="longitude" value="{{ d.longitude }}" readonly><br><br>
                         {%endfor%} {% endcomment %}
 
-          
-
-                        <h3>Nodes List Of Project:{{ project.nomp }}</h3>
-                        <div class="row">
-                        {% for d in node %}
-                        <div class="col-2" style="border: 1px solid rgb(7, 7, 7) ; height: 200px; width: 200px;">                        
-                          <h6 class="card-subtitle mb-2 text-muted" style="text-align:center; color:rgb(51, 77, 4);"><h5>Node Name: </h5>{{ d.nom }}</h6>
-                          <h6 class="card-subtitle mb-2 text-muted" style="text-align:center; color:rgb(51, 77, 4);"><h5>Node Latitude: </h5>{{ d.latitude  }}</h6>
-                          <h6 class="card-subtitle mb-2 text-muted" style="text-align:center; color:rgb(51, 77, 4);"><h5>Node Longitude:</h5> {{ d.longitude  }}</h6>
-                        </div>
-                        {%endfor%}
-                      </div>
 
                     </form>
 
@@ -106,13 +94,13 @@
                      </div>
                     <div class="card-body">
                      
-                      {% for marker in markers %}
+                      {% for d in nodee %}
                       <div class="card mb-2 " style="background-color: #d4d6d8; display: flex; flex-direction: column;">
                         <div class="card-body text-vert">
-                          <h6 class="card-subtitle mb-2 text-muted" style="text-align:center; color:rgb(51, 77, 4);"><h5>Node Name: </h5>{{ marker.nom }}</h6>
-                          <h6 class="card-subtitle mb-2 text-muted" style="text-align:center; color:rgb(51, 77, 4);"><h5>Node Latitude: </h5>{{ marker.latitude  }}</h6>
-                          <h6 class="card-subtitle mb-2 text-muted" style="text-align:center; color:rgb(51, 77, 4);"><h5>Node Longitude:</h5> {{ marker.longitude  }}</h6>
-                          <h6 class="card-subtitle mb-2 text-muted" style="text-align:center; color:rgb(51, 77, 4);"><h5>Node Poly: </h5>{{ marker.polyg  }}</h6>
+                          <h6 class="card-subtitle mb-2 text-muted" style="text-align:center; color:rgb(51, 77, 4);"><h5>Node Name: </h5>{{ d.nom }}</h6>
+                          <h6 class="card-subtitle mb-2 text-muted" style="text-align:center; color:rgb(51, 77, 4);"><h5>Node Latitude: </h5>{{ d.latitude  }}</h6>
+                          <h6 class="card-subtitle mb-2 text-muted" style="text-align:center; color:rgb(51, 77, 4);"><h5>Node Longitude:</h5> {{ d.longitude  }}</h6>
+                          <h6 class="card-subtitle mb-2 text-muted" style="text-align:center; color:rgb(51, 77, 4);"><h5>Node Poly: </h5>{{ d.polyg  }}</h6>
                           <!-- <button class="btn btn-dark  mx-auto d-block"  onclick="location.href='{% url 'display_polygone' project.polygon_id %}'">see polygon</button>
                           <button class="btn btn-dark  mx-auto d-block" name="button_2" style='  font-size: 8px; background-color: darkgreen;' onclick="location.href='{% url 'all' project.polygon_id %}'"> SEE all details</button> -->
                            </div>
@@ -136,26 +124,30 @@
       var geojson = JSON.parse(geojson_str);
 
  
-      var map = L.map('map').setView([{{ project.geomp.centroid.y }}, {{ project.geomp.centroid.x }}], 9);
+      var map = L.map('map').setView([{{ project.geomp.centroid.y }}, {{ project.geomp.centroid.x }}], 12);
 
 
       L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
 
-        L.marker([36, 10]).addTo(map)
-          .bindPopup('A marker test.')
-          .openPopup();
+
 
           
 
         polygon = L.geoJSON(geojson).addTo(map);
       
-        var yass = L.marker([{{node_instance.position.y}},{{node_instance.position.x}}]).addTo(map);
+        // var yass = L.marker([{{node_instance.position.y}},{{node_instance.position.x}}]).addTo(map);
 
-        var latlng = yass.getLatLng();
-        yass.bindPopup("<b>Node Name</b><br>{{node_instance.nom}} <br><b>Node Position</b><br>Latitude: " + latlng.lat + "<br>Longitude: " + latlng.lng).openPopup();
+        // var latlng = yass.getLatLng();
+        // yass.bindPopup("<b>Node Name</b><br>{{node_instance.nom}} <br><b>Node Position</b><br>Latitude: " + latlng.lat + "<br>Longitude: " + latlng.lng).openPopup();
 
+        {% for node in nodee %}
+        // console.log('nooooom',{{node.nom}})
+            var yass = L.marker([{{ node.position.y }}, {{ node.position.x }}]).addTo(map);
+            // var latlng = yass.getLatLng();
+            // yass.bindPopup("<b>Node Name</b><br>" + {{ node.nom }} + "<br><b>Node Position</b><br>Latitude: " + latlng.lat + "<br>Longitude: " + latlng.lng).openPopup();
+        {% endfor %}
   
      
     </script>

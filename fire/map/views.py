@@ -5,10 +5,12 @@ from .models import myProject
 from dash.models import Post
 from django.contrib.gis.geos import GEOSGeometry
 
+
 from django.http import JsonResponse
 from django.contrib.gis.geos import Point
 from .forms import *
 import pyowm 
+import PyFWI
 
 def add_project(request):
     projects = myProject.objects.all()
@@ -34,9 +36,11 @@ def add_project(request):
             selected_client = client.objects.get(id=selected_client_id)
                  
             formulairep.enregistrerProj()
-            polygonString = request.POST.get('points')
-            print(polygonString)
-            polygon = GEOSGeometry(polygonString, srid=4326)
+
+            multiPolygone= request.POST.get('points')
+            print(multiPolygone)
+            polygon = GEOSGeometry(multiPolygone, srid=4326)
+
             instance = myProject(nomp=nomp,descp=descp,debutp=debutp,finp=finp,cityp=cityp,geomp=polygon,clientp=selected_client)
             instance.save()
                     
@@ -86,6 +90,11 @@ def add_node(request, id):
     projects = myProject.objects.all()
     project = myProject.objects.get(polygon_id=id)
 
+    marker = node.objects.all()
+    nodeq = node.objects.filter(polyg=project)
+    
+    
+
     if request.method == 'POST':
         node_name = request.POST.get('nom') 
         mylatitude = request.POST.get('latitude') 
@@ -99,7 +108,7 @@ def add_node(request, id):
 
         return redirect('all',id)
 
-    return render(request, 'add_node.html', { 'projects': projects, 'project': project})
+    return render(request, 'add_node.html', { 'projects': projects, 'project': project,'nodee':nodeq})
 
 
 def all_node(request,id):
@@ -112,7 +121,9 @@ def all_node(request,id):
 
     marker = node.objects.all()
     nodeq = node.objects.filter(polyg=project)
-    print('****',nodeq)
+    print('****nodeq:',nodeq)
+    l=len(nodeq)
+    print('****nodeq length:', len(nodeq))
     
     for node_instance in nodeq:
         # get the latitude and longitude values from the node instance
@@ -125,11 +136,14 @@ def all_node(request,id):
         print('x:',node_instance.position.x)
         print('y:',node_instance.position.y)
         print('position:',position)
+    
+    if request.method == 'POST':
+        return redirect('addnode',id)
         
     #no = node.objects.order_by('-id').first()
     #bla = no.nom
     #print(bla)
-    context = { 'node_instance': node_instance,'nodee': nodeq,'markers': marker,'post_instance':post_instance}
+    context = { 'l':l,'projects':projects,'project':project,'node_instance': node_instance,'nodee': nodeq,'markers': marker,'post_instance':post_instance}
     return render(request, 'all.html',context)
 
 
@@ -156,7 +170,7 @@ def ALL(request,id):
         print('nom:',nom)
         print('position:',position)
 
-    return render(request, 'ALL_node.html', {  'node_instance': node_instance,'node': nodeq,'markers': marker,'projects':projects, 'project': project,'post_instance':post_instance})
+    return render(request, 'ALL_node.html', {  'node_instance': node_instance,'nodee': nodeq,'markers': marker,'projects':projects, 'project': project,'post_instance':post_instance})
 
 
 
@@ -186,7 +200,7 @@ def interface_c(request, pseudo):
         # print('---node name:',nom)
         # print('---node position:',position)
 
-    context = {'clientp':clientp,'projects': projects, 'pseudo': pseudo,'proj_instance':proj_instance,'node_instance':node_instance,'post_instance':post_instance}
+    context = {'nodee':nodeq,'clientp':clientp,'projects': projects, 'pseudo': pseudo,'proj_instance':proj_instance,'node_instance':node_instance,'post_instance':post_instance}
     return render(request, 'interface_c.html', context)
 
    

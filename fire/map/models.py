@@ -11,7 +11,7 @@ from location_field.models.plain import PlainLocationField
 
 class myProject(models.Model):
     nomp = models.CharField(max_length=50, null=True)
-    geomp = models.PolygonField(null=True)
+    geomp = models.MultiPolygonField(null=True)
     descp = models.TextField(null=True)
     debutp = models.DateTimeField(default=timezone.now,null=True)
     finp = models.DateTimeField(null=True)

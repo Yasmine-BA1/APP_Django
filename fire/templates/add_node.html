@@ -115,7 +115,7 @@ var geojson_str = "{{ project.geomp.json|escapejs }}";
 var geojson = JSON.parse(geojson_str);
 
 // Create a Leaflet map
-var map = L.map('map').setView([{{ project.geomp.centroid.y }}, {{ project.geomp.centroid.x }}], 9);
+var map = L.map('map').setView([{{ project.geomp.centroid.y }}, {{ project.geomp.centroid.x }}], 12);
 
 
 L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
@@ -128,33 +128,33 @@ L.geoJSON(geojson).addTo(map);
 // Add the client name to the page
 // document.getElementById('client').innerHTML = client;
 
-{% comment %} L.marker([35, 9.5]).addTo(map)
-    .bindPopup('A marker test.')
-    .openPopup();
+// {% comment %} L.marker([35, 9.5]).addTo(map)
+//     .bindPopup('A marker test.')
+//     .openPopup();
 
 
-    var marker;
+//     var marker;
 
-map.on("click", function (e) {
-  // If marker is already defined, remove it before adding a new one
-//   if (marker) {
-//     map.removeLayer(marker);
-//   }
-  // Add new marker at double-clicked location
-  marker = L.marker(e.latlng, { draggable: true }).addTo(map);
-marker.bindPopup('heloooooooooooooo.')
-    .openPopup();
+// map.on("click", function (e) {
+//   // If marker is already defined, remove it before adding a new one
+// //   if (marker) {
+// //     map.removeLayer(marker);
+// //   }
+//   // Add new marker at double-clicked location
+//   marker = L.marker(e.latlng, { draggable: true }).addTo(map);
+// marker.bindPopup('heloooooooooooooo.')
+//     .openPopup();
   
-  document.getElementById("lat").value = e.latlng.lat;
-  document.getElementById("lng").value = e.latlng.lng;
+//   document.getElementById("lat").value = e.latlng.lat;
+//   document.getElementById("lng").value = e.latlng.lng;
 
-  marker.on("dragend", function (e) {
-    var marker = e.target;
-    var position = marker.getLatLng();
-    document.getElementById("lat").value = position.lat;
-    document.getElementById("lng").value = position.lng;
-  });
-}); {% endcomment %}
+//   marker.on("dragend", function (e) {
+//     var marker = e.target;
+//     var position = marker.getLatLng();
+//     document.getElementById("lat").value = position.lat;
+//     document.getElementById("lng").value = position.lng;
+//   });
+// }); {% endcomment %}
 
 
 
@@ -260,30 +260,37 @@ map.on("draw:edited", function(e){
     
 })
 
+        {% for node in nodee %}
+        // console.log('nooooom',{{node.nom}})
+            var yass = L.marker([{{ node.position.y }}, {{ node.position.x }}]).addTo(map);
+            // var latlng = yass.getLatLng();
+            // yass.bindPopup("<b>Node Name</b><br>" + {{ node.nom }} + "<br><b>Node Position</b><br>Latitude: " + latlng.lat + "<br>Longitude: " + latlng.lng).openPopup();
+        {% endfor %}
+
 /**************the old markeer*****************/
 
-{% comment %} var marker;
+// {% comment %} var marker;
 
-map.on("click", function (e) {
-  // If marker is already defined, remove it before adding a new one
-   if (marker) {
-   map.removeLayer(marker);
-   }  
-  // Add new marker at double-clicked location
-  marker = L.marker(e.latlng, { draggable: true }).addTo(map);
-marker.bindPopup('heloooo from "click".')
-    .openPopup();
+// map.on("click", function (e) {
+//   // If marker is already defined, remove it before adding a new one
+//    if (marker) {
+//    map.removeLayer(marker);
+//    }  
+//   // Add new marker at double-clicked location
+//   marker = L.marker(e.latlng, { draggable: true }).addTo(map);
+// marker.bindPopup('heloooo from "click".')
+//     .openPopup();
   
-  document.getElementById("lat").value = e.latlng.lat;
-  document.getElementById("lng").value = e.latlng.lng;
+//   document.getElementById("lat").value = e.latlng.lat;
+//   document.getElementById("lng").value = e.latlng.lng;
 
-  marker.on("dragend", function (e) {
-    var marker = e.target;
-    var position = marker.getLatLng();
-    document.getElementById("lat").value = position.lat;
-    document.getElementById("lng").value = position.lng;
-  });
-}); {% endcomment %}
+//   marker.on("dragend", function (e) {
+//     var marker = e.target;
+//     var position = marker.getLatLng();
+//     document.getElementById("lat").value = position.lat;
+//     document.getElementById("lng").value = position.lng;
+//   });
+// }); {% endcomment %}
  </script>       
 
     </body>

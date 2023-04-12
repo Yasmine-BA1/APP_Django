@@ -48,10 +48,11 @@
                 <div class="col-3" style=" border: 2px solid rgb(7, 7, 7) ; width: 250px; height: 150px; margin-left: 33px; border-radius: 10px; margin-top: 8px; margin-right: 60px;" >
                     
                    
-                        <h4><a href="{% url 'update' %}""> live Data</a></h4>
+                        <h4 style="margin-bottom: 1px;"><a href="{% url 'update' %}""> live Data</a></h4>
                         
                         <h5 id="display"> </h5>
-                        <h5>Wind Speed :{{post_instance.wind_speed}}</h5>
+                        <h5>Wind Speed :{{post_instance.wind_speed}} km/h</h5>
+                        <h5>Rain Volume:{{post_instance.rain_volume}} mm</h5>
                       
                 </div>
                 <div class="col-3" style=" border: 2px solid rgb(7, 7, 7) ; width: 300px; height: 150px;  border-radius: 10px; margin-top: 8px; margin-right: 60px;" ></div>
@@ -108,7 +109,7 @@ var geojson_str = "{{ proj_instance.geomp.json|escapejs }}";
 var geojson = JSON.parse(geojson_str);
 
 // Create a Leaflet map
-var map = L.map('map').setView([{{ proj_instance.geomp.centroid.y }}, {{ proj_instance.geomp.centroid.x }}], 15);
+var map = L.map('map').setView([{{ proj_instance.geomp.centroid.y }}, {{ proj_instance.geomp.centroid.x }}], 12);
 
 
 L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
@@ -121,11 +122,17 @@ L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
 // Add the GeoJSON polygon to the map
 polygon = L.geoJSON(geojson).addTo(map);
 
-var yass = L.marker([{{node_instance.position.y}},{{node_instance.position.x}}]).addTo(map);
+// var yass = L.marker([{{node_instance.position.y}},{{node_instance.position.x}}]).addTo(map);
 
-var latlng = yass.getLatLng();
-yass.bindPopup("<b>Node Name</b><br>{{node_instance.nom}} <br><b>Node Position</b><br>Latitude: " + latlng.lat + "<br>Longitude: " + latlng.lng).openPopup();
+// var latlng = yass.getLatLng();
+// yass.bindPopup("<b>Node Name</b><br>{{node_instance.nom}} <br><b>Node Position</b><br>Latitude: " + latlng.lat + "<br>Longitude: " + latlng.lng).openPopup();
 
+        {% for node in nodee %}
+        // console.log('nooooom',{{node.nom}})
+            var yass = L.marker([{{ node.position.y }}, {{ node.position.x }}]).addTo(map);
+            // var latlng = yass.getLatLng();
+            // yass.bindPopup("<b>Node Name</b><br>" + {{ node.nom }} + "<br><b>Node Position</b><br>Latitude: " + latlng.lat + "<br>Longitude: " + latlng.lng).openPopup();
+        {% endfor %}
             
 </script> 
 
@@ -143,7 +150,7 @@ yass.bindPopup("<b>Node Name</b><br>{{node_instance.nom}} <br><b>Node Position</
               for (var key in response.TEMP)
               {
                 
-                var temp = "<h5>" + "temperature: " + response.TEMP[key].temperature + "<br>humidity: " + response.TEMP[key].humidity + "</h5>";
+                var temp = "<h5>" + "temperature: " + response.TEMP[key].temperature+"°C" + "<br>humidity: " + response.TEMP[key].humidity+"%" + "</h5>";
                  // $("#display").append(temp); 
                 $("#display").html(temp); 
 

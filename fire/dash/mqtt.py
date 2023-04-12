@@ -34,6 +34,8 @@ def on_message(mqtt_client, userdata, msg):
     post = Post(temperature=temperature, humidity=humidity)
     post.save()
 
+
+
 def start_mqtt_client():
     # Create a new MQTT client instance
     client = mqtt.Client()

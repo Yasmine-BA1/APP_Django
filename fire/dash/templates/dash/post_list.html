@@ -13,11 +13,16 @@
     
     <h1> This is my live Data</h1>
     <h3><a href="{% url 'update' %}"">Click Here To See Hum and Temp</a></h3>
-    
-    
+
     <ul id="display">    
     </ul>
-    
+<h2>
+  
+  <br> wind_speed : {{post_instance.wind_speed}}
+  <br> rain_volume : {{post_instance.rain_volume}}
+  <br> fire_weather_index : {{fire_weather_index}}
+
+</h2>
     
     <script>
         $(document).ready(function(){
