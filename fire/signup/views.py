@@ -13,7 +13,7 @@ def compte(request, pk):
                 pseudo = formulaire.cleaned_data['pseudo']
                 variable = 'supervisor'
                 #######PB here
-                return redirect('add_client',  pseudo)
+                return redirect('add_client')
                 # return redirect('map', variable, pseudo)
             return render(request, 'signup.html', {'form': formulaire})
         return render(request, 'signup.html', {'form': Form_supervisor()})

@@ -69,6 +69,7 @@ def add_client(request):
         
 
 def display_polygone(request,id):
+    supervisors = supervisor.objects.all()
     projects = myProject.objects.all()
     project = myProject.objects.get(polygon_id=id)
 
