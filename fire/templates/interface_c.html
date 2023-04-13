@@ -1,4 +1,4 @@
-{% extends 'base.html' %} 
+{% extends 'base_client.html' %} 
 {% block content %} {% load static %}
 
 <!DOCTYPE html>
@@ -19,33 +19,18 @@
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+  
 
     </head>
 
     <body class="bg-img">
-        <div class="contain text-center" style="width: 1445px; height: 1500px; border: 1px solid rgb(7, 7, 7) ;  margin-left: 2px; border-radius: 10px;" >
+
+        <div class="contain text-center" style="width: 1445px; height: 1500px;   margin-left: 2px; border-radius: 10px;" >
             <div  class="row">
                 <div class="col-3" style="width: 250px; height: 120px;background-color: #FFFFFF; border: 0.5px solid rgb(168, 167, 167) ; margin-left: 22px; border-radius: 10px ; margin-top: 25px;">
-                    
-                    <div class="sidebar-header d-flex justify-content-center align-items-center px-3 py-4" >
-                        <img
-                             class="rounded-pill img-fluid"
-                             width="70"
-                             src="{{ clientp.image.url }}"
-                             alt="">
-
-                        <div class="ms-2">
-                          <h4 class="fs-6 mb-0">
-                            
-                            <a class="text-decoration-none" href="#">{{clientp.prenom}} {{clientp.nom}}</a>
-                          </h4>
-                          <h6 style="margin-top: 10px; margin-bottom: 5px;">Welcome, {{ pseudo }}!</h6> 
-                          <!-- <p class="mt-1 mb-0">Lorem ipsum dolor sit .</p> -->
-                        </div>
-                      </div>
-                      
+                           
                 </div>
-                <div class="col-3" style=" border: 2px solid rgb(7, 7, 7) ; width: 250px; height: 150px; margin-left: 33px; border-radius: 10px; margin-top: 8px; margin-right: 60px;" >
+                <div class="col-3" style=" border: 1px solid rgb(70, 69, 69) ; width: 250px; height: 150px; margin-left: 33px; border-radius: 10px; margin-top: 8px; margin-right: 60px;" >
                     
                    
                         <h4 style="margin-bottom: 1px;"><a href="{% url 'update' %}""> live Data</a></h4>
@@ -55,9 +40,7 @@
                         <h5>Rain Volume:{{post_instance.rain_volume}} mm</h5>
                       
                 </div>
-                <div class="col-3" style=" border: 2px solid rgb(7, 7, 7) ; width: 300px; height: 150px;  border-radius: 10px; margin-top: 8px; margin-right: 60px;" ></div>
-                <div class="col-3" style=" border: 2px solid rgb(7, 7, 7) ; width: 300px; height: 150px;  border-radius: 10px; margin-top: 8px; margin-right: 8px;" ></div>
-
+              
            </div>
 
             <div class="row">
@@ -67,21 +50,11 @@
                 </div>
 
 
-                <div class="col-3"  style="background-color: #FFFFFF; width: 1150px; height: 800px; border-radius: 10px; margin-top: 8px; margin-left: 8px;">
+                <div class="col-3"  style="background-color: #FFFFFF; width: 1150px; height: 640px; border-radius: 10px; margin-top: 8px; margin-left: 8px;">
 
-               
-                    
-<!-- 
-                    {% for project in projects %}
-                        <p>{{ project.nomp }}</p>
-                    {% endfor %}
 
-                   -->
-                   <h3> Project Name:</h3>
-                    <p>{{proj_instance.nomp}}</p>
-                   
 
-                    <div class='col-6 rounded ' id="map" style="width: 1125px;height: 600px; box-sizing:border-box; margin-top: 20px;  border-radius: 50px; border: 1px solid rgb(9, 0, 0) ;">
+                    <div class='col-6 rounded ' id="map" style="width: 1125px;height: 600px; box-sizing:border-box; margin-top: 5px;  border-radius: 50px; border: 1px solid rgb(9, 0, 0) ;">
                         <div class="leaflet-control"></div>
                     </div>
          
@@ -99,10 +72,7 @@
    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.js"></script> 
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
  
-   //       var map = L.map('map').setView([37, 10.2], 10);
-// L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-//     attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-// }).addTo(map);
+
 
    <script>
 var geojson_str = "{{ proj_instance.geomp.json|escapejs }}";

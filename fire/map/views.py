@@ -3,6 +3,7 @@ from django.contrib.gis.geos import Polygon
 
 from .models import myProject
 from dash.models import Post
+from signup.models import supervisor
 from django.contrib.gis.geos import GEOSGeometry
 
 
@@ -150,6 +151,8 @@ def all_node(request,id):
 
 
 def ALL(request,id):
+
+
     posts = Post.objects.all()
     for post_instance in posts:
         print('***wind',post_instance.wind_speed)
@@ -170,7 +173,7 @@ def ALL(request,id):
         print('nom:',nom)
         print('position:',position)
 
-    return render(request, 'ALL_node.html', {  'node_instance': node_instance,'nodee': nodeq,'markers': marker,'projects':projects, 'project': project,'post_instance':post_instance})
+    return render(request, 'ALL_node.html', { 'node_instance': node_instance,'nodee': nodeq,'markers': marker,'projects':projects, 'project': project,'post_instance':post_instance})
 
 
 
