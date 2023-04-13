@@ -23,7 +23,7 @@
 
     </head>
 
-    <body class="bg-img">
+    <body style="background-color: #E2DCDE;">
 
         <div class="contain text-center" style="width: 1445px; height: 1500px;   margin-left: 2px; border-radius: 10px;" >
             <div  class="row">
@@ -50,18 +50,18 @@
                 </div>
 
 
-                <div class="col-3"  style="background-color: #FFFFFF; width: 1150px; height: 640px; border-radius: 10px; margin-top: 8px; margin-left: 8px;">
+                <!-- <div class="col-3"  style="background-color: #FFFFFF; width: 1150px; height: 640px; border-radius: 10px; margin-top: 8px; margin-left: 8px;"> -->
 
 
 
-                    <div class='col-6 rounded ' id="map" style="width: 1125px;height: 600px; box-sizing:border-box; margin-top: 5px;  border-radius: 50px; border: 1px solid rgb(9, 0, 0) ;">
+                    <div class='col-6 rounded ' id="map" style="width: 1180px;height: 800px; box-sizing:border-box; margin-top: 5px;  border-radius: 50px; border: 1px solid rgb(9, 0, 0) ; ">
                         <div class="leaflet-control"></div>
                     </div>
          
-                    <label for="geomp">Geometry:</label>
+                    <!-- <label for="geomp">Geometry:</label>
                     <input type="text" id="geomp" name="geomp" value="{{ proj_instance.geomp }}" readonly><br><br>
-                    
-                </div>
+                     -->
+                <!-- </div> -->
 
             </div>
 
@@ -82,9 +82,14 @@ var geojson = JSON.parse(geojson_str);
 var map = L.map('map').setView([{{ proj_instance.geomp.centroid.y }}, {{ proj_instance.geomp.centroid.x }}], 12);
 
 
-L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-  }).addTo(map);
+// L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+//       attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+//   }).addTo(map);
+
+
+L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        attribution: 'Tiles © Esri — Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+    }).addTo(map);
 
   var drawnItems = new L.FeatureGroup();
     map.addLayer(drawnItems);

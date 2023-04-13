@@ -41,7 +41,7 @@ def connectassupervisor(request):
                 login(request, data)
                 #### on va redirect dashboard #####
                 # return redirect('map/')
-            return redirect('add_client')
+            return redirect('add_client',pseudo)
         # We pass the form to the template even if it is not valid
         return render(request, 'login.html', {'form': formulaire})
     # We pass the form to the template for GET requests

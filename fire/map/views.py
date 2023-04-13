@@ -13,12 +13,16 @@ from .forms import *
 import pyowm 
 import PyFWI
 
-def add_project(request):
+def add_project(request,pseudo):
     projects = myProject.objects.all()
-    # project = myProject.objects.get(polygon_id=id)
+    supervisors = supervisor.objects.get(pseudo=pseudo)
+    
+    # supervisorp = request.POST.get('supervisors')
+    print("++++++supervisorp", supervisors)
 
     clients = client.objects.all()
     if request.method == 'POST':
+
 
         formulairep = Form_project(request.POST)
         # Get the other data from the form data
@@ -27,7 +31,7 @@ def add_project(request):
         debutp = request.POST.get('debutp')
         finp = request.POST.get('finp')
         cityp = request.POST.get('cityp')
-        # clientp = request.POST.get('clientp')
+
 
         if formulairep.is_valid():
             # Get the selected client from the form
@@ -42,18 +46,18 @@ def add_project(request):
             print(multiPolygone)
             polygon = GEOSGeometry(multiPolygone, srid=4326)
 
-            instance = myProject(nomp=nomp,descp=descp,debutp=debutp,finp=finp,cityp=cityp,geomp=polygon,clientp=selected_client)
+            instance = myProject(nomp=nomp,descp=descp,debutp=debutp,finp=finp,cityp=cityp,geomp=polygon,clientp=selected_client,supervisorp=supervisors)
             instance.save()
                     
             # return redirect('add_client',id=instance.polygon_id)
-            return redirect('display_polygone',id=instance.polygon_id)
-        return render(request, 'addproj.html', {'form': formulairep,'projects':projects})
-    return render(request, 'addproj.html', {'form': Form_project(),'projects':projects})
+            return redirect('display_polygone',pseudo=pseudo,id=instance.polygon_id)
+        return render(request, 'addproj.html', {'form': formulairep,'projects':projects,'supervisor':supervisors})
+    return render(request, 'addproj.html', {'form': Form_project(),'projects':projects,'supervisor':supervisors})
 
 
-def add_client(request):
+def add_client(request,pseudo):
         # project = myProject.objects.get(polygon_id=id)
-        
+        supervisors = supervisor.objects.get(pseudo=pseudo)
         if request.method == 'POST':
             formulaire = Form_client(request.POST)
             if formulaire.is_valid():
@@ -63,33 +67,43 @@ def add_client(request):
 
                 
                 return redirect('add_project')
-            return render(request, 'addclient.html', {'form': formulaire})
-        return render(request, 'addclient.html', {'form': Form_client()})
+            return render(request, 'addclient.html', {'form': formulaire,'supervisor':supervisors})
+        return render(request, 'addclient.html', {'form': Form_client(),'supervisor':supervisors})
 
-        
 
-def display_polygone(request,id):
-    supervisors = supervisor.objects.all()
-    projects = myProject.objects.all()
+def display(request,pseudo):
+    # projects = myProject.objects.all()
+    # supervisors = supervisor.objects.get(pseudo=pseudo)
+    
+    supervisor_obj = supervisor.objects.get(pseudo=pseudo)
+    projects = myProject.objects.filter(supervisorp=supervisor_obj)
+    print("/////////", supervisor_obj.pseudo)
+    print("/////projects////",projects )
+
+    for proj in projects :
+        print("/////proj////", proj)
+
+    return render(request, 'display.html', {'projects':projects,'supervisor_obj':supervisor_obj})
+
+
+def display_polygone(request,id,pseudo):
+    supervisor_obj = supervisor.objects.get(pseudo=pseudo)
+    print("//supervisor_obj/", supervisor_obj)
+    projects = myProject.objects.filter(supervisorp=supervisor_obj)
     project = myProject.objects.get(polygon_id=id)
+    print("//project/", project.supervisorp)
 
     if request.method == 'POST':
         # id=instance.polygon_id
 
        
-        return redirect('addnode',id)
-    return render(request, 'displaypoly.html', {'projects':projects,'project':project})
+        return redirect('addnode',pseudo,id)
+    return render(request, 'displaypoly.html', {'projects':projects,'project':project,'supervisor_obj':supervisor_obj})
 
 
-def display(request):
-    projects = myProject.objects.all()
-    # project = myProject.objects.get(polygon_id=id)
-
-    return render(request, 'display.html', {'projects':projects})
-
-
-def add_node(request, id):
-    projects = myProject.objects.all()
+def add_node(request, id,pseudo):
+    supervisor_obj = supervisor.objects.get(pseudo=pseudo)
+    projects = myProject.objects.filter(supervisorp=supervisor_obj)
     project = myProject.objects.get(polygon_id=id)
 
     marker = node.objects.all()
@@ -108,17 +122,18 @@ def add_node(request, id):
         instance = node(position=point,nom=node_name, polyg=project_instance, latitude=mylatitude, longitude=mylongitude)
         instance.save()
 
-        return redirect('all',id)
+        return redirect('all',pseudo,id)
 
     return render(request, 'add_node.html', { 'projects': projects, 'project': project,'nodee':nodeq})
 
 
-def all_node(request,id):
+def all_node(request,id,pseudo):
     posts = Post.objects.all()
     for post_instance in posts:
         print('***wind',post_instance.wind_speed)
 
-    projects = myProject.objects.all()
+    supervisor_obj = supervisor.objects.get(pseudo=pseudo)
+    projects = myProject.objects.filter(supervisorp=supervisor_obj)
     project = myProject.objects.get(polygon_id=id)
 
     marker = node.objects.all()
@@ -140,7 +155,7 @@ def all_node(request,id):
         print('position:',position)
     
     if request.method == 'POST':
-        return redirect('addnode',id)
+        return redirect('addnode',pseudo,id)
         
     #no = node.objects.order_by('-id').first()
     #bla = no.nom
@@ -151,14 +166,15 @@ def all_node(request,id):
 
 
 
-def ALL(request,id):
+def ALL(request,id,pseudo):
 
 
     posts = Post.objects.all()
     for post_instance in posts:
         print('***wind',post_instance.wind_speed)
 
-    projects = myProject.objects.all()
+    supervisor_obj = supervisor.objects.get(pseudo=pseudo)
+    projects = myProject.objects.filter(supervisorp=supervisor_obj)
     project = myProject.objects.get(polygon_id=id)
 
     marker = node.objects.all()
