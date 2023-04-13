@@ -163,6 +163,36 @@ def all_node(request,id,pseudo):
     context = { 'l':l,'projects':projects,'project':project,'node_instance': node_instance,'nodee': nodeq,'markers': marker,'post_instance':post_instance}
     return render(request, 'all.html',context)
 
+def modify(request,id,pseudo):
+    posts = Post.objects.all()
+    for post_instance in posts:
+        print('***wind',post_instance.wind_speed)
+
+    supervisor_obj = supervisor.objects.get(pseudo=pseudo)
+    projects = myProject.objects.filter(supervisorp=supervisor_obj)
+    project = myProject.objects.get(polygon_id=id)
+
+    marker = node.objects.all()
+    nodeq = node.objects.filter(polyg=project)
+
+    
+    for node_instance in nodeq:
+        # get the latitude and longitude values from the node instance
+        latitude = node_instance.latitude
+        longitude = node_instance.longitude
+        position=node_instance.position
+        nom=node_instance.nom
+        
+        print('nom:',nom)
+
+    
+    if request.method == 'POST':
+        return redirect('addnode',pseudo,id)
+
+    context = {'projects':projects,'project':project,'nodee': nodeq,'markers': marker,'post_instance':post_instance}
+    return render(request, 'modify.html',context)
+
+
 
 
 

@@ -54,17 +54,16 @@
 
                         <h4>ALL Details Of Project: {{ project.nomp }}</h4>
 
-                        <div style="border: 1px solid rgb(7, 7, 7) ; height: 150px; width: 350px; margin-top: 50px;">
+                        <div class="col-3" style=" border: 1px solid rgb(70, 69, 69) ; width: 250px; height: 150px; margin-left: 33px; border-radius: 10px; margin-top: 8px; margin-right: 60px;" >
+                    
                    
-                          <h3><a href="{% url 'update' %}"">This is my live Data</a></h3>
+                          <h4 style="margin-bottom: 1px;"><a href="{% url 'update' %}""> live Data</a></h4>
                           
-                          <h4 id="display"> </h4>
-                          <h4>Wind Speed :{{post_instance.wind_speed}}</h4>
-                        </div>
-
-
-
-                           <h2>Map</h2>
+                          <h5 id="display"> </h5>
+                          <h5>Wind Speed :{{post_instance.wind_speed}} km/h</h5>
+                          <h5>Rain Volume:{{post_instance.rain_volume}} mm</h5>
+                        
+                  </div>
                         <div class='col-6 rounded ' id="map" style="width: 700px;height: 500px; box-sizing:border-box; margin-top: 20px;  border-radius: 50px; border: 1px solid rgb(9, 0, 0) ;">
                             <div class="leaflet-control"></div>
                         </div>
@@ -80,7 +79,6 @@
                         <label for="lng">Longitude:</label>
                         <input type="text" id="longitude" name="longitude" value="{{ d.longitude }}" readonly><br><br>
                         {%endfor%} {% endcomment %}
-
 
                     </form>
 
@@ -167,10 +165,9 @@
                 for (var key in response.TEMP)
                 {
                   
-                  var temp = "<h4>" + "temperature: " + response.TEMP[key].temperature + "<br>humidity: " + response.TEMP[key].humidity + "</h4>";
-                   // $("#display").append(temp); 
-                  $("#display").html(temp); 
-
+                  var temp = "<h5>" + "temperature: " + response.TEMP[key].temperature+"°C" + "<br>humidity: " + response.TEMP[key].humidity+"%" + "</h5>";
+                 // $("#display").append(temp); 
+                $("#display").html(temp); 
                                   // Get the temperature and humidity values
                         var temperature = response.TEMP[key].temperature;
                         var humidity = response.TEMP[key].humidity;
