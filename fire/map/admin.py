@@ -2,7 +2,11 @@ from django.contrib import admin
 from django.contrib.gis import admin
 from .models import node
 from .models import myProject
+from .models import Data
 
+
+
+admin.site.register(Data)
 
 
 admin.site.register(node)

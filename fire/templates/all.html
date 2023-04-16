@@ -39,7 +39,7 @@
                               <h6 class="card-subtitle mb-2 text-muted" style="text-align:center; color:rgb(51, 77, 4);">Project name: {{ proj.nomp }}</h6>
                               <h6 class="card-subtitle mb-2 text-muted" style="text-align:center; color:rgb(51, 77, 4);">Project ID: {{ proj.polygon_id }}</h6>
                               <button class="btn btn-dark  mx-auto d-block"  onclick="location.href='{% url 'display_polygone' proj.supervisorp.pseudo proj.polygon_id %}'" style="margin-bottom: 3px;">see polygon</button>
-                              <button class="btn btn-dark  mx-auto d-block" name="button_2" style='  font-size: 8px; background-color: darkgreen;' onclick="location.href='{% url 'all' proj.supervisorp.pseudo proj.polygon_id %}'"> SEE all details</button>
+                              <!-- <button class="btn btn-dark  mx-auto d-block" name="button_2" style='  font-size: 8px; background-color: darkgreen;' onclick="location.href='{% url 'all' proj.supervisorp.pseudo proj.polygon_id %}'"> SEE all details</button> -->
                               <button class="btn btn-dark  mx-auto d-block" name="b_add_N" style='  font-size: 8px; margin-top: 3px;' onclick="location.href='{% url 'modify' proj.supervisorp.pseudo proj.polygon_id %}'"> Modify</button>
                                </div>
                           </div>
@@ -54,32 +54,40 @@
                     {% csrf_token %} 
 
                         <h4>ALL Details Of Project: {{ project.nomp }}</h4>
+                        <h6>information of last node added</h6>
                         
+<div class="row">
 
-                        <!-- <div style="border: 1px solid rgb(7, 7, 7) ; height: 150px; width: 350px; margin-top: 50px;">
-                   
-                          <h3><a href="{% url 'update' %}""> live Data</a></h3>
-                          
-                          <h4 id="display"> </h4>
-                          <h4>Wind Speed :{{post_instance.wind_speed}}</h4>
-                          <!-- <h4>location : {{location}}</h4> -->
-                          <!-- <h4>weather : {{weather}}</h4> -->
-                          <!-- <h4>temperature_owm : {{temperature_owm}}</h4> -->
-                          <!-- <h4>humidity_owm : {{humidity_owm}}</h4> -->
-      
-                        <!-- </div>  -->
-
-                        <div class="col-3" style=" border: 1px solid rgb(70, 69, 69) ; width: 250px; height: 150px; margin-left: 33px; border-radius: 10px; margin-top: 8px; margin-right: 60px;" >
+                        <div class="col-3" style=" border: 1px solid rgb(70, 69, 69) ; width: 250px; height: 300px; margin-left: 33px; border-radius: 10px; margin-top: 8px; margin-right: 60px;" >
                     
-                   
-                          <h4 style="margin-bottom: 1px;"><a href="{% url 'update' %}""> live Data</a></h4>
-                          
-                          <h5 id="display"> </h5>
-                          <h5>Wind Speed :{{post_instance.wind_speed}} km/h</h5>
-                          <h5>Rain Volume:{{post_instance.rain_volume}} mm</h5>
-                        
-                  </div>
+                          {% if project %}
+                          <h4 style="margin-bottom: 1px;"><a href="{% url 'update' project.polygon_id %}"">Weather Information</a></h4>
+                          {% endif %}
+                          <div id="weather-info">
+                                    <p><strong>Temperature:</strong> {{ parm.temperature }}°C</p>
+                                    <p><strong>Humidity:</strong> {{ parm.humidity }}%</p>
+                                    <p><strong>Wind Speed:</strong> {{ parm.wind }} km/h</p>
+                                    <p><strong>related node:</strong> {{ parm.node }} </p>
+                          </div>    
+                        </div>
 
+                        <div class="col-3" style=" border: 1px solid rgb(70, 69, 69) ; width: 250px; height: 340px; margin-left: 33px; border-radius: 10px; margin-top: 8px; margin-right: 60px;" >
+                    
+                          <h4>Node Information</h4>
+
+
+                          <p><strong>Name: </strong>{{ node.nom }}</p>
+                          <p><strong>Referance: </strong>{{ node.reference }}</p>
+                          <p><strong>Position: </strong>{{ node.latitude }},{{ node.latitude }}</p>
+                          <p><strong>Sensors: </strong>{{ node.Sensors }}</p>
+                          <p><strong>Duty Cycle: </strong>{{ 'Every 1 Min' }}</p>
+                          <div id="rssi">
+                          <p><strong>RSSI: </strong> {{ node.RSSI }}</p>
+                          </div>
+                          <p><strong>Battery level: </strong>{{ node.Battery_value }}%</p>
+                                                      
+                        </div>
+</div>
 
 
                          
@@ -158,59 +166,97 @@
             var latlng = yass.getLatLng();
             console.log('--latlng',latlng)
             // console.log('--name {{node.nom}}')
-            yass.bindPopup("<b>Node Name</b><br> {{ node.nom }} "   + "<br><b>Node Position</b><br>Latitude: " + latlng.lat + "<br>Longitude: " + latlng.lng).openPopup();
+            yass.bindPopup("<b>Node Name</b><br> {{ node.nom }} "   + "<br><b>Node Position</b><br>Latitude: " + latlng.lat + "<br>Longitude: " + latlng.lng);
         {% endfor %}
 
     </script>
 
-    <script>
-      $(document).ready(function(){
-          
-          setInterval(function(){
-            
-            $.ajax({
-              type:'GET',
-              url : "{% url 'getTemp' %}",
-              success: function(response){
-                
-                $("#display").empty();
-                for (var key in response.TEMP)
-                {
+<script>
+  
+  $(document).ready(function() {
+      setInterval(function() {
+          $.ajax({
+              url: "{% url 'update_weather' project.polygon_id %}",
+              type: "GET",
+              success: function(data) {
+              //  status = data.status;
+              //  if (status === "DOWN") {
+              //      color = "green";
+              //  } else if (status === "MODERATE") {
+              //     color = "blue";
+              //  } else if (status === "HIGH") {
+              //      color = "yellow";
+              //  } else if (status === "VERY HIGH") {
+              //      color = "orange";
+              //  } else if (status === "EXTREME") {
+              //      color = "red";
+              //  } else {
+              //      color = "black";
+              //  }
+              //  polygonLayer.setStyle({ color: color });                   
+
+
+                  $('#weather-info').html(
+                     
+                         '<p><strong>Temperature:</strong> ' + data.temperature + '°C</p>' +
+                         '<p><strong>Humidity:</strong> ' + data.humidity + '%</p>' +
+                         '<p><strong>Wind Speed:</strong> ' + data.wind + ' km/h</p>'
+                  );
+                  $('#rssi').html(
+                    
+                         '<p><strong>RSSI: </strong>' + data.RSSI +' </p>' 
+                  );
+
                   
-                  var temp = "<h5>" + "temperature: " + response.TEMP[key].temperature+"°C" + "<br>humidity: " + response.TEMP[key].humidity+"%" + "</h5>";
-                 // $("#display").append(temp); 
-                $("#display").html(temp);  
+                  // if (data.camera == 0) {
+                  //      $('#status-card').html('<div class="card-body"><p><strong>Status: </strong><span style="color:green; font-weight:bold">NO FIRE</span></p></div>');
+                  // } else if (data.camera <= 1) {
+                  //      $('#status-card').html('<div class="card-body"> <p><strong>Status: </strong><span style="color:red; font-weight:bold">FIRE</span></p></div>');
+                  // } else {
+                  //      $('#status-card').html('<div class="card-body"> <p><strong>Status: </strong><span style="color:black; font-weight:bold">NO NODE</span></p></div>');
+                  // } 
 
-                                  // Get the temperature and humidity values
-                        var temperature = response.TEMP[key].temperature;
-                        var humidity = response.TEMP[key].humidity;
 
-                        // Change the polygon color based on the temperature and humidity values
-                        if (temperature > 30 && humidity < 30) {
-                          polygon.setStyle({
-                            fillColor: 'red'
-                            , fillOpacity: 0.5, color:'red'
-                          });
-                        } else if (temperature <= 30 && humidity >= 30) {
-                          polygon.setStyle({
-                            fillColor: 'green', fillOpacity: 0.5 ,color:'green'
-                          });
-                        } else {
-                          polygon.setStyle({
-                            fillColor: 'yellow', fillOpacity: 0.5,color:'yellow'
-                          });
-                        }
-                   
-                }
-              },
-              error: function(reponse){
+                  //  $('#fwi').html('<p><strong>FWI: </strong>' + data.fwi + '</p>');
+
+
+
+                  //  if (data.status == 'DOWN') {
+                  //      $('#status').html('<p><strong>Status: </strong><span style="color:green; font-weight:bold">' + data.status + '</span></p>');
+                  //  } else if (data.status == 'MODERATE') {
+                  //      $('#status').html('<p><strong>Status: </strong><span style="color:blue; font-weight:bold">' + data.status + '</span></p>');
+                  //  } else if (data.status == 'HIGH') {
+                  //      $('#status').html('<p><strong>Status: </strong><span style="color:yellow; font-weight:bold">' + data.status + '</span></p>');
+                  //  } else if (data.status == 'VERY HIGH') {
+                  //      $('#status').html('<p><strong>Status: </strong><span style="color:orange; font-weight:bold">' + data.status + '</span></p>');
+                  //  } else if (data.status == 'EXTREME') {
+                  //      $('#status').html('<p><strong>Status: </strong><span style="color:red; font-weight:bold">' + data.status + '</span></p>');
+                  //  }                   
+
+
+
+
+
+
+                  //  if (status === "EXTREME") {
+                  //    marker.setIcon(fireIcon)
+                  //    marker.bounce(5);
+                    
                 
-                alert("an error occured");
+                     
+                  //  } else {
+                  //    marker.setIcon(null);
+                  //    marker.stopBouncing();
+                  //   }
+              },
+              error: function(xhr, status, error) {
+                  console.log("An error occurred: " + xhr.status + " " + xhr.statusText);
               }
-            });
-          },1000);
-        });
-      </script>
+          });
+      }, 5000); // refresh every 5 seconds
+  });
+ </script>
+ 
 
     </body>
 

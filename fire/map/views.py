@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.gis.geos import Polygon
 
 from .models import myProject
-from dash.models import Post
+
 from signup.models import supervisor
 from django.contrib.gis.geos import GEOSGeometry
 
@@ -11,7 +11,8 @@ from django.http import JsonResponse
 from django.contrib.gis.geos import Point
 from .forms import *
 import pyowm 
-import PyFWI
+from .mqtt import start_mqtt_client
+
 
 def add_project(request,pseudo):
     projects = myProject.objects.all()
@@ -84,7 +85,7 @@ def display(request,pseudo):
         print("/////proj////", proj)
 
     return render(request, 'display.html', {'projects':projects,'supervisor_obj':supervisor_obj})
-
+#-----------------------------------------------------------------------------
 
 def display_polygone(request,id,pseudo):
     supervisor_obj = supervisor.objects.get(pseudo=pseudo)
@@ -108,51 +109,68 @@ def add_node(request, id,pseudo):
 
     marker = node.objects.all()
     nodeq = node.objects.filter(polyg=project)
-    
-    
-
+ 
     if request.method == 'POST':
-        node_name = request.POST.get('nom') 
+        node_name = request.POST.get('nom')
+        Sensors = request.POST.get('Sensors') 
+        reference = request.POST.get('reference')  
         mylatitude = request.POST.get('latitude') 
         mylongitude = request.POST.get('longitude') 
         point=Point(x=float(mylongitude),y=float(mylatitude))
         project_id = request.POST.get('polyg')
         project_instance = myProject.objects.get(polygon_id=project_id)
 
-        instance = node(position=point,nom=node_name, polyg=project_instance, latitude=mylatitude, longitude=mylongitude)
+        instance = node(position=point,nom=node_name, polyg=project_instance, latitude=mylatitude, longitude=mylongitude,reference=reference,Sensors=Sensors)
         instance.save()
+
+        new_data = Data(temperature=0, humidity=0, wind=0, node=instance)
+        new_data.save()
+
+        datas = Data.objects.filter(node=instance)
+        print('hello')
+        print(instance.nom)
+        print(datas)
+    
 
         return redirect('all',pseudo,id)
 
     return render(request, 'add_node.html', { 'projects': projects, 'project': project,'nodee':nodeq})
+#--------------------------------------------------------------------
+
+def start_mqtt(request, id):
+    # Start the MQTT client
+    start_mqtt_client(id)
+    
+    # Return a simple response to indicate that the client has started
+    #return HttpResponse('MQTT client started successfully.')
+    return render(request, 'all.html', {})
+
 
 
 def all_node(request,id,pseudo):
-    posts = Post.objects.all()
-    for post_instance in posts:
-        print('***wind',post_instance.wind_speed)
-
     supervisor_obj = supervisor.objects.get(pseudo=pseudo)
     projects = myProject.objects.filter(supervisorp=supervisor_obj)
-    project = myProject.objects.get(polygon_id=id)
+    my_project = myProject.objects.get(polygon_id=id)
 
-    marker = node.objects.all()
-    nodeq = node.objects.filter(polyg=project)
-    print('****nodeq:',nodeq)
-    l=len(nodeq)
-    print('****nodeq length:', len(nodeq))
+    nodes = node.objects.filter(polyg=my_project).order_by('-Idnode')
+    print('****nodes:',nodes)
+    onode = nodes[0] # =======node_instance// last one
+    print(onode) 
+
+    datas = Data.objects.filter(node=onode).order_by('-IdData')
+    data = datas.first()
+    print('dataaaaaa',data)
+
+    temperature = data.temperature
+    humidity = data.humidity
+    wind_speed = data.wind
+
+    print('temperature',temperature)
     
-    for node_instance in nodeq:
-        # get the latitude and longitude values from the node instance
-        latitude = node_instance.latitude
-        longitude = node_instance.longitude
-        position=node_instance.position
-        nom=node_instance.nom
-        
+    for node_instance in nodes:
+        nom=node_instance.nom       
         print('nom:',nom)
-        print('x:',node_instance.position.x)
-        print('y:',node_instance.position.y)
-        print('position:',position)
+
     
     if request.method == 'POST':
         return redirect('addnode',pseudo,id)
@@ -160,8 +178,34 @@ def all_node(request,id,pseudo):
     #no = node.objects.order_by('-id').first()
     #bla = no.nom
     #print(bla)
-    context = { 'l':l,'projects':projects,'project':project,'node_instance': node_instance,'nodee': nodeq,'markers': marker,'post_instance':post_instance}
+    context = { 'projects':projects,'project':my_project,'node_instance': node_instance,'nodee': nodes,'node':onode,'parm':data}
     return render(request, 'all.html',context)
+
+def update_weather(request, id):
+    # get updated weather information
+    my_project = myProject.objects.get(polygon_id=id)
+
+    nodes = node.objects.filter(polyg=my_project).order_by('-Idnode')
+    onode = nodes[0]
+
+    rssi= node.RSSI
+
+    datas = Data.objects.filter(node=onode).order_by('-IdData')
+    data = datas.first()
+
+    data = {
+        'temperature': data.temperature,
+        'humidity': data.humidity,
+        'wind': data.wind,
+        'RSSI' : rssi,
+        # 'camera' : cam,
+        # 'fwi' : fwi,
+        # 'status' : status,
+        }
+
+    # return a JsonResponse with the updated data
+    return JsonResponse(data)
+
 
 def modify(request,id,pseudo):
     posts = Post.objects.all()
@@ -197,30 +241,38 @@ def modify(request,id,pseudo):
 
 
 def ALL(request,id,pseudo):
-
-
-    posts = Post.objects.all()
-    for post_instance in posts:
-        print('***wind',post_instance.wind_speed)
-
     supervisor_obj = supervisor.objects.get(pseudo=pseudo)
     projects = myProject.objects.filter(supervisorp=supervisor_obj)
     project = myProject.objects.get(polygon_id=id)
 
-    marker = node.objects.all()
-    nodeq = node.objects.filter(polyg=project)
-    
-    
-    for node_instance in nodeq:
-        # get the latitude and longitude values from the node instance
-        latitude = node_instance.latitude
-        longitude = node_instance.longitude
-        position=node_instance.position
-        nom=node_instance.nom
-        print('nom:',nom)
-        print('position:',position)
+    nodes = node.objects.filter(polyg=project).order_by('-Idnode')
+    print('****nodes:',nodes)
+    onode = nodes[0] # =======node_instance// onlyy for the last one
+    print(onode) 
 
-    return render(request, 'ALL_node.html', { 'node_instance': node_instance,'nodee': nodeq,'markers': marker,'projects':projects, 'project': project,'post_instance':post_instance})
+    datas = Data.objects.filter(node=onode).order_by('-IdData')
+    data = datas.first()
+    # print('dataaaaaassss',datas)
+#-------------------------------------------------
+    # nodeq = node.objects.filter(polyg=project)
+    # for node_instance in nodeq:
+    #     datas = Data.objects.filter(node=node_instance).order_by('-IdData')
+    #     data = datas.first()
+    #     print('node_instance::::',node_instance)
+    #     print('data::::',data)
+
+    nodeq = node.objects.filter(polyg=project)
+    nodes_data = []
+    for node_instance in nodeq:
+        datas = Data.objects.filter(node=node_instance).order_by('-IdData')
+        data = datas.first()
+        nodes_data.append({'node_instance': node_instance, 'data': data})
+        
+    print('------nodes_data',nodes_data)
+    context = {'nodes_data': nodes_data,'nodee': nodeq,'projects':projects, 'project': project,'parm':data}
+   
+
+    return render(request, 'ALL_node.html',context )
 
 
 

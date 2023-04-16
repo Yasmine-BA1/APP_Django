@@ -37,7 +37,7 @@
                               <h6 class="card-subtitle mb-2 text-muted" style="text-align:center; color:rgb(51, 77, 4);">Project name: {{ proj.nomp }}</h6>
                               <h6 class="card-subtitle mb-2 text-muted" style="text-align:center; color:rgb(51, 77, 4);">Project ID: {{ proj.polygon_id }}</h6>
                               <button class="btn btn-dark  mx-auto d-block"  onclick="location.href='{% url 'display_polygone' proj.supervisorp.pseudo proj.polygon_id %}'" style="margin-bottom: 3px;">see polygon</button>
-                              <button class="btn btn-dark  mx-auto d-block" name="button_2" style='  font-size: 8px; background-color: darkgreen;' onclick="location.href='{% url 'all' proj.supervisorp.pseudo proj.polygon_id %}'"> SEE all details</button>
+                              <button class="btn btn-dark  mx-auto d-block" name="button_2" style='  font-size: 8px; background-color: darkgreen;' onclick="location.href='{% url 'all' proj.supervisorp.pseudo proj.polygon_id %}'"> Last Node</button>
                                </div>
                           </div>
                           {% endfor %}
@@ -54,6 +54,14 @@
 
                         <div class="col-md-5">
                             <input type="text"  name="nom" style="margin-right: 375px;" placeholder="Node Name" /> 
+                        </div>
+
+                        <div class="col-md-5">
+                            <input type="text"  name="reference" style="margin-right: 375px;" placeholder="Node reference" /> 
+                        </div>
+
+                        <div class="col-md-5">
+                            <input type="text"  name="Sensors" style="margin-right: 375px;" placeholder="Node Sensors" /> 
                         </div>
 
                         <!-- <div class="col-md-5">

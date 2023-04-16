@@ -23,7 +23,7 @@ urlpatterns = [
 
     path('project/',include("map.urls")),
     
-    path('dash/',include("dash.urls")),
+    # path('dash/',include("dash.urls")),
    
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

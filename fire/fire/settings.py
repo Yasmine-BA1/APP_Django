@@ -53,7 +53,6 @@ INSTALLED_APPS = [
     'home',
     'signup',
     'login',
-    'dash',
     
    
     

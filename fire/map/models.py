@@ -30,12 +30,34 @@ class myProject(models.Model):
 
 #table des noeuds /markers
 class node(models.Model):
+    Idnode = models.AutoField(primary_key=True, default=None)
     nom = models.CharField(max_length=50,blank=True, null=True)
     position=models.PointField(null=True)
     latitude =models.CharField(max_length=50, null=True , blank=True)
     longitude =models.CharField(max_length=50, null=True,blank=True)
+
+    reference =  models.CharField(max_length=50, null=True)
+    Sensors = models.CharField(max_length=50, null=True)
+    RSSI = models.BigIntegerField(null=True)
+    Battery_value = models.BigIntegerField(null=True)
+    status = models.CharField(max_length=50, null=True)
+    FWI=models.BigIntegerField(null=True)
    
     polyg = models.ForeignKey(myProject, on_delete=models.CASCADE, null=True, blank=True,related_name='%(class)s_related')
 
     def __str__(self):
         return f' {self.nom}'  
+
+
+class Data(models.Model):
+    IdData = models.AutoField(primary_key=True,default=None)
+    temperature = models.BigIntegerField(null=True)
+    humidity = models.BigIntegerField(null=True)
+    wind = models.FloatField(null=True)
+    node = models.ForeignKey(node, on_delete=models.CASCADE, null=True, related_name='datas')
+    
+    
+    
+    def __str__(self):
+        return f' node : {self.node},Temperature: {self.temperature}, Humidity: {self.humidity}, wind: {self.wind}'
+
