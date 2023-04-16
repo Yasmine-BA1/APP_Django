@@ -41,7 +41,7 @@ class node(models.Model):
     RSSI = models.BigIntegerField(null=True)
     Battery_value = models.BigIntegerField(null=True)
     status = models.CharField(max_length=50, null=True)
-    FWI=models.BigIntegerField(null=True)
+    FWI=models.FloatField(null=True)
    
     polyg = models.ForeignKey(myProject, on_delete=models.CASCADE, null=True, blank=True,related_name='%(class)s_related')
 
@@ -54,6 +54,7 @@ class Data(models.Model):
     temperature = models.BigIntegerField(null=True)
     humidity = models.BigIntegerField(null=True)
     wind = models.FloatField(null=True)
+    rain = models.FloatField(null=True)
     node = models.ForeignKey(node, on_delete=models.CASCADE, null=True, related_name='datas')
     
     

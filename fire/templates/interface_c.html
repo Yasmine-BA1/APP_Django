@@ -30,18 +30,36 @@
                 <div class="col-3" style="width: 250px; height: 120px;background-color: #FFFFFF; border: 0.5px solid rgb(168, 167, 167) ; margin-left: 22px; border-radius: 10px ; margin-top: 25px;">
                            
                 </div>
-                <div class="col-3" style=" border: 1px solid rgb(70, 69, 69) ; width: 250px; height: 150px; margin-left: 33px; border-radius: 10px; margin-top: 8px; margin-right: 60px;" >
-                    
-                   
-                        <h4 style="margin-bottom: 1px;"><a href="{% url 'update' %}""> live Data</a></h4>
-                        
-                        <h5 id="display"> </h5>
-                        <h5>Wind Speed :{{post_instance.wind_speed}} km/h</h5>
-                        <h5>Rain Volume:{{post_instance.rain_volume}} mm</h5>
+                {% for node_data in nodes_data %}
+                <div class="col-3" style=" border: 1px solid rgb(70, 69, 69) ; background-color: #D4D6D8; width: 200px; height: 280px; margin-left: 10px; border-radius: 10px; margin-top: 8px; margin-right: 10px;" >
                       
+                
+                    <p><strong>Weather information of node :  </strong>{{ node_data.node_instance.nom }}</p><hr>
+                    <p><strong>Temperature : </strong>{{ node_data.data.temperature }}°C</p>
+                    <p><strong>Humidity : </strong>{{ node_data.data.humidity }}%</p>
+                    <p><strong>Wind Speed : </strong>{{ node_data.data.wind }} km/h</p>
+                    <p><strong>Rain Volume:</strong>{{ node_data.data.rain }} mm</p>
+            
                 </div>
+                {% endfor %}
               
            </div>
+
+           <!-- <div class="row">
+
+            {% for node_data in nodes_data %}
+            <div class="col-3" style=" border: 1px solid rgb(70, 69, 69) ; background-color: #D4D6D8; width: 200px; height: 240px; margin-left: 10px; border-radius: 10px; margin-top: 8px; margin-right: 10px;" >
+                  
+            
+                <p><strong>Weather information of node :  </strong>{{ node_data.node_instance.nom }}</p><hr>
+                <p><strong>Temperature : </strong>{{ node_data.data.temperature }}°C</p>
+                <p><strong>Humidity : </strong>{{ node_data.data.humidity }}%</p>
+                <p><strong>Wind Speed : </strong>{{ node_data.data.wind }} km/h</p>
+                <p><strong>Rain Volume : </strong>{{ node_data.data.rain }} mm</p>
+        
+            </div>
+            {% endfor %}
+      </div> -->
 
             <div class="row">
                 <div class="col-3" style="width: 250px; height: 800px; background-color: #FFFFFF;  border: 0.5px solid rgb(168, 167, 167) ; margin-left: 22px; border-radius: 10px; margin-right: 8px; ">
@@ -78,6 +96,9 @@
 var geojson_str = "{{ proj_instance.geomp.json|escapejs }}";
 var geojson = JSON.parse(geojson_str);
 
+      // Define the colors for the polygon based on status
+      var color = status === "Risk" ? "red" : "purple";
+
 // Create a Leaflet map
 var map = L.map('map').setView([{{ proj_instance.geomp.centroid.y }}, {{ proj_instance.geomp.centroid.x }}], 12);
 
@@ -95,20 +116,48 @@ L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/M
     map.addLayer(drawnItems);
 
 // Add the GeoJSON polygon to the map
-polygon = L.geoJSON(geojson).addTo(map);
+var polygonLayer = L.geoJSON(geojson, { style: { color: color } }).addTo(map);
 
 // var yass = L.marker([{{node_instance.position.y}},{{node_instance.position.x}}]).addTo(map);
 
 // var latlng = yass.getLatLng();
 // yass.bindPopup("<b>Node Name</b><br>{{node_instance.nom}} <br><b>Node Position</b><br>Latitude: " + latlng.lat + "<br>Longitude: " + latlng.lng).openPopup();
 
-        {% for node in nodee %}
-            var yass = L.marker([{{ node.position.y }}, {{ node.position.x }}]).addTo(map);
-            var latlng = yass.getLatLng();
-            console.log('--latlng',latlng)
-            // console.log('--name {{node.nom}}')
-            yass.bindPopup("<b>Node Name</b><br> {{ node.nom }} "   + "<br><b>Node Position</b><br>Latitude: " + latlng.lat + "<br>Longitude: " + latlng.lng).openPopup();
-        {% endfor %}
+
+var markers = [];
+
+{% for node in nodee %}
+        var status = "{{ node.status }}";
+      console.log('node :',"{{node.nom}}"  ,'statuss',status)
+
+                                    var color = "";
+                                    
+
+                        if (status === "DOWN") {
+                                  color = "green";
+                              
+                        } else if (status === "MODERATE") {
+                            color = "blue";
+                           
+                        } else if (status === "HIGH") {
+                            color = "yellow";
+                        } else if (status === "VERY HIGH") {
+                            color = "orange";
+                        } else if (status === "EXTREME") {
+                            color = "red";
+                        } else {
+                            color = "black";
+                        }                      
+                        // var yass = L.marker([{{ node.position.y }}, {{ node.position.x }}], { style: { color: color } }).addTo(map);
+
+    var yass = L.marker([{{ node.position.y }}, {{ node.position.x }}]).addTo(map);
+    var latlng = yass.getLatLng();
+    console.log('--latlng',latlng)
+    // console.log('--name {{node.nom}}')
+    yass.bindPopup("<b>Node Name</b><br> {{ node.nom }} "   + "<br><b>Node Position</b><br>Latitude: " + latlng.lat + "<br>Longitude: " + latlng.lng +"<br><b>Status</b><br> <span style='color:" + color + ";font-weight:bold;'>" + status + "</span> ").openPopup();
+    markers.push(yass);
+    
+    {% endfor %}
             
 </script> 
 
@@ -119,38 +168,10 @@ polygon = L.geoJSON(geojson).addTo(map);
           
           $.ajax({
             type:'GET',
-            url : "{% url 'getTemp' %}",
+            url : "#",
             success: function(response){
               
-              $("#display").empty();
-              for (var key in response.TEMP)
-              {
-                
-                var temp = "<h5>" + "temperature: " + response.TEMP[key].temperature+"°C" + "<br>humidity: " + response.TEMP[key].humidity+"%" + "</h5>";
-                 // $("#display").append(temp); 
-                $("#display").html(temp); 
-
-                                // Get the temperature and humidity values
-                      var temperature = response.TEMP[key].temperature;
-                      var humidity = response.TEMP[key].humidity;
-
-                      // Change the polygon color based on the temperature and humidity values
-                      if (temperature > 30 && humidity < 30) {
-                        polygon.setStyle({
-                          fillColor: 'red'
-                          , fillOpacity: 0.5, color:'red'
-                        });
-                      } else if (temperature <= 30 && humidity >= 30) {
-                        polygon.setStyle({
-                          fillColor: 'green', fillOpacity: 0.5 ,color:'green'
-                        });
-                      } else {
-                        polygon.setStyle({
-                          fillColor: 'yellow', fillOpacity: 0.5,color:'yellow'
-                        });
-                      }
-                 
-              }
+             
             },
             error: function(reponse){
               

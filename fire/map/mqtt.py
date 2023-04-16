@@ -52,8 +52,10 @@ def on_message(mqtt_client, userdata, msg, id):
         temperature_owm = weather.temperature('celsius')['temp']
         humidity_owm = weather.humidity
         wind_speed = weather.wind()['speed']
+        rain_volume = weather.rain.get('1h', 0)  # get rain volume in last 1 hour
 
         print('wind_speed',wind_speed)
+        print('rain',rain_volume)
 
 
 
@@ -86,7 +88,7 @@ def on_message(mqtt_client, userdata, msg, id):
         
         datas = Data.objects.filter(node=nodee)
         print('datasssssss0',datas)
-        new_data = Data.objects.create(temperature=temperature, humidity=humidity, wind=wind_speed, node=nodee)
+        new_data = Data.objects.create(temperature=temperature, humidity=humidity, wind=wind_speed,rain=rain_volume, node=nodee)
         #datas.append(new_data)
         new_data.save()
         print('hiiiiiiiiii',new_data)

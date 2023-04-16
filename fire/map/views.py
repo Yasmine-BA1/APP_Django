@@ -1,6 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib.gis.geos import Polygon
-
+import json
+from multiprocessing.connection import Client
+from statistics import geometric_mean
+from unittest import result
 from .models import myProject
 
 from signup.models import supervisor
@@ -12,6 +15,10 @@ from django.contrib.gis.geos import Point
 from .forms import *
 import pyowm 
 from .mqtt import start_mqtt_client
+from .status import result
+import csv 
+from .FWI import *
+from datetime import datetime
 
 
 def add_project(request,pseudo):
@@ -165,7 +172,29 @@ def all_node(request,id,pseudo):
     humidity = data.humidity
     wind_speed = data.wind
 
+    with open('testBatch.csv', mode='a', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow([datetime.today().strftime('%m/%d/%Y'), temperature, humidity, wind_speed, '0'])
+
+
+    batchFWI('testBatch.csv')
+
+
+    with open('testBatch.csv', mode='r') as file:
+        reader = csv.reader(file)
+        rows = list(reader)
+        last_row = rows[-1]
+        FWI = last_row[-1]
+    
+    fwi = float(FWI)
+    onode.FWI=fwi
+    onode.save()
+    print('ffffffffffwi',fwi)
+
+
     print('temperature',temperature)
+
+
     
     for node_instance in nodes:
         nom=node_instance.nom       
@@ -185,9 +214,19 @@ def update_weather(request, id):
     # get updated weather information
     my_project = myProject.objects.get(polygon_id=id)
 
+    status = result(id)
+   
+
     nodes = node.objects.filter(polyg=my_project).order_by('-Idnode')
     onode = nodes[0]
 
+    onode.status = status
+    onode.save()
+    print('statussssss',status)
+
+
+    status = node.status
+    fwi = node.FWI
     rssi= node.RSSI
 
     datas = Data.objects.filter(node=onode).order_by('-IdData')
@@ -199,8 +238,8 @@ def update_weather(request, id):
         'wind': data.wind,
         'RSSI' : rssi,
         # 'camera' : cam,
-        # 'fwi' : fwi,
-        # 'status' : status,
+        'fwi' : fwi,
+        'status' : status,
         }
 
     # return a JsonResponse with the updated data
@@ -252,14 +291,7 @@ def ALL(request,id,pseudo):
 
     datas = Data.objects.filter(node=onode).order_by('-IdData')
     data = datas.first()
-    # print('dataaaaaassss',datas)
-#-------------------------------------------------
-    # nodeq = node.objects.filter(polyg=project)
-    # for node_instance in nodeq:
-    #     datas = Data.objects.filter(node=node_instance).order_by('-IdData')
-    #     data = datas.first()
-    #     print('node_instance::::',node_instance)
-    #     print('data::::',data)
+
 
     nodeq = node.objects.filter(polyg=project)
     nodes_data = []
@@ -269,7 +301,7 @@ def ALL(request,id,pseudo):
         nodes_data.append({'node_instance': node_instance, 'data': data})
         
     print('------nodes_data',nodes_data)
-    context = {'nodes_data': nodes_data,'nodee': nodeq,'projects':projects, 'project': project,'parm':data}
+    context = {'nodes_data': nodes_data,'nodee': nodeq,'node':onode,'projects':projects, 'project': project,'parm':data}
    
 
     return render(request, 'ALL_node.html',context )
@@ -277,9 +309,9 @@ def ALL(request,id,pseudo):
 
 
 def interface_c(request, pseudo):
-    posts = Post.objects.all()
-    for post_instance in posts:
-        print('***wind',post_instance.wind_speed)
+    datas = Data.objects.all()
+    for post_instance in datas:
+        print('***wind',post_instance.wind)
 
     clientp = client.objects.get(pseudo=pseudo)
     print('nom client',clientp.nom)
@@ -302,7 +334,13 @@ def interface_c(request, pseudo):
         print('---node name:',nom)
         # print('---node position:',position)
 
-    context = {'nodee':nodeq,'clientp':clientp,'projects': projects, 'pseudo': pseudo,'proj_instance':proj_instance,'node_instance':node_instance,'post_instance':post_instance}
+    nodes_data = []
+    for node_instance in nodeq:
+        datas = Data.objects.filter(node=node_instance).order_by('-IdData')
+        data = datas.first()
+        nodes_data.append({'node_instance': node_instance, 'data': data})
+
+    context = {'nodes_data': nodes_data,'nodee':nodeq,'clientp':clientp,'projects': projects, 'pseudo': pseudo,'proj_instance':proj_instance,'node_instance':node_instance,'post_instance':post_instance}
     return render(request, 'interface_c.html', context)
 
    
