@@ -157,9 +157,7 @@
                 var status = "{{ node.status }}";
               console.log('node :',"{{node.nom}}"  ,'statuss',status)
 
-                                            var color = "";
-                                            
-
+                                var color = "";
                                 if (status === "DOWN") {
                                           color = "green";
                                       
@@ -195,19 +193,21 @@
 
       var lastMarker = markers[0];
 console.log('lastMarker',lastMarker)
+
 {% for d in nodee %}
 
-              console.log('status22',{{d.status}})
+              console.log('status22',"{{d.status}}" )
                    if (status === "EXTREME") {
                     lastMarker.setIcon(fireIcon)
                     lastMarker.bounce(5);
                     
                 
                      
-                   } else {
+                   } 
+                   {% comment %} else {
                     lastMarker.setIcon(null);
                     lastMarker.stopBouncing();
-                    }
+                    } {% endcomment %}
   
 {% endfor %}   
     </script>
@@ -221,7 +221,7 @@ console.log('lastMarker',lastMarker)
               type: "GET",
               success: function(data) {
                status = data.status;
-               if (status === "DOWN") {
+               {% comment %} if (status === "DOWN") {
                    color = "green";
                } else if (status === "MODERATE") {
                   color = "blue";
@@ -234,7 +234,7 @@ console.log('lastMarker',lastMarker)
                } else {
                    color = "black";
                }
-               polygonLayer.setStyle({ color: color });                   
+               polygonLayer.setStyle({ color: color });                    {% endcomment %}
 
 
                   $('#weather-info').html(
@@ -278,7 +278,7 @@ console.log('lastMarker',lastMarker)
 
 
 
-
+{% comment %} 
                    if (status === "EXTREME") {
                      marker.setIcon(fireIcon)
                      marker.bounce(5);
@@ -288,7 +288,7 @@ console.log('lastMarker',lastMarker)
                    } else {
                      marker.setIcon(null);
                      marker.stopBouncing();
-                    }
+                    } {% endcomment %}
               },
               error: function(xhr, status, error) {
                   console.log("An error occurred: " + xhr.status + " " + xhr.statusText);

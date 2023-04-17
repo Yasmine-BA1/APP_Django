@@ -171,10 +171,11 @@ def all_node(request,id,pseudo):
     temperature = data.temperature
     humidity = data.humidity
     wind_speed = data.wind
+    rain_volume =data.rain
 
     with open('testBatch.csv', mode='a', newline='') as file:
         writer = csv.writer(file)
-        writer.writerow([datetime.today().strftime('%m/%d/%Y'), temperature, humidity, wind_speed, '0'])
+        writer.writerow([datetime.today().strftime('%m/%d/%Y'), temperature, humidity, wind_speed,'0'])
 
 
     batchFWI('testBatch.csv')
@@ -230,24 +231,40 @@ def update_weather(request, id):
     rssi= node.RSSI
 
     datas = Data.objects.filter(node=onode).order_by('-IdData')
+    print("ddddddddddd",datas)
     data = datas.first()
+    
 
     data = {
         'temperature': data.temperature,
         'humidity': data.humidity,
         'wind': data.wind,
-        'RSSI' : rssi,
-        # 'camera' : cam,
-        'fwi' : fwi,
-        'status' : status,
+        'rain': data.rain,
+        # 'RSSI' : rssi,
+        # # 'camera' : cam,
+        # 'fwi' : fwi,
+        # 'status' : status,
         }
+    # get node status, fwi, and rssi
+    node_status = onode.status
+    node_fwi = onode.FWI
+    node_rssi = onode.RSSI
+    node_name =onode.nom
+    # add node status, fwi, and rssi to data
+    data['status'] = node_status
+    data['fwi'] = node_fwi
+    data['RSSI'] = node_rssi
+    data['node'] = node_name
+    print("oooooooo",data)
+    
 
     # return a JsonResponse with the updated data
     return JsonResponse(data)
+    # return JsonResponse({"datas": list(datas.values())})
 
 
 def modify(request,id,pseudo):
-    posts = Post.objects.all()
+    posts = Data.objects.all()
     for post_instance in posts:
         print('***wind',post_instance.wind_speed)
 

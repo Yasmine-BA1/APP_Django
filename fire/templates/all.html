@@ -124,6 +124,8 @@
             <p><strong>Status: </strong><span style="color:orange; font-weight:bold">{{ node.status }}</span></p>
         {% elif node.status == 'EXTREME' %}
             <p><strong>Status: </strong><span style="color:red; font-weight:bold">{{ node.status }}</span></p>
+        {% elif node.status == 'UNKNOWN' %}
+            <p><strong>Status: </strong><span style="color:black; font-weight:bold">{{ node.status }}</span></p>            
         {% endif %}
         </div>
   </div>
@@ -229,7 +231,7 @@
                var markers = [];
         {% for node in nodee %}
               var statusn = "{{ node.status }}";
-              console.log('node :',"{{node.nom}}"  ,'statuss',status)
+              console.log('----------node :',"{{node.nom}}"  ,'statusnnnn',statusn)
 
               var colorn = "";
                                             
@@ -264,7 +266,7 @@
     popupAnchor: [0, -19]
 });
 
-console.log('Markers',markers)
+{% comment %} console.log('Markers',markers)
 // get the last marker in the array
 var lastMarker = markers[0];
 console.log('lastMarker',lastMarker)
@@ -279,7 +281,7 @@ console.log('lastMarker',lastMarker)
                    } else {
                     lastMarker.setIcon(null);
                     lastMarker.stopBouncing();
-                    }
+                    } {% endcomment %}
 
 
     </script>
@@ -290,12 +292,15 @@ console.log('lastMarker',lastMarker)
       setInterval(function() {
         console.log('helloooo')
           $.ajax({
-           
+            type: "GET",
               url: "{% url 'update_weather' project.polygon_id %}",
-              type: "GET",
+              
               success: function(data) {
+                console.log('dataaaa',data)
+               
                status = data.status;
-               console.log('status',status)
+               console.log('insiiiiide status',status)
+               
                if (status === "DOWN") {
                    color = "green";
                } else if (status === "MODERATE") {
@@ -316,7 +321,9 @@ console.log('lastMarker',lastMarker)
                      
                          '<p><strong>Temperature:</strong> ' + data.temperature + '°C</p>' +
                          '<p><strong>Humidity:</strong> ' + data.humidity + '%</p>' +
-                         '<p><strong>Wind Speed:</strong> ' + data.wind + ' km/h</p>'
+                         '<p><strong>Wind Speed:</strong> ' + data.wind + ' km/h</p>'+
+                         '<p><strong>Rain Volume:</strong> ' + data.rain + ' mm</p>'+
+                         '<p><strong>related_node:</strong> ' + data.node + ' </p>'
                   );
                   $('#rssi').html(
                     
@@ -347,23 +354,28 @@ console.log('lastMarker',lastMarker)
                        $('#status').html('<p><strong>Status: </strong><span style="color:orange; font-weight:bold">' + data.status + '</span></p>');
                    } else if (data.status == 'EXTREME') {
                        $('#status').html('<p><strong>Status: </strong><span style="color:red; font-weight:bold">' + data.status + '</span></p>');
-                   }                   
+                   } 
+                  else if (data.status == 'UNKNOWN') {
+                    $('#status').html('<p><strong>Status: </strong><span style="color:black; font-weight:bold">' + data.status + '</span></p>');
+                  }                   
 
 
 
 
 
 
-                   if (status === "EXTREME") {
-                     marker.setIcon(fireIcon)
-                     marker.bounce(5);
+                  {% comment %} if (status === "EXTREME") {
+                     yass.setIcon(fireIcon)
+                     yass.bounce(5);
                     
                 
                      
                    } else {
-                     marker.setIcon(null);
-                     marker.stopBouncing();
-                    }
+                     yass.setIcon(null);
+                     yass.stopBouncing();
+                    }  {% endcomment %}
+
+                  
               },
               error: function(xhr, status, error) {
                   console.log("An error occurred: " + xhr.status + " " + xhr.statusText);

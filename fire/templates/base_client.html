@@ -57,7 +57,7 @@ rel="stylesheet"
           z-index: 1;
           top: 0;
           left: 0;
-          background-color: #131407;
+          background-color: #04111A;
           overflow-x: hidden;
           padding-top: 20px;
         }
@@ -90,13 +90,13 @@ rel="stylesheet"
 <body>
 
    <header>
-    <nav class="navbar navbar-expand-lg navbar-dark shadow p-2 mb-1" style="background-color: #131407; height: 60px;">
+    <nav class="navbar navbar-expand-lg navbar-dark " style="background-color: #D4D6D8; height: 60px;">
       <div class="container-fluid">
   
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item" style="font-size: 20px; margin-top: 10px;margin-left: 275px;">
-              <a class="nav-link active" aria-current="page" href="{% url 'home' %}"><i class="fa fa-fw fa-home"></i></i>Home</a>
+              <a   href="{% url 'home' %}" style="color: #082631; font-weight: 800; margin-bottom: 15px;"><i class="fa fa-fw fa-home" style="color: #082631; margin-top: 15px;"></i></i>Home</a>
             </li>
             
             
@@ -123,7 +123,7 @@ rel="stylesheet"
                       position: absolute;
                       top: -6px;
                       left: 10px;
-                      background-color: #AAD3DF;
+                      background-color: #DD4406;
                       color: var(--lightcolor);
                       font-size: 10px;
                       text-align: center;
@@ -144,8 +144,8 @@ rel="stylesheet"
                
                   </div>
                   
-                  <li class="nav-item dropdown" style="font-size: 15px; margin-top: 20px;" >
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  <li class="nav-item dropdown" style="font-size: 15px; margin-top: 20px; " >
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: #082631;" >
                      
                     </a>
                         <!-- <ul class="dropdown-menu" ">
@@ -189,17 +189,21 @@ rel="stylesheet"
 <center>
   <h6 style="color: rgb(108, 107, 107); margin-top: 10px;"> <strong>Project Name:</strong> {{proj_instance.nomp}}</h6>
 </center>
-
-<a href="{% url 'interface_c' pseudo %}" style="margin-top: 20px;"> <i class="fa-solid fa-chart-column"></i>
+<hr>
+<a href="{% url 'interface_c' pseudo %}" style="margin-top: 50px;"> <i class="fa-solid fa-chart-column"></i>
     <span>Dashboard</span>
 </a>
+<hr>
 <a href="{% url 'home' %}">Nodes Details</a>
+<hr>
 <a href="#clients"><i class="fa fa-user"></i>
     <span>Profile</span>
 </a>
+<hr>
 <a href="#contact"><i class="fa fa-gear"></i>
 <span>Settings</span>
 </a>
+<hr>
 </div>
    </header>
 
