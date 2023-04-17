@@ -258,30 +258,34 @@
             yass.bindPopup("<b>Node Name</b><br> {{ node.nom }} "   + "<br><b>Node Position</b><br>Latitude: " + latlng.lat + "<br>Longitude: " + latlng.lng+"<br><b>Status</b><br> <span style='color:" + colorn + ";font-weight:bold;'>" + statusn + "</span> ").openPopup();
             markers.push(yass);
             {% endfor %}
-
-        var fireIcon = L.icon({
-    iconUrl: '/static/images/fire3.png',
-    iconSize: [50, 50],
-    iconAnchor: [19, 19],
-    popupAnchor: [0, -19]
-});
-
-{% comment %} console.log('Markers',markers)
-// get the last marker in the array
-var lastMarker = markers[0];
-console.log('lastMarker',lastMarker)
-
-              console.log('status22',status)
-                  if (status === "EXTREME") {
-                    lastMarker.setIcon(fireIcon)
-                    lastMarker.bounce(5);
-                    
-                
-                     
-                   } else {
-                    lastMarker.setIcon(null);
-                    lastMarker.stopBouncing();
-                    } {% endcomment %}
+            
+            {% comment %} var fireIcon = L.icon({
+              iconUrl: '/static/images/fire3.png',
+              iconSize: [50, 50],
+              iconAnchor: [19, 19],
+              popupAnchor: [0, -19]
+          });
+    
+          var lastMarker = markers[0];
+    console.log('lastMarker',lastMarker)
+    
+    {% for d in nodee %}
+    var statuss = "{{ d.status }}";
+    console.log('node :',"{{d.nom}}"  ,'statuss',statuss)
+    
+                       if (statuss === "EXTREME") {
+                          lastMarker.setIcon(fireIcon)
+                          lastMarker.bounce(5); 
+                          
+                      
+                          
+                        } 
+                       {% comment %} else {
+                          lastMarker.setIcon(null);
+                          lastMarker.stopBouncing();
+                          }  {% endcomment %}
+{% comment %}       
+    {% endfor %}  {% endcomment %}
 
 
     </script>

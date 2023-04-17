@@ -195,19 +195,20 @@
 console.log('lastMarker',lastMarker)
 
 {% for d in nodee %}
+var statuss = "{{ d.status }}";
+console.log('node :',"{{d.nom}}"  ,'statuss',statuss)
 
-              console.log('status22',"{{d.status}}" )
-                   if (status === "EXTREME") {
-                    lastMarker.setIcon(fireIcon)
-                    lastMarker.bounce(5);
-                    
-                
-                     
-                   } 
-                   {% comment %} else {
-                    lastMarker.setIcon(null);
-                    lastMarker.stopBouncing();
-                    } {% endcomment %}
+                   if (statuss === "EXTREME") {
+                      lastMarker.setIcon(fireIcon)
+                      lastMarker.bounce(5); 
+                      
+                  
+                      
+                    } 
+                   else {
+                      lastMarker.setIcon(null);
+                      lastMarker.stopBouncing();
+                      } 
   
 {% endfor %}   
     </script>
