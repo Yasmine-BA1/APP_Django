@@ -8,7 +8,7 @@ from .models import *
 import pyowm
 
 topics = ['v3/my-lora1-application@ttn/devices/eui-70b3d57edd05a535/up', 'v3/my-lora1-application@ttn/devices/eui-70b3d57ed005ca2c/up']
-
+topi =['eui-70b3d57edd05a535','eui-70b3d57ed005ca2c']
 def on_connect(mqtt_client, userdata, flags, rc):
 
     if rc == 0:
@@ -27,71 +27,86 @@ def on_message(mqtt_client, userdata, msg, id):
         # Decode the incoming message
         payload_dict =json.loads(msg.payload)
         print(f'Received message on topic: {msg.topic} with payload: {msg.payload}', '\n')
-
-
-         # Get temperature and humidity values from payload
-        temperature = payload_dict['uplink_message']['decoded_payload']['temperature']
-        humidity = payload_dict['uplink_message']['decoded_payload']['humidity']
-
-        rssi = payload_dict['uplink_message']['rx_metadata'][0]['rssi']
-        snr = payload_dict['uplink_message']['rx_metadata'][0]['snr']
-
-
-
-        print('temperature :', temperature, 'humidity :', humidity, 'rssi :', rssi, 'snr :', snr, '\n')
-
-        # Replace "YOUR_API_KEY" with your actual API key from OpenWeatherMap
-        owm = pyowm.OWM("0f21fa98b6e075b77fd85b3af087e294")
-    
-         # Replace "City name" with the name of the city you want weather data for
-        location = owm.weather_manager().weather_at_place('Bizerte, TN')
-    
-        weather = location.weather
-
-        # Get the temperature, humidity, and wind speed
-        temperature_owm = weather.temperature('celsius')['temp']
-        humidity_owm = weather.humidity
-        wind_speed = weather.wind()['speed']
-        rain_volume = weather.rain.get('1h', 0)  # get rain volume in last 1 hour
-
-        print('wind_speed',wind_speed)
-        print('rain',rain_volume)
-
-
-
-        # print('temperature :', temperature, 'humidity :', humidity, 'wind :', wind_speed, '\n')
-        # Create a new Post object and save it to the database
+        
+        referencep = msg.topic.split('/')[-2]
+        print('rrrrrffffffrrrppp',referencep)
+        
         project = myProject.objects.get(polygon_id=id)
 
-      
-        nodes = node.objects.filter(polyg=project).order_by('-Idnode')
         
-        # my_project = myProject.objects.get(polygon_id=id)
-        # # polygon = my_project.geomp
-
-        # nodes = node.objects.filter(polyg=my_project)
-        onode = nodes[0]
-
-        onode.RSSI = rssi
-        onode.save()
-        print('RSSI',onode.RSSI)
-
-
-
-
-
-        my_project = myProject.objects.get(polygon_id=id)
-        # polygon = my_project.geomp
-
-        nodes = node.objects.filter(polyg=my_project).order_by('-Idnode')
-        nodee = nodes[0]
+            # Get the node with the matching reference
+        nodes = node.objects.filter(polyg=project,reference=referencep)
+        print('nodes',nodes)
+        if nodes:
+            n = nodes[0]
+            print('n',n.nom,'  ref',n.reference)
         
-        datas = Data.objects.filter(node=nodee)
-        print('datasssssss0',datas)
-        new_data = Data.objects.create(temperature=temperature, humidity=humidity, wind=wind_speed,rain=rain_volume, node=nodee)
-        #datas.append(new_data)
-        new_data.save()
-        print('hiiiiiiiiii',new_data)
+
+            
+                    # print('reeeef',n.reference)
+                    # Get temperature and humidity values from payload
+            temperature = payload_dict['uplink_message']['decoded_payload']['temperature']
+            humidity = payload_dict['uplink_message']['decoded_payload']['humidity']
+
+            rssi = payload_dict['uplink_message']['rx_metadata'][0]['rssi']
+            snr = payload_dict['uplink_message']['rx_metadata'][0]['snr']
+
+
+
+            print('temperature :', temperature, 'humidity :', humidity, 'rssi :', rssi, 'snr :', snr, '\n')
+
+                    # Replace "YOUR_API_KEY" with your actual API key from OpenWeatherMap
+            owm = pyowm.OWM("0f21fa98b6e075b77fd85b3af087e294")
+                
+                    # Replace "City name" with the name of the city you want weather data for
+            location = owm.weather_manager().weather_at_place('Bizerte, TN')
+                
+            weather = location.weather
+
+                    # Get the temperature, humidity, and wind speed
+            temperature_owm = weather.temperature('celsius')['temp']
+            humidity_owm = weather.humidity
+            wind_speed = weather.wind()['speed']
+            rain_volume = weather.rain.get('1h', 0)  # get rain volume in last 1 hour
+
+            # print('wind_speed',wind_speed)
+            # print('rain',rain_volume)
+
+
+
+                    # print('temperature :', temperature, 'humidity :', humidity, 'wind :', wind_speed, '\n')
+                    # Create a new Post object and save it to the database
+                    # project = myProject.objects.get(polygon_id=id)
+
+                
+                    # nodes = node.objects.filter(polyg=project).order_by('-Idnode')
+                    
+                    # my_project = myProject.objects.get(polygon_id=id)
+                    # # polygon = my_project.geomp
+
+                    # nodes = node.objects.filter(polyg=my_project)
+                    # onode = nodes[0]
+
+            n.RSSI = rssi
+            n.save()
+            print('RSSI',n.RSSI)
+
+
+
+
+
+                    # my_project = myProject.objects.get(polygon_id=id)
+                    # # polygon = my_project.geomp
+
+                    # nodes = node.objects.filter(polyg=my_project).order_by('-Idnode')
+                    # nodee = nodes[0]
+                    
+            datas = Data.objects.filter(node=n)
+            print('datasssssss0',datas)
+            new_data = Data.objects.create(temperature=temperature, humidity=humidity, wind=wind_speed,rain=rain_volume, node=n)
+                    #datas.append(new_data)
+            new_data.save()
+            print('hiiiiiiiiii',new_data)
 
 
 def start_mqtt_client(id):

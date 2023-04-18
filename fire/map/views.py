@@ -160,13 +160,13 @@ def all_node(request,id,pseudo):
     my_project = myProject.objects.get(polygon_id=id)
 
     nodes = node.objects.filter(polyg=my_project).order_by('-Idnode')
-    print('****nodes:',nodes)
+    # print('****nodes:',nodes)
     onode = nodes[0] # =======node_instance// last one
     print(onode) 
 
     datas = Data.objects.filter(node=onode).order_by('-IdData')
     data = datas.first()
-    print('dataaaaaa',data)
+    # print('dataaaaaa',data)
 
     temperature = data.temperature
     humidity = data.humidity
@@ -190,16 +190,16 @@ def all_node(request,id,pseudo):
     fwi = float(FWI)
     onode.FWI=fwi
     onode.save()
-    print('ffffffffffwi',fwi)
+    # print('ffffffffffwi',fwi)
 
 
-    print('temperature',temperature)
+    # print('temperature',temperature)
 
 
     
     for node_instance in nodes:
         nom=node_instance.nom       
-        print('nom:',nom)
+        # print('nom:',nom)
 
     
     if request.method == 'POST':
@@ -223,15 +223,21 @@ def update_weather(request, id):
 
     onode.status = status
     onode.save()
-    print('statussssss',status)
+    # print('statussssss',status)
 
 
-    status = node.status
-    fwi = node.FWI
-    rssi= node.RSSI
+    # status = node.status
+    # fwi = node.FWI
+    # rssi= node.RSSI
+    
+    status =onode.status
+    fwi=onode.FWI
+    rssi=onode.RSSI
+    node_name =onode.nom
+    # print('oonodeee',status)
 
     datas = Data.objects.filter(node=onode).order_by('-IdData')
-    print("ddddddddddd",datas)
+    # print("ddddddddddd",datas)
     data = datas.first()
     
 
@@ -240,22 +246,26 @@ def update_weather(request, id):
         'humidity': data.humidity,
         'wind': data.wind,
         'rain': data.rain,
-        # 'RSSI' : rssi,
+        'RSSI' : rssi,
         # # 'camera' : cam,
-        # 'fwi' : fwi,
-        # 'status' : status,
+        'fwi' : fwi,
+        'status' : status,
+        'node':node_name,
         }
-    # get node status, fwi, and rssi
-    node_status = onode.status
-    node_fwi = onode.FWI
-    node_rssi = onode.RSSI
-    node_name =onode.nom
-    # add node status, fwi, and rssi to data
-    data['status'] = node_status
-    data['fwi'] = node_fwi
-    data['RSSI'] = node_rssi
-    data['node'] = node_name
-    print("oooooooo",data)
+    # print('fffff',data['fwi'])
+    # print('fffff',data['RSSI'])
+    # print('fffff',data['status'])
+    # # get node status, fwi, and rssi
+    # node_status = onode.status
+    # node_fwi = onode.FWI
+    # node_rssi = onode.RSSI
+    # node_name =onode.nom
+    # # add node status, fwi, and rssi to data
+    # data['status'] = node_status
+    # data['fwi'] = node_fwi
+    # data['RSSI'] = node_rssi
+    # data['node'] = node_name
+    # print("oooooooo",data)
     
 
     # return a JsonResponse with the updated data
@@ -302,9 +312,9 @@ def ALL(request,id,pseudo):
     project = myProject.objects.get(polygon_id=id)
 
     nodes = node.objects.filter(polyg=project).order_by('-Idnode')
-    print('****nodes:',nodes)
+    # print('****nodes:',nodes)
     onode = nodes[0] # =======node_instance// onlyy for the last one
-    print(onode) 
+    # print(onode) 
 
     datas = Data.objects.filter(node=onode).order_by('-IdData')
     data = datas.first()
@@ -317,7 +327,7 @@ def ALL(request,id,pseudo):
         data = datas.first()
         nodes_data.append({'node_instance': node_instance, 'data': data})
         
-    print('------nodes_data',nodes_data)
+    # print('------nodes_data',nodes_data)
     context = {'nodes_data': nodes_data,'nodee': nodeq,'node':onode,'projects':projects, 'project': project,'parm':data}
    
 
@@ -331,8 +341,8 @@ def interface_c(request, pseudo):
         print('***wind',post_instance.wind)
 
     clientp = client.objects.get(pseudo=pseudo)
-    print('nom client',clientp.nom)
-    print('---------image url client',clientp.image.url)
+    # print('nom client',clientp.nom)
+    # print('---------image url client',clientp.image.url)
     projects = myProject.objects.filter(clientp=clientp)
     # print('***',projects)
     for proj_instance in projects:
@@ -348,7 +358,7 @@ def interface_c(request, pseudo):
         longitude = node_instance.longitude
         position=node_instance.position
         nom=node_instance.nom
-        print('---node name:',nom)
+        # print('---node name:',nom)
         # print('---node position:',position)
 
     nodes_data = []
