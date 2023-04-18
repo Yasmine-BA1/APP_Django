@@ -47,13 +47,14 @@ def on_message(mqtt_client, userdata, msg, id):
                     # Get temperature and humidity values from payload
             temperature = payload_dict['uplink_message']['decoded_payload']['temperature']
             humidity = payload_dict['uplink_message']['decoded_payload']['humidity']
-
+            Battery_level = payload_dict['uplink_message']['decoded_payload']['Battery_level']
+            
             rssi = payload_dict['uplink_message']['rx_metadata'][0]['rssi']
             snr = payload_dict['uplink_message']['rx_metadata'][0]['snr']
 
 
 
-            print('temperature :', temperature, 'humidity :', humidity, 'rssi :', rssi, 'snr :', snr, '\n')
+            print('temperature :', temperature, 'humidity :', humidity, 'rssi :', rssi, 'snr :', snr,'Battery_level :',Battery_level ,'\n')
 
                     # Replace "YOUR_API_KEY" with your actual API key from OpenWeatherMap
             owm = pyowm.OWM("0f21fa98b6e075b77fd85b3af087e294")
@@ -89,7 +90,10 @@ def on_message(mqtt_client, userdata, msg, id):
 
             n.RSSI = rssi
             n.save()
+            n.Battery_value =Battery_level
+            n.save()
             print('RSSI',n.RSSI)
+            print('Battery_value',n.Battery_value)
 
 
 
