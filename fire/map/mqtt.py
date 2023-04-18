@@ -63,7 +63,7 @@ def on_message(mqtt_client, userdata, msg, id):
         # Create a new Post object and save it to the database
         project = myProject.objects.get(polygon_id=id)
 
-        marker = node.objects.all()
+      
         nodes = node.objects.filter(polyg=project).order_by('-Idnode')
         
         # my_project = myProject.objects.get(polygon_id=id)
