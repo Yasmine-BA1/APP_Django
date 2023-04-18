@@ -80,7 +80,10 @@
                                   <p><strong>Status: </strong><span style="color:orange; font-weight:bold">{{ d.status }}</span></p>
                               {% elif d.status == 'EXTREME' %}
                                   <p><strong>Status: </strong><span style="color:red; font-weight:bold">{{ d.status }}</span></p>
-                              {% endif %}
+                              
+                              {% elif d.status == 'UNKNOWN' %}
+                                  <p><strong>Status: </strong><span style="color:black; font-weight:bold">{{ d.status }}</span></p>
+                              {% endif %}                              
                                 </p>
                               </div>
                             {% endfor %}
@@ -200,15 +203,15 @@ console.log('node :',"{{d.nom}}"  ,'statuss',statuss)
 
                    if (statuss === "EXTREME") {
                       lastMarker.setIcon(fireIcon)
-                      lastMarker.bounce(5); 
+                      {% comment %} lastMarker.bounce(5);  {% endcomment %}
                       
                   
                       
                     } 
-                   else {
+                   {% comment %} else {
                       lastMarker.setIcon(null);
                       lastMarker.stopBouncing();
-                      } 
+                      }  {% endcomment %}
   
 {% endfor %}   
     </script>
@@ -274,7 +277,9 @@ console.log('node :',"{{d.nom}}"  ,'statuss',statuss)
                    } else if (data.status == 'EXTREME') {
                        $('#status').html('<p><strong>Status: </strong><span style="color:red; font-weight:bold">' + data.status + '</span></p>');
                    }                   
-
+                  else if (data.status == 'UNKNOWN') {
+                    $('#status').html('<p><strong>Status: </strong><span style="color:black; font-weight:bold">' + data.status + '</span></p>');
+                } 
 
 
 
