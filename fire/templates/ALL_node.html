@@ -21,6 +21,22 @@
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
 
+        <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+        integrity="sha384-6DBIkDzKj1PHw3gW8skvQoAQ5KoG5ru5Ot1WmYvFxBn96yO9SB+4+W4A7WuL4izU"
+        crossorigin=""/>
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" integrity="sha512-1xhdQwMzS8Ly+5ZCvSk/Z9oGt92uI1FUpy2+vcD7zTkXXw06ivV8WgZ+flv7dX9tMJPCT8YENWQOv+7OxNwHvw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js" integrity="sha512-PnX6fRPjq/LiYD6rsRv6LZx6PZyoLCejr3q1ZDDtzAVT9T1TzT8OGpVEyTjjntPtd+bGwIzgm1orDjZi2QX6UQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet.marker.bouncing/dist/leaflet.marker.bouncing.min.js"></script>
+    
+    
+    <script type="text/javascript"
+            src="https://cdn.jsdelivr.net/gh/hosuaby/Leaflet.SmoothMarkerBouncing@v3.0.2/dist/bundle.js"
+            crossorigin="anonymous"></script>
+
     </head>
 
     <body class="bg-img">
@@ -129,165 +145,104 @@
 
         <script src="https://cdn.jsdelivr.net/npm/leaflet.marker.bouncing/dist/leaflet.marker.bouncing.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/leaflet.marker.bouncing/dist/leaflet.marker.bouncing.min.js"></script>
-    <!-- <script src="{% static 'js/map.js' %}"></script> -->
-    <script>
-        var geojson_str = "{{ project.geomp.json|escapejs }}";
-        var geojson = JSON.parse(geojson_str);
-        {% comment %} var status = "{{ node.status }}";
-        console.log('status  :::',status) {% endcomment %}
-  
-  
-  
-   
-        var map = L.map('map').setView([{{ project.geomp.centroid.y }}, {{ project.geomp.centroid.x }}], 12);
-  
-  
-        L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-              attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-          }).addTo(map);
+
+
+ <script>
+      var geojson_str = "{{ project.geomp.json|escapejs }}";
+      var geojson = JSON.parse(geojson_str);
+      {% comment %} var status = "{{ node.status }}";
+      console.log('status  :::',status) {% endcomment %}
 
 
 
+ 
+      var map = L.map('map').setView([{{ project.geomp.centroid.y }}, {{ project.geomp.centroid.x }}], 12);
+
+
+      L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+  
         var fireIcon = L.icon({
-            iconUrl: '/static/images/fire3.png',
-            iconSize: [50, 50],
-            iconAnchor: [19, 19],
-            popupAnchor: [0, -19]
-            });
-      
-      {% for d in ldn %}
-      
-          var coords = JSON.parse(geojson_str).coordinates;
-      var first_coords = coords[0][0];
-      
-      console.log("{{ d.node.node_range}}")
-          var polygonOne = { 
-            "type": "Polygon",
-            "coordinates": [
-                coords[0][{{ d.node.node_range}}-1]
-            ]
-          };
-  
-                                          var statusn = "{{ d.node.status }}";
-                                          console.log('----------node :',"{{node.nom}}"  ,'statusnnnn',statusn)
-  
-                                          var colorn = "";
-                                        
-  
-                                        if (statusn === "DOWN") {
-                                          colorn = "green";
-                                              
-                                        } else if (statusn === "MODERATE") {
-                                          colorn = "blue";
-                                           
-                                        } else if (statusn === "HIGH") {
-                                          colorn = "yellow";
-                                        } else if (statusn === "VERY HIGH") {
-                                          colorn = "orange";
-                                        } else if (statusn === "EXTREME") {
-                                          colorn = "red";
-                                        } else {
-                                          colorn = "black";
-                                        }
-                var latest_data = "<strong>Node name :</strong> {{ d.node.nom }} <br><strong>Ref:</strong> {{ d.node.reference }} <br><strong>Node Position:</strong> <br>Latitude : {{ d.node.latitude }} <br> Longitude : {{ d.node.longitude }}<br> <strong>RSSI:</strong> {{ d.node.RSSI }}<br> <strong>Battery level:</strong> {{ d.node.Battery_value }} <br> <strong>FWI:</strong> {{ d.node.FWI }} <br> <strong>Predection result:</strong> <br><span style='color:" + colorn + ";font-weight:bold;'>" + statusn + "</span>  <br><strong>Temperature:</strong> {{ d.temperature }} <br> <strong>Humidity:</strong> {{ d.humidity }} <br> <strong>Wind_speed:</strong> {{ d.wind }} <br>"
-                console.log(latest_data)
-                var marker = L.marker([{{ d.node.position.y }}, {{ d.node.position.x }}]).bindPopup(latest_data).addTo(map);   
-                
-                
-                status = "{{ d.node.status}}" ;
-                console.log( status )
-                var color;
-                    if (status == "DOWN") {
-                        color = "green";
-                    } else if (status == "MODERATE") {
-                       color = "blue";
-                    } else if (status == "HIGH") {
-                        color = "yellow";
-                    } else if (status == "VERY HIGH") {
-                        color = "orange";
-                    } else if (status == "EXTREME") {
-                        color = "red";
-                        marker.setIcon(fireIcon);
-                        marker.bounce(-1);
-                    } else {
-                        color = "black";
-                    }
-    
-          var polygonLayer = L.geoJSON(polygonOne, { style: { color: color, fillOpacity: 0.5 } }).addTo(map);
-          polygonLayer.setStyle({ color: color });
-          polygonLayer.bindTooltip("Polygon " +  {{d.node.node_range}} +" Of Project: "+"{{d.node.polyg.nomp}}");
-    
-    
-      {% endfor %}
-  
-
-
-          
-{% comment %} 
-        var polygonLayer = L.geoJSON(geojson, { style: { color: color } }).addTo(map);
-      
-  
-
-        var markers = [];
-
-        {% for node in nodee %}
-                var status = "{{ node.status }}";
-              console.log('node :',"{{node.nom}}"  ,'statuss',status)
-
-                                var color = "";
-                                if (status === "DOWN") {
-                                          color = "green";
-                                      
-                                } else if (status === "MODERATE") {
-                                    color = "blue";
-                                   
-                                } else if (status === "HIGH") {
-                                    color = "yellow";
-                                } else if (status === "VERY HIGH") {
-                                    color = "orange";
-                                } else if (status === "EXTREME") {
-                                    color = "red";
-                                } else {
-                                    color = "black";
-                                }                      
-                                // var yass = L.marker([{{ node.position.y }}, {{ node.position.x }}], { style: { color: color } }).addTo(map);
-
-            var yass = L.marker([{{ node.position.y }}, {{ node.position.x }}]).addTo(map);
-            var latlng = yass.getLatLng();
-            console.log('--latlng',latlng)
-            // console.log('--name {{node.nom}}')
-            yass.bindPopup("<b>Node Name</b><br> {{ node.nom }} "   + "<br><b>Node Position</b><br>Latitude: " + latlng.lat + "<br>Longitude: " + latlng.lng +"<br><b>Status</b><br> <span style='color:" + color + ";font-weight:bold;'>" + status + "</span> ").openPopup();
-            markers.push(yass);
-            
-            {% endfor %}
-
-              var fireIcon = L.icon({
           iconUrl: '/static/images/fire3.png',
           iconSize: [50, 50],
           iconAnchor: [19, 19],
           popupAnchor: [0, -19]
-      });
+          });
+    
+    {% for d in ldn %}
+    
+        var coords = JSON.parse(geojson_str).coordinates;
+    var first_coords = coords[0][0];
+    
+    console.log("{{ d.node.node_range}}")
+        var polygonOne = { 
+          "type": "Polygon",
+          "coordinates": [
+              coords[0][{{ d.node.node_range}}-1]
+          ]
+        };
 
-      var lastMarker = markers[0];
-console.log('lastMarker',lastMarker)
+                                        var statusn = "{{ d.node.status }}";
+                                        console.log('----------node :',"{{node.nom}}"  ,'statusnnnn',statusn)
 
-{% for d in nodee %}
-var statuss = "{{ d.status }}";
-console.log('node :',"{{d.nom}}"  ,'statuss',statuss)
+                                        var colorn = "";
+                                      
 
-                   if (statuss === "EXTREME") {
-                      lastMarker.setIcon(fireIcon)
-                      {% comment %} lastMarker.bounce(5);  {% endcomment %}
-                      
-                  
-                      
-                    {% comment %} }  {% endcomment %}
-                   {% comment %} else {
-                      lastMarker.setIcon(null);
-                      lastMarker.stopBouncing();
-                      }  {% endcomment %}
+                                      if (statusn === "DOWN") {
+                                        colorn = "green";
+                                            
+                                      } else if (statusn === "MODERATE") {
+                                        colorn = "blue";
+                                         
+                                      } else if (statusn === "HIGH") {
+                                        colorn = "yellow";
+                                      } else if (statusn === "VERY HIGH") {
+                                        colorn = "orange";
+                                      } else if (statusn === "EXTREME") {
+                                        colorn = "red";
+                                      } else {
+                                        colorn = "black";
+                                      }
+              var latest_data = "<strong>Node name :</strong> {{ d.node.nom }} <br><strong>Ref:</strong> {{ d.node.reference }} <br><strong>Node Position:</strong> <br>Latitude : {{ d.node.latitude }} <br> Longitude : {{ d.node.longitude }}<br> <strong>RSSI:</strong> {{ d.node.RSSI }}<br> <strong>Battery level:</strong> {{ d.node.Battery_value }} <br> <strong>FWI:</strong> {{ d.node.FWI }} <br> <strong>Predection result:</strong> <br><span style='color:" + colorn + ";font-weight:bold;'>" + statusn + "</span>  <br><strong>Temperature:</strong> {{ d.temperature }} <br> <strong>Humidity:</strong> {{ d.humidity }} <br> <strong>Wind_speed:</strong> {{ d.wind }} <br>"
+              console.log(latest_data)
+              var marker = L.marker([{{ d.node.position.y }}, {{ d.node.position.x }}]).bindPopup(latest_data).addTo(map);   
+              
+              
+              status = "{{ d.node.status}}" ;
+              console.log( status )
+              var color;
+                  if (status == "DOWN") {
+                      color = "green";
+                  } else if (status == "MODERATE") {
+                     color = "blue";
+                  } else if (status == "HIGH") {
+                      color = "yellow";
+                  } else if (status == "VERY HIGH") {
+                      color = "orange";
+                  } else if (status == "EXTREME") {
+                      color = "red";
+                      marker.setIcon(fireIcon);
+                      marker.bounce(-1);
+                  } else {
+                      color = "black";
+                  }
   
-{% comment %} {% endfor %}     {% endcomment %}
+        var polygonLayer = L.geoJSON(polygonOne, { style: { color: color, fillOpacity: 0.5 } }).addTo(map);
+        polygonLayer.setStyle({ color: color });
+        polygonLayer.bindTooltip("Polygon " +  {{d.node.node_range}} +" Of Project: "+"{{d.node.polyg.nomp}}");
+  
+  
+    {% endfor %}
+
+        
+
+
+  
+
+
+        
     </script>
 
 {% comment %} <script>

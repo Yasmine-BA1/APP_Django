@@ -164,7 +164,7 @@ def all_node(request,id,pseudo):
     nodes = node.objects.filter(polyg=my_project).order_by('-Idnode')
     # print('****nodes:',nodes)
     onode = nodes[0] # =======node_instance// last one
-    print(onode) 
+    print('last node added',onode) 
 
     datas = Data.objects.filter(node=onode).order_by('-IdData')
     data = datas.first()
@@ -174,28 +174,6 @@ def all_node(request,id,pseudo):
     humidity = data.humidity
     wind_speed = data.wind
     rain_volume =data.rain
-    
-    data_list = []
-    for n in nodes :
-        ds = Data.objects.filter(node=n).order_by('-IdData').first()
-        data_list.append(
-            ds,
-        )
-        
-    
-    print('data liiiiiiist',data_list)
-    
-    for i in range(len(data_list)):
-        ldn0 = data_list[i]
-        #node = ldn0.node
-        print(ldn0)
-        dd = ldn0.wind
-        print(dd)
-
-        temperature = ldn0.temperature
-        humidity = ldn0.humidity
-        wind_speed = ldn0.wind
-    
     
 
     with open('testBatch.csv', mode='a', newline='') as file:
@@ -214,10 +192,58 @@ def all_node(request,id,pseudo):
         FWI = last_row[-1]
     
     
+    # fwi = float(FWI)
+    # onode.FWI=fwi
+    # onode.save()
+    # print('ffffffffffwi',fwi)
+    
+    data_list = []
+    for n in nodes :
+        ds = Data.objects.filter(node=n).order_by('-IdData').first()
+        data_list.append(
+            ds,
+        )
+        
+    
+    print('data liiiiiiist',data_list)
+    
+    for i in range(len(data_list)):
+        ldn0 = data_list[i]
+        #node = ldn0.node
+        print(ldn0)
+        dd = ldn0.wind
+        print(dd)
+        
+        # fwi = float(FWI)
+        # ldn0.node.FWI=fwi
+        # ldn0.node.save()
+        # print('ffffffffffwi',fwi)
+        
+        
+        # status = result(id)
+        # ldn0.node.status = status
+        # ldn0.node.save()
+        # print('sssssssss',status)
+        # print('-----------------------------')
+    
+
+    print('-----------------------------')
+    my_project = myProject.objects.get(polygon_id=id)
+
+    status = result(id)
+   
+
+    nodes = node.objects.filter(polyg=my_project).order_by('-Idnode')
+    onode = nodes[0]
+    
     fwi = float(FWI)
     onode.FWI=fwi
     onode.save()
     print('ffffffffffwi',fwi)
+
+    onode.status = status
+    onode.save()
+    print('last    sssssssss',status)
 
 
     # print('temperature',temperature)
@@ -240,66 +266,66 @@ def all_node(request,id,pseudo):
     context = { 'projects':projects,'project':my_project,'node_instance': node_instance,'nodee': nodes,'node':onode,'parm':data, 'ldn':data_list}
     return render(request, 'all.html',context)
 
-def update_weather(request, id):
-    # get updated weather information
-    my_project = myProject.objects.get(polygon_id=id)
+# def update_weather(request, id):
+#     # get updated weather information
+#     my_project = myProject.objects.get(polygon_id=id)
 
-    status = result(id)
+#     status = result(id)
    
 
-    nodes = node.objects.filter(polyg=my_project).order_by('-Idnode')
-    onode = nodes[0]
+#     nodes = node.objects.filter(polyg=my_project).order_by('-Idnode')
+#     onode = nodes[0]
 
-    onode.status = status
-    onode.save()
-    # print('statussssss',status)
+#     onode.status = status
+#     onode.save()
+#     # print('statussssss',status)
 
 
-    # status = node.status
-    # fwi = node.FWI
-    # rssi= node.RSSI
+#     # status = node.status
+#     # fwi = node.FWI
+#     # rssi= node.RSSI
     
-    status =onode.status
-    fwi=onode.FWI
-    rssi=onode.RSSI
-    node_name =onode.nom
-    # print('oonodeee',status)
+#     status =onode.status
+#     fwi=onode.FWI
+#     rssi=onode.RSSI
+#     node_name =onode.nom
+#     # print('oonodeee',status)
 
-    datas = Data.objects.filter(node=onode).order_by('-IdData')
-    # print("ddddddddddd",datas)
-    data = datas.first()
-    
-
-    data = {
-        'temperature': data.temperature,
-        'humidity': data.humidity,
-        'wind': data.wind,
-        'rain': data.rain,
-        'RSSI' : rssi,
-        # # 'camera' : cam,
-        'fwi' : fwi,
-        'status' : status,
-        'node':node_name,
-        }
-    # print('fffff',data['fwi'])
-    # print('fffff',data['RSSI'])
-    # print('fffff',data['status'])
-    # # get node status, fwi, and rssi
-    # node_status = onode.status
-    # node_fwi = onode.FWI
-    # node_rssi = onode.RSSI
-    # node_name =onode.nom
-    # # add node status, fwi, and rssi to data
-    # data['status'] = node_status
-    # data['fwi'] = node_fwi
-    # data['RSSI'] = node_rssi
-    # data['node'] = node_name
-    # print("oooooooo",data)
+#     datas = Data.objects.filter(node=onode).order_by('-IdData')
+#     # print("ddddddddddd",datas)
+#     data = datas.first()
     
 
-    # return a JsonResponse with the updated data
-    return JsonResponse(data)
-    # return JsonResponse({"datas": list(datas.values())})
+#     data = {
+#         'temperature': data.temperature,
+#         'humidity': data.humidity,
+#         'wind': data.wind,
+#         'rain': data.rain,
+#         'RSSI' : rssi,
+#         # # 'camera' : cam,
+#         'fwi' : fwi,
+#         'status' : status,
+#         'node':node_name,
+#         }
+#     # print('fffff',data['fwi'])
+#     # print('fffff',data['RSSI'])
+#     # print('fffff',data['status'])
+#     # # get node status, fwi, and rssi
+#     # node_status = onode.status
+#     # node_fwi = onode.FWI
+#     # node_rssi = onode.RSSI
+#     # node_name =onode.nom
+#     # # add node status, fwi, and rssi to data
+#     # data['status'] = node_status
+#     # data['fwi'] = node_fwi
+#     # data['RSSI'] = node_rssi
+#     # data['node'] = node_name
+#     # print("oooooooo",data)
+    
+
+#     # return a JsonResponse with the updated data
+#     return JsonResponse(data)
+#     # return JsonResponse({"datas": list(datas.values())})
 
 
 def modify(request,id,pseudo):

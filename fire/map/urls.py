@@ -18,6 +18,6 @@ urlpatterns = [
   
     path('interface/<str:pseudo>', views.interface_c, name='interface_c'),
   
-    path('update_weather/<int:id>/', views.update_weather, name='update_weather'),
+    # path('update_weather/<int:id>/', views.update_weather, name='update_weather'),
    
 ]
