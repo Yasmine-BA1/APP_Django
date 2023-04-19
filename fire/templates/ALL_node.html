@@ -131,25 +131,99 @@
         <script src="https://cdn.jsdelivr.net/npm/leaflet.marker.bouncing/dist/leaflet.marker.bouncing.min.js"></script>
     <!-- <script src="{% static 'js/map.js' %}"></script> -->
     <script>
-      var geojson_str = "{{ project.geomp.json|escapejs }}";
-      var geojson = JSON.parse(geojson_str);
+        var geojson_str = "{{ project.geomp.json|escapejs }}";
+        var geojson = JSON.parse(geojson_str);
+        {% comment %} var status = "{{ node.status }}";
+        console.log('status  :::',status) {% endcomment %}
+  
+  
+  
+   
+        var map = L.map('map').setView([{{ project.geomp.centroid.y }}, {{ project.geomp.centroid.x }}], 12);
+  
+  
+        L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+              attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+          }).addTo(map);
 
 
 
-      // Define the colors for the polygon based on status
-  var color = status === "Risk" ? "red" : "purple";
- 
-      var map = L.map('map').setView([{{ project.geomp.centroid.y }}, {{ project.geomp.centroid.x }}], 12);
-
-
-      L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
-
+        var fireIcon = L.icon({
+            iconUrl: '/static/images/fire3.png',
+            iconSize: [50, 50],
+            iconAnchor: [19, 19],
+            popupAnchor: [0, -19]
+            });
+      
+      {% for d in ldn %}
+      
+          var coords = JSON.parse(geojson_str).coordinates;
+      var first_coords = coords[0][0];
+      
+      console.log("{{ d.node.node_range}}")
+          var polygonOne = { 
+            "type": "Polygon",
+            "coordinates": [
+                coords[0][{{ d.node.node_range}}-1]
+            ]
+          };
+  
+                                          var statusn = "{{ d.node.status }}";
+                                          console.log('----------node :',"{{node.nom}}"  ,'statusnnnn',statusn)
+  
+                                          var colorn = "";
+                                        
+  
+                                        if (statusn === "DOWN") {
+                                          colorn = "green";
+                                              
+                                        } else if (statusn === "MODERATE") {
+                                          colorn = "blue";
+                                           
+                                        } else if (statusn === "HIGH") {
+                                          colorn = "yellow";
+                                        } else if (statusn === "VERY HIGH") {
+                                          colorn = "orange";
+                                        } else if (statusn === "EXTREME") {
+                                          colorn = "red";
+                                        } else {
+                                          colorn = "black";
+                                        }
+                var latest_data = "<strong>Node name :</strong> {{ d.node.nom }} <br><strong>Ref:</strong> {{ d.node.reference }} <br><strong>Node Position:</strong> <br>Latitude : {{ d.node.latitude }} <br> Longitude : {{ d.node.longitude }}<br> <strong>RSSI:</strong> {{ d.node.RSSI }}<br> <strong>Battery level:</strong> {{ d.node.Battery_value }} <br> <strong>FWI:</strong> {{ d.node.FWI }} <br> <strong>Predection result:</strong> <br><span style='color:" + colorn + ";font-weight:bold;'>" + statusn + "</span>  <br><strong>Temperature:</strong> {{ d.temperature }} <br> <strong>Humidity:</strong> {{ d.humidity }} <br> <strong>Wind_speed:</strong> {{ d.wind }} <br>"
+                console.log(latest_data)
+                var marker = L.marker([{{ d.node.position.y }}, {{ d.node.position.x }}]).bindPopup(latest_data).addTo(map);   
+                
+                
+                status = "{{ d.node.status}}" ;
+                console.log( status )
+                var color;
+                    if (status == "DOWN") {
+                        color = "green";
+                    } else if (status == "MODERATE") {
+                       color = "blue";
+                    } else if (status == "HIGH") {
+                        color = "yellow";
+                    } else if (status == "VERY HIGH") {
+                        color = "orange";
+                    } else if (status == "EXTREME") {
+                        color = "red";
+                        marker.setIcon(fireIcon);
+                        marker.bounce(-1);
+                    } else {
+                        color = "black";
+                    }
+    
+          var polygonLayer = L.geoJSON(polygonOne, { style: { color: color, fillOpacity: 0.5 } }).addTo(map);
+          polygonLayer.setStyle({ color: color });
+          polygonLayer.bindTooltip("Polygon " +  {{d.node.node_range}} +" Of Project: "+"{{d.node.polyg.nomp}}");
+    
+    
+      {% endfor %}
+  
 
 
           
-
+{% comment %} 
         var polygonLayer = L.geoJSON(geojson, { style: { color: color } }).addTo(map);
       
   
@@ -207,16 +281,16 @@ console.log('node :',"{{d.nom}}"  ,'statuss',statuss)
                       
                   
                       
-                    } 
+                    {% comment %} }  {% endcomment %}
                    {% comment %} else {
                       lastMarker.setIcon(null);
                       lastMarker.stopBouncing();
                       }  {% endcomment %}
   
-{% endfor %}   
+{% comment %} {% endfor %}     {% endcomment %}
     </script>
 
-<script>
+{% comment %} <script>
   
   $(document).ready(function() {
       setInterval(function() {
@@ -240,7 +314,7 @@ console.log('node :',"{{d.nom}}"  ,'statuss',statuss)
                }
                polygonLayer.setStyle({ color: color });                    {% endcomment %}
 
-
+{% comment %} 
                   $('#weather-info').html(
                      
                          '<p><strong>Temperature:</strong> ' + data.temperature + '°C</p>' +
@@ -259,10 +333,10 @@ console.log('node :',"{{d.nom}}"  ,'statuss',statuss)
                   //      $('#status-card').html('<div class="card-body"> <p><strong>Status: </strong><span style="color:red; font-weight:bold">FIRE</span></p></div>');
                   // } else {
                   //      $('#status-card').html('<div class="card-body"> <p><strong>Status: </strong><span style="color:black; font-weight:bold">NO NODE</span></p></div>');
-                  // } 
+                  // }  {% endcomment %}
 
 
-                   $('#fwi').html('<p><strong>FWI: </strong>' + data.fwi + '</p>');
+                   {% comment %} $('#fwi').html('<p><strong>FWI: </strong>' + data.fwi + '</p>');
 
 
 
@@ -279,7 +353,7 @@ console.log('node :',"{{d.nom}}"  ,'statuss',statuss)
                    }                   
                   else if (data.status == 'UNKNOWN') {
                     $('#status').html('<p><strong>Status: </strong><span style="color:black; font-weight:bold">' + data.status + '</span></p>');
-                } 
+                }  {% endcomment %} 
 
 
 
@@ -295,14 +369,14 @@ console.log('node :',"{{d.nom}}"  ,'statuss',statuss)
                      marker.setIcon(null);
                      marker.stopBouncing();
                     } {% endcomment %}
-              },
+              {% comment %} },
               error: function(xhr, status, error) {
                   console.log("An error occurred: " + xhr.status + " " + xhr.statusText);
               }
           });
       }, 5000); // refresh every 5 seconds
   });
- </script>
+ </script> {% endcomment %}
  
     
 

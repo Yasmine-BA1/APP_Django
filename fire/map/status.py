@@ -12,11 +12,11 @@ def result(id):
     my_project = myProject.objects.get(polygon_id=id)
     nodee = node.objects.filter(polyg=my_project).order_by('-Idnode')
     onode=nodee[0]
-    # print('.........nodee',onode)
+    print('.........nodee',onode)
    
     #node = polygon.node
     fwi = onode.FWI
-    # print('fff--------fwi',fwi)
+    print('fff--------fwi',fwi)
 
     if fwi is not None and 0 <= fwi <= 7:
         status = 'DOWN'

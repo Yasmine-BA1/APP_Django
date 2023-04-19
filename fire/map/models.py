@@ -37,11 +37,12 @@ class node(models.Model):
     longitude =models.CharField(max_length=50, null=True,blank=True)
 
     reference =  models.CharField(max_length=50, null=True)
+    node_range = models.BigIntegerField(null=True,blank=True)
     Sensors = models.CharField(max_length=50, null=True)
     RSSI = models.BigIntegerField(null=True)
     Battery_value = models.BigIntegerField(null=True)
     status = models.CharField(max_length=50, null=True)
-    FWI=models.FloatField(null=True)
+    FWI=models.BigIntegerField(null=True,default= 0)
    
     polyg = models.ForeignKey(myProject, on_delete=models.CASCADE, null=True, blank=True,related_name='%(class)s_related')
 
@@ -53,8 +54,8 @@ class Data(models.Model):
     IdData = models.AutoField(primary_key=True,default=None)
     temperature = models.BigIntegerField(null=True)
     humidity = models.BigIntegerField(null=True)
-    wind = models.FloatField(null=True)
-    rain = models.FloatField(null=True)
+    wind = models.BigIntegerField(default= 0,null=True)
+    rain = models.BigIntegerField(default= 0,null=True)
     node = models.ForeignKey(node, on_delete=models.CASCADE, null=True, related_name='datas')
     
     

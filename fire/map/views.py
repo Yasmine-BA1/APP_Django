@@ -120,14 +120,16 @@ def add_node(request, id,pseudo):
     if request.method == 'POST':
         node_name = request.POST.get('nom')
         Sensors = request.POST.get('Sensors') 
-        reference = request.POST.get('reference')  
+        reference = request.POST.get('reference') 
+        range_str = request.POST.get('range')
+        node_range = int(range_str) 
         mylatitude = request.POST.get('latitude') 
         mylongitude = request.POST.get('longitude') 
         point=Point(x=float(mylongitude),y=float(mylatitude))
         project_id = request.POST.get('polyg')
         project_instance = myProject.objects.get(polygon_id=project_id)
 
-        instance = node(position=point,nom=node_name, polyg=project_instance, latitude=mylatitude, longitude=mylongitude,reference=reference,Sensors=Sensors)
+        instance = node(position=point,nom=node_name, polyg=project_instance, latitude=mylatitude, longitude=mylongitude,reference=reference,node_range=node_range,Sensors=Sensors)
         instance.save()
 
         new_data = Data(temperature=0, humidity=0, wind=0, node=instance)
@@ -144,7 +146,7 @@ def add_node(request, id,pseudo):
     return render(request, 'add_node.html', { 'projects': projects, 'project': project,'nodee':nodeq})
 #--------------------------------------------------------------------
 
-def start_mqtt(request, id):
+def start_mqtt(request,id):
     # Start the MQTT client
     start_mqtt_client(id)
     
@@ -172,25 +174,50 @@ def all_node(request,id,pseudo):
     humidity = data.humidity
     wind_speed = data.wind
     rain_volume =data.rain
+    
+    data_list = []
+    for n in nodes :
+        ds = Data.objects.filter(node=n).order_by('-IdData').first()
+        data_list.append(
+            ds,
+        )
+        
+    
+    print('data liiiiiiist',data_list)
+    
+    for i in range(len(data_list)):
+        ldn0 = data_list[i]
+        #node = ldn0.node
+        print(ldn0)
+        dd = ldn0.wind
+        print(dd)
+
+        temperature = ldn0.temperature
+        humidity = ldn0.humidity
+        wind_speed = ldn0.wind
+    
+    
 
     with open('testBatch.csv', mode='a', newline='') as file:
         writer = csv.writer(file)
         writer.writerow([datetime.today().strftime('%m/%d/%Y'), temperature, humidity, wind_speed,rain_volume,'0'])
+        
 
 
     batchFWI('testBatch.csv')
-
-
+    
+   
     with open('testBatch.csv', mode='r') as file:
         reader = csv.reader(file)
         rows = list(reader)
         last_row = rows[-1]
         FWI = last_row[-1]
     
+    
     fwi = float(FWI)
     onode.FWI=fwi
     onode.save()
-    # print('ffffffffffwi',fwi)
+    print('ffffffffffwi',fwi)
 
 
     # print('temperature',temperature)
@@ -200,15 +227,17 @@ def all_node(request,id,pseudo):
     for node_instance in nodes:
         nom=node_instance.nom       
         # print('nom:',nom)
+    
+
+    
+    
 
     
     if request.method == 'POST':
         return redirect('addnode',pseudo,id)
         
-    #no = node.objects.order_by('-id').first()
-    #bla = no.nom
-    #print(bla)
-    context = { 'projects':projects,'project':my_project,'node_instance': node_instance,'nodee': nodes,'node':onode,'parm':data}
+
+    context = { 'projects':projects,'project':my_project,'node_instance': node_instance,'nodee': nodes,'node':onode,'parm':data, 'ldn':data_list}
     return render(request, 'all.html',context)
 
 def update_weather(request, id):
@@ -327,8 +356,29 @@ def ALL(request,id,pseudo):
         data = datas.first()
         nodes_data.append({'node_instance': node_instance, 'data': data})
         
+    data_list = []
+    for n in nodes :
+        ds = Data.objects.filter(node=n).order_by('-IdData').first()
+        data_list.append(
+            ds,
+        )
+        
+
+    print('data liiiiiiist',data_list)
+    
+    for i in range(len(data_list)):
+        ldn0 = data_list[i]
+        #node = ldn0.node
+        print(ldn0)
+        dd = ldn0.wind
+        print(dd)
+
+        temperature = ldn0.temperature
+        humidity = ldn0.humidity
+        wind_speed = ldn0.wind
+        
     # print('------nodes_data',nodes_data)
-    context = {'nodes_data': nodes_data,'nodee': nodeq,'node':onode,'projects':projects, 'project': project,'parm':data}
+    context = {'nodes_data': nodes_data,'nodee': nodeq,'node':onode,'projects':projects, 'project': project,'parm':data,'ldn':data_list}
    
 
     return render(request, 'ALL_node.html',context )

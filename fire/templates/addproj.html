@@ -165,7 +165,7 @@ map.on('draw:created', function (e) {
             console.log(layer.toGeoJSON());
            
             const   coordinates = layer.toGeoJSON();
-            console.log("coord : "+e.layer.toGeoJSON().geometry.coordinates);
+            {% comment %} console.log("coord : "+e.layer.toGeoJSON().geometry.coordinates); {% endcomment %}
             console.log(type);
             if (type === 'polygon'){
                 drawnItems.addLayer(layer);
