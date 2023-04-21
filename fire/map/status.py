@@ -4,19 +4,20 @@ from .views import *
 
 
 
-def result(id):
-    # my_project = Project.objects.get(idProject=id) 
-    # polygon = my_project.Polygon
-    # node = Node.objects.filter(polygon=polygon).first()
+def result(idnode):
+    nod = node.objects.get(Idnode=idnode)
+    print('....node.....',nod)
+    fwi = nod.FWI
+    print('fff.........fwi',fwi)
 
-    my_project = myProject.objects.get(polygon_id=id)
-    nodee = node.objects.filter(polyg=my_project).order_by('-Idnode')
-    onode=nodee[0]
-    print('....last.....nodee',onode)
+    # my_project = myProject.objects.get(polygon_id=id)
+    # nodee = node.objects.filter(polyg=my_project).order_by('-Idnode')
+    # onode=nodee[0]
+    # print('....last.....nodee',onode)
    
-    #node = polygon.node
-    fwi = onode.FWI
-    print('fff....last.....fwi',fwi)
+    # #node = polygon.node
+    # fwi = onode.FWI
+    # print('fff....last.....fwi',fwi)
 
     if fwi is not None and 0 <= fwi <= 7:
         status = 'DOWN'
@@ -31,6 +32,8 @@ def result(id):
     else:
         status = 'UNKNOWN'
     print('sss.........status',status)
+    
+    
 
     return status
 

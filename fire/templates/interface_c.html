@@ -115,170 +115,95 @@
 var geojson_str = "{{ proj_instance.geomp.json|escapejs }}";
 var geojson = JSON.parse(geojson_str);
 
-      // Define the colors for the polygon based on status
-      var color = status === "Risk" ? "red" : "purple";
+
 
 // Create a Leaflet map
 var map = L.map('map').setView([{{ proj_instance.geomp.centroid.y }}, {{ proj_instance.geomp.centroid.x }}], 12);
 
-
-// L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-//       attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-//   }).addTo(map);
 
 
 L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
         attribution: 'Tiles © Esri — Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
     }).addTo(map);
 
-  var drawnItems = new L.FeatureGroup();
-    map.addLayer(drawnItems);
+    L.geoJSON(geojson).addTo(map);
 
-// Add the GeoJSON polygon to the map
-var polygonLayer = L.geoJSON(geojson, { style: { color: color } }).addTo(map);
+  
+    var fireIcon = L.icon({
+      iconUrl: '/static/images/fire3.png',
+      iconSize: [50, 50],
+      iconAnchor: [19, 19],
+      popupAnchor: [0, -19]
+      });
 
-// var yass = L.marker([{{node_instance.position.y}},{{node_instance.position.x}}]).addTo(map);
+{% for d in ldn %}
 
-// var latlng = yass.getLatLng();
-// yass.bindPopup("<b>Node Name</b><br>{{node_instance.nom}} <br><b>Node Position</b><br>Latitude: " + latlng.lat + "<br>Longitude: " + latlng.lng).openPopup();
+    var coords = JSON.parse(geojson_str).coordinates;
+var first_coords = coords[0][0];
+
+console.log("{{ d.node.node_range}}")
+    var polygonOne = { 
+      "type": "Polygon",
+      "coordinates": [
+          coords[0][{{ d.node.node_range}}-1]
+      ]
+    };
+
+                                    var statusn = "{{ d.node.status }}";
+                                    console.log('----------node :',"{{node.nom}}"  ,'statusnnnn',statusn)
+
+                                    var colorn = "";
+                                  
+
+                                  if (statusn === "DOWN") {
+                                    colorn = "green";
+                                        
+                                  } else if (statusn === "MODERATE") {
+                                    colorn = "blue";
+                                     
+                                  } else if (statusn === "HIGH") {
+                                    colorn = "yellow";
+                                  } else if (statusn === "VERY HIGH") {
+                                    colorn = "orange";
+                                  } else if (statusn === "EXTREME") {
+                                    colorn = "red";
+                                  } else {
+                                    colorn = "black";
+                                  }
+          var latest_data = "<strong>Node name :</strong> {{ d.node.nom }} <br><strong>Ref:</strong> {{ d.node.reference }} <br><strong>Node Position:</strong> <br>Latitude : {{ d.node.latitude }} <br> Longitude : {{ d.node.longitude }}<br> <strong>RSSI:</strong> {{ d.node.RSSI }}<br> <strong>Battery level:</strong> {{ d.node.Battery_value }} <br> <strong>FWI:</strong> {{ d.node.FWI }} <br> <strong>Predection result:</strong> <br><span style='color:" + colorn + ";font-weight:bold;'>" + statusn + "</span>  <br><strong>Temperature:</strong> {{ d.temperature }} <br> <strong>Humidity:</strong> {{ d.humidity }} <br> <strong>Wind_speed:</strong> {{ d.wind }} <br>"
+          
+          var marker = L.marker([{{ d.node.position.y }}, {{ d.node.position.x }}]).bindPopup(latest_data).addTo(map);   
+          
+          
+          status = "{{ d.node.status}}" ;
+          console.log( status )
+          var color;
+              if (status == "DOWN") {
+                  color = "green";
+              } else if (status == "MODERATE") {
+                 color = "blue";
+              } else if (status == "HIGH") {
+                  color = "yellow";
+              } else if (status == "VERY HIGH") {
+                  color = "orange";
+              } else if (status == "EXTREME") {
+                  color = "red";
+                  marker.setIcon(fireIcon);
+                  marker.bounce(-1);
+              } else {
+                  color = "black";
+              }
+
+    var polygonLayer = L.geoJSON(polygonOne, { style: { color: color, fillOpacity: 0.5 } }).addTo(map);
+    polygonLayer.setStyle({ color: color });
+    polygonLayer.bindTooltip("Polygon " +  {{d.node.node_range}} +" Of Project: "+"{{d.node.polyg.nomp}}");
 
 
-var markers = [];
-
-{% for node in nodee %}
-        var status = "{{ node.status }}";
-      console.log('node :',"{{node.nom}}"  ,'statuss',status)
-
-                                    var color = "";
-                                    
-
-                        if (status === "DOWN") {
-                                  color = "green";
-                              
-                        } else if (status === "MODERATE") {
-                            color = "blue";
-                           
-                        } else if (status === "HIGH") {
-                            color = "yellow";
-                        } else if (status === "VERY HIGH") {
-                            color = "orange";
-                        } else if (status === "EXTREME") {
-                            color = "red";
-                        } else {
-                            color = "black";
-                        }                      
-                        // var yass = L.marker([{{ node.position.y }}, {{ node.position.x }}], { style: { color: color } }).addTo(map);
-
-    var yass = L.marker([{{ node.position.y }}, {{ node.position.x }}]).addTo(map);
-    var latlng = yass.getLatLng();
-    console.log('--latlng',latlng)
-    // console.log('--name {{node.nom}}')
-    yass.bindPopup("<b>Node Name</b><br> {{ node.nom }} "   + "<br><b>Node Position</b><br>Latitude: " + latlng.lat + "<br>Longitude: " + latlng.lng +"<br><b>Status</b><br> <span style='color:" + color + ";font-weight:bold;'>" + status + "</span> ").openPopup();
-    markers.push(yass);
-    
-    {% endfor %}
+{% endfor %}
             
 </script> 
 
-<script>
-  
-    $(document).ready(function() {
-        setInterval(function() {
-          console.log('helloooo')
-            $.ajax({
-              type: "GET",
-                url: "{% url 'update_weather' proj_instance.polygon_id %}",
-                
-                success: function(data) {
-                  {% comment %} console.log('dataaaa',data)
-                 
-                 status = data.status;
-                 console.log('insiiiiide status',status)
-                 
-                 if (status === "DOWN") {
-                     color = "green";
-                 } else if (status === "MODERATE") {
-                    color = "blue";
-                 } else if (status === "HIGH") {
-                     color = "yellow";
-                 } else if (status === "VERY HIGH") {
-                     color = "orange";
-                 } else if (status === "EXTREME") {
-                     color = "red";
-                 } else {
-                     color = "black";
-                 }
-                 polygonLayer.setStyle({ color: color });                    {% endcomment %}
-  
-  
-                    $('#weather-info').html(
-                       
-                           '<p><strong>Temperature:</strong> ' + data.temperature + '°C</p>' +
-                           '<p><strong>Humidity:</strong> ' + data.humidity + '%</p>' +
-                           '<p><strong>Wind Speed:</strong> ' + data.wind + ' km/h</p>'+
-                           '<p><strong>Rain Volume:</strong> ' + data.rain + ' mm</p>'
-                          
-                    );
-                    
-                    {% comment %} $('#rssi').html(
-                      
-                           '<p><strong>RSSI: </strong>' + data.RSSI +' </p>' 
-                    ); {% endcomment %}
-  
-                    
-                    // if (data.camera == 0) {
-                    //      $('#status-card').html('<div class="card-body"><p><strong>Status: </strong><span style="color:green; font-weight:bold">NO FIRE</span></p></div>');
-                    // } else if (data.camera <= 1) {
-                    //      $('#status-card').html('<div class="card-body"> <p><strong>Status: </strong><span style="color:red; font-weight:bold">FIRE</span></p></div>');
-                    // } else {
-                    //      $('#status-card').html('<div class="card-body"> <p><strong>Status: </strong><span style="color:black; font-weight:bold">NO NODE</span></p></div>');
-                    // } 
-  
-{% comment %}   
-                     $('#fwi').html('<p><strong>FWI: </strong>' + data.fwi + '</p>');
-  
-  
-  
-                     if (data.status == 'DOWN') {
-                         $('#status').html('<p><strong>Status: </strong><span style="color:green; font-weight:bold">' + data.status + '</span></p>');
-                     } else if (data.status == 'MODERATE') {
-                         $('#status').html('<p><strong>Status: </strong><span style="color:blue; font-weight:bold">' + data.status + '</span></p>');
-                     } else if (data.status == 'HIGH') {
-                         $('#status').html('<p><strong>Status: </strong><span style="color:yellow; font-weight:bold">' + data.status + '</span></p>');
-                     } else if (data.status == 'VERY HIGH') {
-                         $('#status').html('<p><strong>Status: </strong><span style="color:orange; font-weight:bold">' + data.status + '</span></p>');
-                     } else if (data.status == 'EXTREME') {
-                         $('#status').html('<p><strong>Status: </strong><span style="color:red; font-weight:bold">' + data.status + '</span></p>');
-                     } 
-                    else if (data.status == 'UNKNOWN') {
-                      $('#status').html('<p><strong>Status: </strong><span style="color:black; font-weight:bold">' + data.status + '</span></p>');
-                    }                   
-  
-   {% endcomment %}
-  
-  
-  
-  
-                    {% comment %} if (status === "EXTREME") {
-                       yass.setIcon(fireIcon)
-                       yass.bounce(5);
-                      
-                  
-                       
-                     } else {
-                       yass.setIcon(null);
-                       yass.stopBouncing();
-                      }  {% endcomment %}
-  
-                    
-                },
-                error: function(xhr, status, error) {
-                    console.log("An error occurred: " + xhr.status + " " + xhr.statusText);
-                }
-            });
-        }, 3000); // refresh every 5 seconds
-    }); 
-   </script>
+
 
 
       

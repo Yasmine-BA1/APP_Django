@@ -79,30 +79,32 @@
                           {% if project %}
                           <h4 style="margin-bottom: 1px; "><a style="color: rgb(79, 78, 78);" href="{% url 'update' project.polygon_id %}"">Weather Information</a></h4>
                           {% endif %} <hr>
+                          {% comment %} {% for ldn0 in ldn %} {% endcomment %}
                           <div id="weather-info">
-                                    <p><strong>Temperature:</strong> {{ parm.temperature }}°C</p>
-                                    <p><strong>Humidity:</strong> {{ parm.humidity }}%</p>
-                                    <p><strong>Wind Speed:</strong> {{ parm.wind }} km/h</p>
-                                    <p><strong>rain volume:</strong> {{ parm.rain }} mm</p>
-                                    <p><strong>related node:</strong> {{ parm.node }} </p>
-                          </div>    
+                                    <p><strong>Temperature:</strong> {{ ldn0.temperature }}°C</p>
+                                    <p><strong>Humidity:</strong> {{ ldn0.humidity }}%</p>
+                                    <p><strong>Wind Speed:</strong> {{ ldn0.wind }} km/h</p>
+                                    <p><strong>rain volume:</strong> {{ ldn0.rain }} mm</p>
+                                    <p><strong>related node:</strong> {{ ldn0.node }} </p>
+                          </div>  
+                          {% comment %} {% endfor %}   {% endcomment %}
                         </div>
 
                         <div class="col-3" style=" border: 1px solid rgb(70, 69, 69) ; width: 280px; height: 340px; margin-left: 33px; border-radius: 10px; margin-top: 8px; margin-right: 60px;" >
                     
                           <h4>Node Information</h4><hr>
 
-
-                          <p><strong>Name: </strong>{{ node.nom }}</p>
-                          <p><strong>Reference: </strong>{{ node.reference }}</p>
-                          <p><strong>Position: </strong>{{ node.latitude }},{{ node.latitude }}</p>
-                          <p><strong>Sensors: </strong>{{ node.Sensors }}</p>
+                          {% comment %} {% for ldn0 in ldn %} {% endcomment %}
+                          <p><strong>Name: </strong>{{ ldn0.node.nom }}</p>
+                          <p><strong>Reference: </strong>{{ ldn0.node.reference }}</p>
+                          <p><strong>Position: </strong>{{ ldn0.node.latitude }},{{ ldn0.node.latitude }}</p>
+                          <p><strong>Sensors: </strong>{{ ldn0.node.Sensors }}</p>
                           <p><strong>Duty Cycle: </strong>{{ 'Every 1 Min' }}</p>
                           <div id="rssi">
-                          <p><strong>RSSI: </strong> {{ node.RSSI }}</p>
+                          <p><strong>RSSI: </strong> {{ ldn0.node.RSSI }}</p>
                           </div>
-                          <p><strong>Battery level: </strong>{{ node.Battery_value }}</p>
-                                                      
+                          <p><strong>Battery level: </strong>{{ ldn0.node.Battery_value }}</p>
+                          {% comment %} {% endfor %}                           {% endcomment %}
                         </div>
 </div>
 
@@ -110,24 +112,30 @@
   <h4>Prediction result</h4> <hr>
 
   <div>
+
+    {% comment %} {% for ldn0 in ldn %} {% endcomment %}
+
     <div id="fwi">
-      <p><strong>FWI :</strong>{{ node.FWI }}</p>
+      <p><strong>FWI :</strong>{{ ldn0.node.FWI }}</p>
       </div>
+      
       <div id="status">
-        {% if node.status == 'DOWN' %}
-            <p><strong>Status: </strong><span style="color:green; font-weight:bold">{{ node.status }}</span></p>
-        {% elif node.status == 'MODERATE' %}
-            <p><strong>Status: </strong><span style="color:blue; font-weight:bold">{{ node.status }}</span></p>
-        {% elif node.status == 'HIGH' %}
-            <p><strong>Status: </strong><span style="color:yellow; font-weight:bold">{{ node.status }}</span></p>
-        {% elif node.status == 'VERY HIGH' %}
-            <p><strong>Status: </strong><span style="color:orange; font-weight:bold">{{ node.status }}</span></p>
-        {% elif node.status == 'EXTREME' %}
-            <p><strong>Status: </strong><span style="color:red; font-weight:bold">{{ node.status }}</span></p>
-        {% elif node.status == 'UNKNOWN' %}
-            <p><strong>Status: </strong><span style="color:black; font-weight:bold">{{ node.status }}</span></p>            
+        {% if ldn0.node.status == 'DOWN' %}
+            <p><strong>Status: </strong><span style="color:green; font-weight:bold">{{ ldn0.node.status }}</span></p>
+        {% elif ldn0.node.status == 'MODERATE' %}
+            <p><strong>Status: </strong><span style="color:blue; font-weight:bold">{{ ldn0.node.status }}</span></p>
+        {% elif ldn0.node.status == 'HIGH' %}
+            <p><strong>Status: </strong><span style="color:yellow; font-weight:bold">{{ ldn0.node.status }}</span></p>
+        {% elif ldn0.node.status == 'VERY HIGH' %}
+            <p><strong>Status: </strong><span style="color:orange; font-weight:bold">{{ ldn0.node.status }}</span></p>
+        {% elif ldn0.node.status == 'EXTREME' %}
+            <p><strong>Status: </strong><span style="color:red; font-weight:bold">{{ ldn0.node.status }}</span></p>
+        {% elif ldn0.node.status == 'UNKNOWN' %}
+            <p><strong>Status: </strong><span style="color:black; font-weight:bold">{{ ldn0.node.status }}</span></p>            
         {% endif %}
         </div>
+
+        {% comment %} {% endfor %} {% endcomment %}
   </div>
 
 </div>
@@ -189,7 +197,7 @@
    
         <script src="https://cdn.jsdelivr.net/npm/leaflet.marker.bouncing/dist/leaflet.marker.bouncing.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/leaflet.marker.bouncing/dist/leaflet.marker.bouncing.min.js"></script>
-        
+
     <script>
       var geojson_str = "{{ project.geomp.json|escapejs }}";
       var geojson = JSON.parse(geojson_str);
@@ -206,7 +214,8 @@
             attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
 
-  
+        L.geoJSON(geojson).addTo(map);
+
         var fireIcon = L.icon({
           iconUrl: '/static/images/fire3.png',
           iconSize: [50, 50],
@@ -287,21 +296,16 @@
     </script>
 
 
-    {% comment %} <script>
+    <script>
   
       $(document).ready(function() {
           setInterval(function() {
-            console.log('helloooo')
               $.ajax({
-                type: "GET",
                   url: "{% url 'update_weather' project.polygon_id %}",
-                  
-                  success: function(data) {
-                    console.log('dataaaa',data)
-                   
-                   status = data.status;
-                   console.log('insiiiiide status',status)
-                   
+                  type: "GET",
+                  success: function(data_list) {
+                   data = data_list[1];
+                   status = data.node.status;
                    if (status === "DOWN") {
                        color = "green";
                    } else if (status === "MODERATE") {
@@ -315,52 +319,67 @@
                    } else {
                        color = "black";
                    }
-                   polygonLayer.setStyle({ color: color });                    {% endcomment %}
-    
-    
-                      {% comment %} $('#weather-info').html(
+                   polygonLayer.setStyle({ color: color });                   
+   
+   
+   
+   
+   
+                   if (status === "EXTREME") {
+                         marker.setIcon(fireIcon)
+                         marker.bounce(5);
+                        
+                    
                          
+                       } else {
+                         marker.setIcon(null);
+                         marker.stopBouncing();
+                        }
+                        
+   
+                        
+                      $('#weather-info').html(
+                          '<div class="card-body">' +
                              '<p><strong>Temperature:</strong> ' + data.temperature + '°C</p>' +
                              '<p><strong>Humidity:</strong> ' + data.humidity + '%</p>' +
-                             '<p><strong>Wind Speed:</strong> ' + data.wind + ' km/h</p>'+
-                             '<p><strong>Rain Volume:</strong> ' + data.rain + ' mm</p>'+
-                             '<p><strong>related_node:</strong> ' + data.node + ' </p>'
+                             '<p><strong>Wind Speed:</strong> ' + data.wind + ' km/h</p>' +
+                          '</div>'
                       );
                       $('#rssi').html(
                         
-                             '<p><strong>RSSI: </strong>' + data.RSSI +' </p>' 
-                      ); {% endcomment %}
-
-    
-    
-                       {% comment %} $('#fwi').html('<p><strong>FWI: </strong>' + data.fwi + '</p>');
-    
-    
-    
-                       if (data.status == 'DOWN') {
-                           $('#status').html('<p><strong>Status: </strong><span style="color:green; font-weight:bold">' + data.status + '</span></p>');
-                       } else if (data.status == 'MODERATE') {
-                           $('#status').html('<p><strong>Status: </strong><span style="color:blue; font-weight:bold">' + data.status + '</span></p>');
-                       } else if (data.status == 'HIGH') {
-                           $('#status').html('<p><strong>Status: </strong><span style="color:yellow; font-weight:bold">' + data.status + '</span></p>');
-                       } else if (data.status == 'VERY HIGH') {
-                           $('#status').html('<p><strong>Status: </strong><span style="color:orange; font-weight:bold">' + data.status + '</span></p>');
-                       } else if (data.status == 'EXTREME') {
-                           $('#status').html('<p><strong>Status: </strong><span style="color:red; font-weight:bold">' + data.status + '</span></p>');
-                       } 
-                      else if (data.status == 'UNKNOWN') {
-                        $('#status').html('<p><strong>Status: </strong><span style="color:black; font-weight:bold">' + data.status + '</span></p>');
-                      }                   
-    
-                      
+                             '<p><strong>RSSI: </strong>' + data.node.RSSI +' </p>' 
+                      );
+   
+                       $('#fwi').html('<p><strong>FWI: </strong>' + data.node.fwi + '</p>');
+   
+   
+   
+                       if (data.node.status == 'DOWN') {
+                           $('#status').html('<p><strong>Status: </strong><span style="color:green; font-weight:bold">' + data.node.status + '</span></p>');
+                       } else if (data.node.status == 'MODERATE') {
+                           $('#status').html('<p><strong>Status: </strong><span style="color:blue; font-weight:bold">' + data.node.status + '</span></p>');
+                       } else if (data.node.status == 'HIGH') {
+                           $('#status').html('<p><strong>Status: </strong><span style="color:yellow; font-weight:bold">' + data.node.status + '</span></p>');
+                       } else if (data.node.status == 'VERY HIGH') {
+                           $('#status').html('<p><strong>Status: </strong><span style="color:orange; font-weight:bold">' +data.node.status+ '</span></p>');
+                       } else if (data.node.status == 'EXTREME') {
+                           $('#status').html('<p><strong>Status: </strong><span style="color:red; font-weight:bold">' + data.node.status + '</span></p>');
+                       }                   
+   
+   
+   
+   
+   
+   
+   
                   },
                   error: function(xhr, status, error) {
                       console.log("An error occurred: " + xhr.status + " " + xhr.statusText);
                   }
               });
-          }, 3000); // refresh every 5 seconds
-      }); 
-     </script> {% endcomment %}
+          }, 5000); // refresh every 5 seconds
+      });
+     </script> 
  
 
     </body>
