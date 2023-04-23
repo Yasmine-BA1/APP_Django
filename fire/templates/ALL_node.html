@@ -42,20 +42,20 @@
     <body class="bg-img">
         <div class="container text-center" style="margin-left: 0.5px;">
             <div class="row" style="width:1450px;" >
-                <div class="col-3" >
+                <div class="col-3">
                     <div class="card mb-3" style="margin-left: 45px;">
                         <div class="card-header">
-                          <h5 class="card-title" style="text-align:center; color:rgb(51, 77, 4);">Projects List</h5>
+                          <h5 class="card-title" style="text-align:center; color:rgb(51, 77, 4); font-family:subset; margin-bottom:5px; font-weight:bolder;">Projects List</h5>
                          </div>
                         <div class="card-body">
                          
                           {% for proj in projects %}
-                          <div class="card mb-2 " style="background-color: #d4d6d8; display: flex; flex-direction: column;">
+                          <div class="card mb-2 " style="background-color: #d4d6d8; display: flex; flex-direction: column; border: 1px solid #4F4F4F ;">
                             <div class="card-body text-vert">
-                              <h6 class="card-subtitle mb-2 text-muted" style="text-align:center; color:rgb(51, 77, 4);">Project name: {{ proj.nomp }}</h6>
-                              <h6 class="card-subtitle mb-2 text-muted" style="text-align:center; color:rgb(51, 77, 4);">Project ID: {{ proj.polygon_id }}</h6>
-                              <button class="btn btn-dark  mx-auto d-block"  onclick="location.href='{% url 'display_polygone' proj.supervisorp.pseudo proj.polygon_id %}'" style="margin-bottom: 3px;">see polygon</button>
-                              <button class="btn btn-dark  mx-auto d-block" name="button_2" style='  font-size: 8px; background-color: darkgreen;' onclick="location.href='{% url 'all' proj.supervisorp.pseudo proj.polygon_id %}'"> SEE Last Node</button>
+                              <h6 class="card-subtitle mb-2 text-muted" style="text-align:center; color:rgb(51, 77, 4); font-family:subset;"><strong>Project name:</strong> {{ proj.nomp }}</h6>
+                              <h6 class="card-subtitle mb-2 text-muted" style="text-align:center; color:rgb(51, 77, 4); font-family:subset;"> <strong>Project ID:</strong> {{ proj.polygon_id }}</h6>
+                              <button class="btn btn-dark   mx-auto d-block shadow-none"  onclick="location.href='{% url 'display_polygone' proj.supervisorp.pseudo proj.polygon_id  %}'" style="margin-bottom: 3px; font-family:subset;font-weight:bold;">see polygon</button>
+                              <button class="btn btn-dark  mx-auto d-block" name="button_2" style='  font-size: 8px; background-color: darkgreen;font-family:subset;font-weight:bold;' onclick="location.href='{% url 'all' proj.supervisorp.pseudo proj.polygon_id %}'"> Last Node</button>
                                </div>
                           </div>
                           {% endfor %}
@@ -68,15 +68,24 @@
                     <form method="POST">
                     {% csrf_token %} 
 
-                        <h4><strong>Project:</strong> {{ project.nomp }}</h4>
+                        
+                        <h4 style=" font-family:subset; margin-bottom:40px;margin-top:20px; "> <strong style="color: #A26A25;">Details Of Project: </strong><br>{{ project.nomp }}</h4>
+                    
+                        <p>
+                            <label style='font-size:10px;'>Click Here To Display Nodes Information </label><br>
+                            <button style="margin-bottom: 3px; font-family:subset;font-weight:bold; background-color:#A26A25;" type="button" class="btn btn-dark shadow-none"  data-bs-toggle="collapse" data-bs-target="#collapseWidthExample" aria-expanded="false" aria-controls="collapseWidthExample">
+                                Information
+                            </button>
+                          </p>
 
-                        <div class="row">
-                          
+                          <div style="display: flex; justify-content: center; align-items: center;">
+                        <div class="row" >
+                        
                           {% for d in nodee %}
-                          <div class="col-3" style=" border: 1px solid rgb(70, 69, 69) ; width: 200px; height: 340px; margin-left: 10px; border-radius: 10px; margin-top: 8px; margin-right: 10px;" >
+                          <div class="col-3 collapse " id="collapseWidthExample"style=" border: 1px solid rgb(70, 69, 69) ; width: 200px; height: 340px; margin-left: 10px; border-radius: 10px; margin-top: 8px; margin-right: 10px;" >
                             
 
-                                <p class="card-subtitle mb-2 text-muted" style="text-align:center; color:rgb(51, 77, 4);"><strong>Node Name: </strong>{{ d.nom }}</p>
+                                <p class="card-subtitle mb-2 text-muted" style="text-align:center; color:rgb(51, 77, 4);"><strong style='color:#A26A25;'>Node Name: </strong>{{ d.nom }}</p>
                                 <hr>
                                 <p class="card-subtitle mb-2 text-muted" style="text-align:center; color:rgb(51, 77, 4);"><strong>Node reference: </strong>{{ d.reference }}</p>
                                 <p class="card-subtitle mb-2 text-muted" style="text-align:center; color:rgb(51, 77, 4);"><strong>Node Position: </strong>{{ d.latitude  }},{{ d.longitude  }}</p>
@@ -104,15 +113,17 @@
                               </div>
                             {% endfor %}
   
-                          
+                            </div>
                        </div>
+
+                       <div style="display: flex; justify-content: center; align-items: center;">
                           <div class="row">
 
                                 {% for node_data in nodes_data %}
                                 <div class="col-3" style=" border: 1px solid rgb(70, 69, 69) ; background-color: #D4D6D8; width: 200px; height: 240px; margin-left: 10px; border-radius: 10px; margin-top: 8px; margin-right: 10px;" >
                                       
                                 
-                                    <p><strong>Weather information of node :  </strong>{{ node_data.node_instance.nom }}</p><hr>
+                                    <p style='font-weight:bolder; margin-bottom:-10px;'><strong>Weather information of node :  </strong>{{ node_data.node_instance.nom }}</p><hr>
                                     <p><strong>Temperature : </strong>{{ node_data.data.temperature }}°C</p>
                                     <p><strong>Humidity : </strong>{{ node_data.data.humidity }}%</p>
                                     <p><strong>Wind Speed : </strong>{{ node_data.data.wind }} km/h</p>
@@ -121,27 +132,60 @@
                                 </div>
                                 {% endfor %}
                           </div>
-                        <div class='col-6 rounded ' id="map" style="width: 950px;height: 500px; box-sizing:border-box; margin-top: 20px;  border-radius: 50px; border: 1px solid rgb(9, 0, 0) ;">
+
+                        </div>
+
+
+                        <div style="display: flex; justify-content: center; align-items: center;">
+                            <div class="row" >
+                                {% for ldn0 in ldn %} 
+                                <div class="col-3" style=" border: 1px solid rgb(70, 69, 69) ; background-color: #D4D6D8; width: 200px; height: 80px; margin-left: 10px; border-radius: 10px; margin-top: 8px; margin-right: 10px;" >
+                                    <h6 style='font-weight:bolder; margin-bottom:-10px;'><strong>Prediction result</strong></h6>  <hr>
+                        
+                              
+                              <div id="status">
+                                {% if ldn0.node.status == 'DOWN' %}
+                                    <p><strong>Status: </strong><span style="color:green; font-weight:bold">{{ ldn0.node.status }}</span></p>
+                                {% elif ldn0.node.status == 'MODERATE' %}
+                                    <p><strong>Status: </strong><span style="color:blue; font-weight:bold">{{ ldn0.node.status }}</span></p>
+                                {% elif ldn0.node.status == 'HIGH' %}
+                                    <p><strong>Status: </strong><span style="color:yellow; font-weight:bold">{{ ldn0.node.status }}</span></p>
+                                {% elif ldn0.node.status == 'VERY HIGH' %}
+                                    <p><strong>Status: </strong><span style="color:orange; font-weight:bold">{{ ldn0.node.status }}</span></p>
+                                {% elif ldn0.node.status == 'EXTREME' %}
+                                    <p><strong>Status: </strong><span style="color:red; font-weight:bold">{{ ldn0.node.status }}</span></p>
+                                {% elif ldn0.node.status == 'UNKNOWN' %}
+                                    <p><strong>Status: </strong><span style="color:black; font-weight:bold">{{ ldn0.node.status }}</span></p>            
+                                {% endif %}
+                                </div>
+                        
+                                 
+                          </div>
+                          {% endfor %}
+                        </div>
+                    </div>
+
+
+                        <div class='col-6 rounded ' id="map" style="width: 975px;height: 500px;box-sizing:border-box; margin-top: 20px;  margin-bottom: 10px;border-radius: 50px; border: 1px solid rgb(9, 0, 0) ;">
                             <div class="leaflet-control"></div>
                         </div>
              
-                        <label for="geomp">Geometry:</label>
+                        {% comment %} <label for="geomp">Geometry:</label>
                         <input type="text" id="geomp" name="geomp" value="{{ project.geomp }}" readonly><br><br>
-                         
+                          {% endcomment %}
           
 
                     </form>
 
                 </div>
 
-                
           
-
-
             </div>
 
 
         </div>
+
+        
 
         <script src="https://cdn.jsdelivr.net/npm/leaflet.marker.bouncing/dist/leaflet.marker.bouncing.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/leaflet.marker.bouncing/dist/leaflet.marker.bouncing.min.js"></script>
@@ -207,8 +251,8 @@
                                       } else {
                                         colorn = "black";
                                       }
-              var latest_data = "<strong>Node name :</strong> {{ d.node.nom }} <br><strong>Ref:</strong> {{ d.node.reference }} <br><strong>Node Position:</strong> <br>Latitude : {{ d.node.latitude }} <br> Longitude : {{ d.node.longitude }}<br> <strong>RSSI:</strong> {{ d.node.RSSI }}<br> <strong>Battery level:</strong> {{ d.node.Battery_value }} <br> <strong>FWI:</strong> {{ d.node.FWI }} <br> <strong>Predection result:</strong> <br><span style='color:" + colorn + ";font-weight:bold;'>" + statusn + "</span>  <br><strong>Temperature:</strong> {{ d.temperature }} <br> <strong>Humidity:</strong> {{ d.humidity }} <br> <strong>Wind_speed:</strong> {{ d.wind }} <br>"
-              console.log(latest_data)
+             var latest_data = "<strong>Node name :</strong> {{ d.node.nom }} <br><strong>Ref:</strong> {{ d.node.reference }} <br><strong>Node Position:</strong> <br>Latitude : {{ d.node.latitude }} <br> Longitude : {{ d.node.longitude }}<br> <strong>RSSI:</strong> {{ d.node.RSSI }}<br> <strong>Battery level:</strong> {{ d.node.Battery_value }} <br> <strong>FWI:</strong> {{ d.node.FWI }} <br> <strong>Predection result:</strong> <br><span style='color:" + colorn + ";font-weight:bold;'>" + statusn + "</span>  <br><strong>Temperature:</strong> {{ d.temperature }} <br> <strong>Humidity:</strong> {{ d.humidity }} <br> <strong>Wind_speed:</strong> {{ d.wind }} <br>"
+                                     
               var marker = L.marker([{{ d.node.position.y }}, {{ d.node.position.x }}]).bindPopup(latest_data).addTo(map);   
               
               

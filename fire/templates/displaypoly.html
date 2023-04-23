@@ -27,17 +27,17 @@
                 <div class="col-3">
                     <div class="card mb-3" style="margin-left: 45px;">
                         <div class="card-header">
-                          <h5 class="card-title" style="text-align:center; color:rgb(51, 77, 4);">Projects List</h5>
+                          <h5 class="card-title" style="text-align:center; color:rgb(51, 77, 4); font-family:subset; margin-bottom:5px; font-weight:bolder;">Projects List</h5>
                          </div>
                         <div class="card-body">
                          
                           {% for proj in projects %}
-                          <div class="card mb-2 " style="background-color: #d4d6d8; display: flex; flex-direction: column;">
+                          <div class="card mb-2 " style="background-color: #d4d6d8; display: flex; flex-direction: column; border: 1px solid #4F4F4F ;">
                             <div class="card-body text-vert">
-                              <h6 class="card-subtitle mb-2 text-muted" style="text-align:center; color:rgb(51, 77, 4);">Project name: {{ proj.nomp }}</h6>
-                              <h6 class="card-subtitle mb-2 text-muted" style="text-align:center; color:rgb(51, 77, 4);">Project ID: {{ proj.polygon_id }}</h6>
-                              <button class="btn btn-dark  mx-auto d-block"  onclick="location.href='{% url 'display_polygone' proj.supervisorp.pseudo proj.polygon_id %}'" style="margin-bottom: 3px;">see polygon</button>
-                              <button class="btn btn-dark  mx-auto d-block" name="button_2" style='  font-size: 8px; background-color: darkgreen;' onclick="location.href='{% url 'ALL_node' proj.supervisorp.pseudo proj.polygon_id %}'"> SEE all details</button>
+                              <h6 class="card-subtitle mb-2 text-muted" style="text-align:center; color:rgb(51, 77, 4); font-family:subset;"><strong>Project name:</strong> {{ proj.nomp }}</h6>
+                              <h6 class="card-subtitle mb-2 text-muted" style="text-align:center; color:rgb(51, 77, 4); font-family:subset;"> <strong>Project ID:</strong> {{ proj.polygon_id }}</h6>
+                              <button class="btn btn-dark   mx-auto d-block shadow-none"  onclick="location.href='{% url 'display_polygone' proj.supervisorp.pseudo proj.polygon_id  %}'" style="margin-bottom: 3px; font-family:subset;font-weight:bold;">see polygon</button>
+                              <button class="btn btn-dark  mx-auto d-block" name="button_2" style='  font-size: 8px; background-color: darkgreen;' onclick="location.href='{% url 'ALL_node' proj.supervisorp.pseudo proj.polygon_id %}'" style="font-family:subset;font-weight:bold;"> SEE all details</button>
                                </div>
                           </div>
                           {% endfor %}
@@ -50,30 +50,34 @@
                     <form method="POST">
                     {% csrf_token %} 
 
-                    <h4> Polygons Of Project: {{ project.nomp }}</h4>
+                    <h4 style=" font-family:subset; margin-bottom:40px;margin-top:20px; "> <strong style="color: #A26A25;">Polygons Of Project: </strong><br>{{ project.nomp }}</h4>
                     
-                    <div class="row">
-                       <div class="col-3" style=" border: 1px solid rgb(70, 69, 69) ; width: 300px; height: 30px;">
-                         <p><strong>Start Date</strong>  : {{project.debutp}}</p>
-                        </div>
-
-                        <div class="col-3" style=" border: 1px solid rgb(70, 69, 69) ; width: 300px; height: 30px;">
-                        <p><strong>End Date</strong> : {{project.finp}}</p>
-                    </div>
-                    </div>
-                   
-                    <h5>Your Client : {{ project.clientp }}</h5>
-
-
-                    <button class="btn btn-dark  mx-auto d-block" name="button_1" style='  font-size: 10px;  margin-bottom: 10px;' onclick="location.href='{% url 'addnode' project.supervisorp.pseudo project.polygon_id %}'"> Add node</button>
+                  <div class="row">
+                    <div class="col">
+                                                  
+                       <div  style=" border: 1px solid rgb(70, 69, 69) ; width: 200px; height: 30px; background-color:#D4D6D8;">
+                        <p><strong>Start Date</strong>  : {{project.debutp|date:"F d, Y"}}</p>
+                       </div>
                        
-                        <div class='col-6 rounded ' id="map" style="width: 800px;height: 500px; box-sizing:border-box; margin-top: 20px;  border-radius: 50px; border: 1px solid rgb(9, 0, 0) ;">
+                       <div  style=" border: 1px solid rgb(70, 69, 69) ; width: 200px; height: 30px;margin-top:10px; background-color:#D4D6D8;">
+                       <p><strong>End Date</strong> : {{project.finp|date:"F d, Y"}}</p>
+                   </div>
+                   <div  style=" border: 1px solid rgb(70, 69, 69) ; width: 200px; height: 30px;margin-top:10px;background-color:#D4D6D8;">
+                       <p><strong>Client</strong> : {{project.clientp}}</p>
+                   </div>
+                    </div>
+
+                    <div class="col">
+                   <button class="btn btn-dark  mx-auto d-block shadow-none" name="button_1" style='  font-size: 10px;  margin-top: 80px; font-family:subset;font-weight:bold;' onclick="location.href='{% url 'addnode' project.supervisorp.pseudo project.polygon_id %}'"> Add node</button>
+                    </div>
+                  </div>  
+                        <div class='col-6 rounded ' id="map" style="width: 875px;height: 500px; box-sizing:border-box; margin-top: 20px; margin-bottom: 10px; border-radius: 50px; border: 1px solid rgb(9, 0, 0) ;">
                             <div class="leaflet-control"></div>
                         </div>
              
-                        <label for="geomp">Geometry:</label>
+                        {% comment %} <label for="geomp">Geometry:</label>
                         <input type="text" id="geomp" name="geomp" value="{{ project.geomp }}" readonly><br><br>
-                                                    
+                                                     {% endcomment %}
                     </form>
 
                 </div>
@@ -104,14 +108,8 @@ L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
     map.addLayer(drawnItems);
 
 // Add the GeoJSON polygon to the map
-L.geoJSON(geojson).addTo(map);
-
-
-
-// L.marker([36, 10]).addTo(map)
-//     .bindPopup('A marker test.')
-//     .openPopup();
-
+polygonLayer=L.geoJSON(geojson).addTo(map);
+polygonLayer.bindTooltip("Polygon Of Project: "+"{{project.nomp}}");
 
 
  </script>       

@@ -21,7 +21,7 @@ class Form_project(forms.Form):
         'cityp').max_length, widget=forms.TextInput(attrs={'id': "cityp", 'name': "cityp", 'class': "form-control shadow-lg p-6 mb-4 rounded", 'style': "font-size: 20px; background-color: #DFD9DB;", 'placeholder': 'City Name'}))
     # location = forms.CharField( required=True,widget=LocationWidget(attrs={'id': "location", 'name': "location", 'class': "form-control shadow-lg p-6 mb-4 rounded", 'style': "font-size: 20px; background-color: #DFD9DB;"}, based_fields=['city']))
 
-    clientp = forms.ModelChoiceField(queryset=client.objects.all(), empty_label=None,required=False, widget=forms.Select(attrs={'id': "clientp", 'name': "clientp", 'class': "form-control shadow-lg p-6 mb-4 rounded", 'style': "font-size: 20px; background-color: #DFD9DB; width:200px; margin-left:340px;", 'placeholder': 'Select Client'}))
+    clientp = forms.ModelChoiceField(queryset=client.objects.all(), empty_label=None,required=False, widget=forms.Select(attrs={'id': "clientp", 'name': "clientp", 'class': "form-control shadow-lg p-6 mb-4 rounded", 'style': "font-size: 20px; background-color: #DFD9DB; width:200px; margin-left:349px;", 'placeholder': 'Select Client'}))
     
     def is_valid(self):
             nomp = self.data['nomp']

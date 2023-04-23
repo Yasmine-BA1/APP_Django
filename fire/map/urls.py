@@ -10,7 +10,7 @@ urlpatterns = [
     path('sup_<str:pseudo>/Projects_List/', views.display, name='display'),
     path('sup_<str:pseudo>/display_polygone/<int:id>/', views.display_polygone, name='display_polygone'),
     path('sup_<str:pseudo>/display_polygone/<int:id>/add_node', views.add_node, name='addnode'),
-    path('sup_<str:pseudo>/display_polygone/<int:iid>/all_detail', views.all_node, name='all'),
+    path('sup_<str:pseudo>/display_polygone/<int:iid>/last_node', views.all_node, name='all'),
     path('sup_<str:pseudo>/display_polygone/<int:id>/modify', views.modify, name='modify'),
     path('sup_<str:pseudo>/display_polygone/<int:id>/nodes', views.ALL, name='ALL_node'),
     

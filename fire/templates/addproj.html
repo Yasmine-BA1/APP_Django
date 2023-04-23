@@ -37,12 +37,12 @@
   </head>
   <body  class="bg-img" ">
 
-    <div class="container text-center" style="margin-left: 20px;">
+    <div class=" text-center" style="margin-left: 20px;">
  
     
-         <div class="container" >
+         <div  >
           
-          <form method="POST" id="form" class="shadow-lg p-6 mb-8 mt-5 rounded"  style="width: 900px;">
+          <form method="POST" id="form" class="shadow-lg p-6 mb-8 mt-5 rounded"  style="width: 950px;">
             {% csrf_token %}
 
             <h1 class="mb-4">Create new project</h1>
@@ -85,11 +85,11 @@
                     {{ form.clientp}} 
                   </div>
 
-                  <div class="col" >
+                  <div class="col">
                     {% csrf_token %} 
-                    <h1>Draw your polygon </h1>
+                    <h1>Draw your polygons </h1>
                   
-                        <div class='col-6 rounded ' id="mapid" style="width: 800px;height: 500px; box-sizing:border-box; margin-top: 20px;  border-radius: 50px; border: 1px solid rgb(9, 0, 0) ;">
+                        <div class='col-6 rounded ' id="mapid" style=" width: 910px;height: 550px; box-sizing:border-box; margin-top: 20px;  border-radius: 50px; border: 1px solid rgb(9, 0, 0) ;">
                             <div class="leaflet-control"></div>
                         </div> 
 
