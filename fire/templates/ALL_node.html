@@ -55,7 +55,7 @@
                               <h6 class="card-subtitle mb-2 text-muted" style="text-align:center; color:rgb(51, 77, 4); font-family:subset;"><strong>Project name:</strong> {{ proj.nomp }}</h6>
                               <h6 class="card-subtitle mb-2 text-muted" style="text-align:center; color:rgb(51, 77, 4); font-family:subset;"> <strong>Project ID:</strong> {{ proj.polygon_id }}</h6>
                               <button class="btn btn-dark   mx-auto d-block shadow-none"  onclick="location.href='{% url 'display_polygone' proj.supervisorp.pseudo proj.polygon_id  %}'" style="margin-bottom: 3px; font-family:subset;font-weight:bold;">see polygon</button>
-                              <button class="btn btn-dark  mx-auto d-block" name="button_2" style='  font-size: 8px; background-color: darkgreen;font-family:subset;font-weight:bold;' onclick="location.href='{% url 'all' proj.supervisorp.pseudo proj.polygon_id %}'"> Last Node</button>
+                              <button class="btn btn-outline-success  mx-auto d-block" name="button_2" style='  font-size: 8px; color: darkgreen;font-family:subset;font-weight:bold;' onclick="location.href='{% url 'all' proj.supervisorp.pseudo proj.polygon_id %}'"> Last Node</button>
                                </div>
                           </div>
                           {% endfor %}

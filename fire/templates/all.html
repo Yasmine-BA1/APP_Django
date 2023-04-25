@@ -88,7 +88,7 @@
                         <div class="col-3" style=" border: 1px solid rgb(70, 69, 69) ; width: 250px; height: 320px; margin-left: 33px; border-radius: 10px; margin-top: 8px; margin-right: 60px;" >
                     
                           {% if project %}
-                          <h4 style="margin-bottom: 1px; "><a style="color: rgb(79, 78, 78);" href="{% url 'update' project.polygon_id %}"">Weather Information</a></h4>
+                          <h5 style="margin-bottom: 1px; "><a style="color: rgb(79, 78, 78);" href="{% url 'update' project.polygon_id %}"">Weather Information</a></h5>
                           {% endif %} <hr>
                           {% comment %} {% for ldn0 in ldn %} {% endcomment %}
                           <div id="weather-info">
@@ -107,7 +107,7 @@
                         </div>
 
                         <div class="col-3" style=" border: 1px solid rgb(70, 69, 69) ; background-color: #D4D6D8; width: 250px; height: 150px; margin-left: 33px; border-radius: 10px; margin-top: 8px; margin-right: 60px;" >
-                          <h4>Prediction result</h4> <hr>
+                          <h5>Prediction result</h5> <hr>
                         
                           <div>
                         
@@ -142,16 +142,16 @@
 
 
                          
-                           <button class="btn btn-dark  mx-auto d-block shadow-none" name="b_add_N" style='  font-size: 10px; margin-top: 20px; font-family:subset;font-weight:bold;' onclick="location.href='{% url 'addnode' project.supervisorp.pseudo project.polygon_id %}'"> Add Another Node</button>
+                           <button  class="btn btn-outline-dark" name="b_add_N" style='  font-size: 10px; margin-top: 20px; font-family:subset;font-weight:bold;' onclick="location.href='{% url 'addnode' project.supervisorp.pseudo project.polygon_id %}'"> Add Another Node</button>
                            
                            <div class='col-6 rounded ' id="map" style="width: 775px;height: 500px; box-sizing:border-box; margin-top: 5px; margin-bottom: 10px; border-radius: 50px; border: 1px solid rgb(9, 0, 0) ;">
                             <div class="leaflet-control"></div>
                         </div>
-             
+{% comment %}              
                         <label for="geomp">Geometry:</label>
                         <input type="text" id="geomp" name="geomp" value="{{ project.geomp }}" readonly><br><br>
                          
-                        <br>
+                        <br> {% endcomment %}
                         {% comment %} {% for d in node %}
                         <label for="lat">Latitude:</label>
                         <input type="text" id="latitude" name="latitude" value="{{ d.latitude }}" readonly><br>
